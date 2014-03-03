@@ -423,10 +423,10 @@ class DirGroup : FileNode
             foreach(DirGroup d; visDirs)
             {
                 d.cleanTotalBounds();
-                d.offsetX = pos1.x;
-                d.offsetY = pos1.y - d.bounds.top + marginY;
+                d.offset.x = pos1.x;
+                d.offset.y = pos1.y - d.bounds.top + marginY;
                 if (d.isDirsShown)
-                    d.offsetY = Mathd.max(d.offsetY, pos2.y - d.totalBounds.top + CHILD_DIR_SPACING_EXPANDED);
+                    d.offset.y = Mathd.max(d.offset.y, pos2.y - d.totalBounds.top + CHILD_DIR_SPACING_EXPANDED);
                 marginY = CHILD_DIR_SPACING;
                 pos1.y = d.transformedBounds.bottom;
                 if (d.isDirsShown)
@@ -435,7 +435,7 @@ class DirGroup : FileNode
             Box2d dirBounds = computeDirBounds();
             double dy = bounds.centerY - dirBounds.centerY;
             foreach(Node d; visDirs)
-                d.offsetY = d.offsetY + dy;
+                d.offset.y = d.offset.y + dy;
         }
         setBoundsDirty();
     }
@@ -494,11 +494,11 @@ class DirGroup : FileNode
         dirSymbol.bounds.height = bounds.height;
         dirSymbol.setBoundsDirty();
         dirText.bounds.width = dirSymbol.bounds.width;
-        dirExpand.offsetX = dirSymbol.bounds.right - 22;
-        dirExpand.offsetY = dirSymbol.bounds.top + 2;
+        dirExpand.offset.x = dirSymbol.bounds.right - 22;
+        dirExpand.offset.y = dirSymbol.bounds.top + 2;
         dirExpand.setBoundsDirty();
-        dirOpen.offsetX = dirSymbol.bounds.left+2;
-        dirOpen.offsetY = dirSymbol.bounds.top+2;
+        dirOpen.offset.x = dirSymbol.bounds.left+2;
+        dirOpen.offset.y = dirSymbol.bounds.top+2;
         dirOpen.setBoundsDirty();
     }
 
@@ -640,11 +640,12 @@ class DirGroup : FileNode
             super.doPaintNode(ct);
             if (bounds.height > BOUNDS.height)
             {
+                immutable TOP = 21;
                 auto r = rectToPaint(lineWidth);
                 ct.setLineWidth(lineWidth);
                 ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
-                ct.moveTo(r.left + 4, r.top + 24);
-                ct.lineTo(r.right - 4, r.top + 24);
+                ct.moveTo(r.left + 4, r.top + TOP);
+                ct.lineTo(r.right - 4, r.top + TOP);
                 ct.stroke();
             }
         }

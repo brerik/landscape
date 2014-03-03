@@ -61,6 +61,9 @@ class Node
         visible = "visible",
         fgColor = "fgColor",
         bgColor = "bgColor",
+        insets = "insets",
+        offset = "offset",
+        alignment = "alignment"
     }
     static immutable LAYOUT_ALL = -1;
     static immutable NO_DIM = Dim2d.zero;
@@ -75,7 +78,7 @@ class Node
     Box2d visBounds = Box2d.zero;
     Box2d totalBounds = Box2d.zero;
     Insets2d margin = NO_MARGIN;
-    Insets2d insets = NO_INSETS;
+    Insets2d _insets = NO_INSETS;
     Color4d _fgColor = Color4d(.2,.2,.2,1);
     Color4d _bgColor = Color4d(.9,.9,.9,1);
     Node parent;
@@ -90,8 +93,8 @@ class Node
     bool _selected;
     bool _pressed;
     int layer;
-    Vec2d mOffset = Vec2d.zero;
-    Vec2d alignment = Vec2d.zero;
+    Vec2d _offset = Vec2d.zero;
+    Vec2d _alignment = Vec2d.zero;
 
     bool delegate(in Vec2d, uint clickCount) onMousePressedDlgs[];
     bool delegate(in Vec2d, uint clickCount) onMouseReleasedDlgs[];
@@ -103,6 +106,8 @@ class Node
     mixin Signal!(string, string, string) changedStringSignal;
     mixin Signal!(string, int, int) changedIntSignal;
     mixin Signal!(string, Color4d, Color4d) changedColor4dSignal;
+    mixin Signal!(string, Insets2d, Insets2d) changedInsets2dSignal;
+    mixin Signal!(string, Vec2d, Vec2d) changedVector2dSignal;
     mixin Signal!(MouseEvent) mouseEventSignal;
 
     void connect(changedBoolSignal.slot_t s)
@@ -168,6 +173,31 @@ class Node
     void emit(string name, in Color4d newValue, in Color4d oldValue)
     {
         changedColor4dSignal.emit(name, newValue, oldValue);
+    }
+
+    void connect(changedInsets2dSignal.slot_t s)
+    {
+        changedInsets2dSignal.connect(s);
+    }
+    void disconnect(changedInsets2dSignal.slot_t s)
+    {
+        changedInsets2dSignal.disconnect(s);
+    }
+    void emit(string name, in Insets2d newValue, in Insets2d oldValue)
+    {
+        changedInsets2dSignal.emit(name, newValue, oldValue);
+    }
+    void connect(changedVector2dSignal.slot_t s)
+    {
+        changedVector2dSignal.connect(s);
+    }
+    void disconnect(changedVector2dSignal.slot_t s)
+    {
+        changedVector2dSignal.disconnect(s);
+    }
+    void emit(string name, in Vec2d newValue, in Vec2d oldValue)
+    {
+        changedVector2dSignal.emit(name, newValue, oldValue);
     }
 
     void connect(mouseEventSignal.slot_t s)
@@ -452,7 +482,7 @@ class Node
     final void moveBy(Vec2d amount) {
         if (amount != Vec2d.zero)
         {
-            mOffset += amount;
+            offset = offset + amount;
             setParentBoundsDirty();
         }
     }
@@ -703,47 +733,37 @@ class Node
         return l;
     }
 
-    final const(Vec2d) offset() const
+    final ref const(Vec2d) offset() const
     {
-        return mOffset;
+        return _offset;
     }
 
-    final void offset(in Vec2d o)
+    final ref Vec2d offset()
     {
-        mOffset = o;
+        return _offset;
     }
 
-    final const(double) offsetX() const
+    final void offset(in Vec2d newOffset)
     {
-        return mOffset.x;
+        if (newOffset != _offset)
+        {
+            auto oldOffset = _offset;
+            _offset = newOffset;
+            emit(PropName.offset, newOffset, oldOffset);
+        }
     }
 
-    final const(double) offsetY() const
-    {
-        return mOffset.y;
-    }
-
-    final void offsetX(double x)
-    {
-        mOffset.x = x;
-    }
-
-    final void offsetY(double y)
-    {
-        mOffset.y = y;
-    }
-
-    final bool isShown() const
+    public final bool isShown() const
     {
         return visible && bounds.width > 0 && bounds.height > 0;
     }
 
-    final Box2d insettedBounds() const
+    public final Box2d insettedBounds() const
     {
         return bounds - insets;
     }
 
-    final void selected(bool b)
+    public final void selected(bool b)
     {
         if (_selected != b)
         {
@@ -751,12 +771,12 @@ class Node
             emit(PropName.selected, b, !b);
         }
     }
-    final bool selected() const
+    public final bool selected() const
     {
         return _selected;
     }
 
-    final void visible(bool b)
+    public final void visible(bool b)
     {
         if (_visible != b)
         {
@@ -764,12 +784,12 @@ class Node
             emit(PropName.visible, b, !b);
         }
     }
-    final bool visible() const
+    public final bool visible() const
     {
         return _visible;
     }
 
-    final void pressed(bool b)
+    public final void pressed(bool b)
     {
         if (_pressed != b)
         {
@@ -777,20 +797,20 @@ class Node
             emit(PropName.pressed, b, !b);
         }
     }
-    final bool pressed() const
+    public final bool pressed() const
     {
         return _pressed;
     }
 
-    public ref const(Color4d) fgColor() const
+    public final ref const(Color4d) fgColor() const
     {
         return _fgColor;
     }
-    public ref Color4d fgColor()
+    public final ref Color4d fgColor()
     {
         return _fgColor;
     }
-    public void fgColor(in Color4d newFgColor)
+    public final void fgColor(in Color4d newFgColor)
     {
         if (_fgColor != newFgColor)
         {
@@ -800,15 +820,21 @@ class Node
         }
     }
 
-    public ref const(Color4d) bgColor() const
+    public final ref const(Color4d) bgColor() const
     {
         return _bgColor;
     }
-    public ref Color4d bgColor()
+
+    public final ref Color4d bgColor()
     {
         return _bgColor;
     }
-    public void bgColor(in Color4d newBgColor)
+
+    /**
+     * Sets background color and emits bgColor changed signal
+     * @param newBgColor - new background color
+     */
+    public final void bgColor(in Color4d newBgColor)
     {
         if (_bgColor != newBgColor)
         {
@@ -818,44 +844,88 @@ class Node
         }
     }
 
-    public bool getBool(string name) const
-    {
-        switch (name)
-        {
-            case PropName.selected: return _selected;
-            case PropName.visible: return _visible;
-            case PropName.pressed: return _pressed;
-            default: return false;
-        }
-    }
-    public Color4d getColor4d(string name) const
-    {
-        switch (name)
-        {
-            case PropName.fgColor: return _fgColor;
-            case PropName.bgColor: return _bgColor;
-            default: return Color4d.zero;
-        }
-    }
-    public double getDouble(string name) const
-    {
-        return double.nan;
-    }
-    public int getInt(string name) const
-    {
-        return 0;
-    }
-
-    final void nodeColor(NodeColor c)
+    /**
+     * Sets fgColor and bgColor and emits their changed signals
+     * @param NodeColor - foreground color and background color
+     */
+    public final void nodeColor(in NodeColor c)
     {
         fgColor = c.fgColor;
         bgColor = c.bgColor;
     }
 
-    final NodeColor nodeColor() const
+    /**
+     * Gets fgColor and bgColor
+     * @return NodeColor[fgColor, bgColor]
+     */
+    public final const(NodeColor) nodeColor() const
     {
         NodeColor c = {fgColor, bgColor};
         return c;
+    }
+
+    /**
+     * Sets insets and emits insets changed signal
+     * @param new insets
+     */
+    public final void insets(in Insets2d newInsets)
+    {
+        if (newInsets != _insets)
+        {
+            auto oldInsets = _insets;
+            _insets = newInsets;
+            emit(PropName.insets, newInsets, oldInsets);
+        }
+    }
+
+    /**
+     * Gets insets as const ref
+     * @return insets
+     */
+    public final ref const(Insets2d) insets() const
+    {
+        return _insets;
+    }
+
+    /**
+     * Gets insets as mutable ref
+     * @return insets
+     */
+    public final ref Insets2d insets()
+    {
+        return _insets;
+    }
+
+    /**
+     * Sets alignment and emits alignment changed signal
+     * @param new alignment
+     */
+    public final void alignment(in Vec2d newAlignment)
+    {
+        if (newAlignment != _alignment)
+        {
+            auto oldAlignment = _alignment;
+            _alignment = newAlignment;
+            emit(PropName.alignment, newAlignment, oldAlignment);
+        }
+    }
+
+    /**
+     * Gets alignment as const ref
+     * @return alignment
+     */
+    public final ref const(Vec2d) alignment() const
+    {
+        return _alignment;
+    }
+
+    /**
+     * Gets alignment as mutable ref
+     * @return alignment
+     */
+    public final ref Vec2d alignment()
+    {
+        return _alignment;
     }
 }
 

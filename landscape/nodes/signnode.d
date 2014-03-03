@@ -72,15 +72,6 @@ class SignNode : Node
         }
     }
 
-    override Color4d getColor4d(string name) const
-    {
-        switch (name)
-        {
-            case PropName.signColor: return _signColor;
-            default: return super.getColor4d(name);
-        }
-    }
-
     final SignType sign() const
     {
         return _sign;
@@ -110,22 +101,7 @@ class SignNode : Node
             emit(PropName.lineWidth, newLineWidth, oldLineWidth);
         }
     }
-    override public double getDouble(string name) const
-    {
-        switch (name)
-        {
-            case PropName.lineWidth: return _lineWidth;
-            default: return super.getDouble(name);
-        }
-    }
-    override public int getInt(string name) const
-    {
-        switch (name)
-        {
-            case PropName.sign: return _sign;
-            default: return super.getInt(name);
-        }
-    }
+
     override void doPaintNode(Context ct)
     {
         Box2d signBounds = bounds - insets;

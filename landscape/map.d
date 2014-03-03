@@ -82,7 +82,7 @@ struct FsUtil
 
 class Map : DrawingArea
 {
-    alias gio.File.File GFile;
+    alias gio.File.File GioFile;
     static immutable SCALE_BOUNDS = Interval!double(0.2, 2.0);
     static immutable SCALE_GRANULARITY = 0.1;
     static immutable INSETS = Insets2d(400,400,400,400);
@@ -108,10 +108,7 @@ class Map : DrawingArea
         addOnScroll(&onMouseScroll);
         addOnDraw(&onMyDraw);
         root = new Root();
-        addRoot(buildDir("/home/erik"));
-//        addRoot(buildDir("C:\\D\\projects"));
-//        addRoot(buildDir("C:\\"));
-//        addRoot(buildDir("G:\\"));
+        addRoot(buildDir(GioFile.parseName("~")));
         cleanUp();
     }
 
@@ -129,9 +126,9 @@ class Map : DrawingArea
         return false;
     }
 
-    final DirGroup buildDir(string path)
+    final DirGroup buildDir(GioFile f)
     {
-        DirGroup n = new DirGroup(new GFile(path));
+        DirGroup n = new DirGroup(f);
         n.importAllChildren(2);
         return n;
     }
@@ -279,6 +276,7 @@ class Map : DrawingArea
         {
             queueDraw();
         }
+
         override void updateLayout()
         {
             double next = 0;
@@ -286,7 +284,7 @@ class Map : DrawingArea
             foreach(Node c; visibleChildren)
             {
                 c.updateTotalBounds();
-                c.offsetY = next - c.totalBounds.top + m;
+                c.offset.y = next - c.totalBounds.top + m;
                 m = 50;
                 next = next + c.totalBounds.height;
             }
