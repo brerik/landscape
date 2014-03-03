@@ -1,0 +1,13 @@
+[Compiler settigns]
+Other options
+-I/usr/include/dmd/gtkd2
+
+[Linker settings]
+Link libraries
+gtkd2
+dl
+
+Other link options
+-L/usr/lib/x86_64-linux-gnu -L/usr/lib/i386-linux-gnu
+
+
