@@ -32,9 +32,9 @@ class Event
         return _name;
     }
 
-    final void name(string n)
+    final void name(string aName)
     {
-        _name = n;
+        _name = aName;
     }
 
     final void consume()
