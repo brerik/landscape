@@ -48,11 +48,6 @@ class TextNode : Node
 
     ~this()
     {
-        if (_fontDesc !is null)
-        {
-            _fontDesc.free();
-            _fontDesc = null;
-        }
     }
 
     /**

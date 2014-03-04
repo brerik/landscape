@@ -32,20 +32,6 @@ import cairo.Context;
 import std.signals;
 import landscape.events.mouseevent;
 
-public class ChangedSignal(T) : NamedSignal
-{
-    public T newValue;
-    public T oldValue;
-
-    public this(string aName, T aNewValue, T aOldValue)
-    {
-        super(aName);
-        newValue = aNewValue;
-        oldValue = aOldValue;
-    }
-}
-
-
 struct NodeColor
 {
     Color4d fgColor;
