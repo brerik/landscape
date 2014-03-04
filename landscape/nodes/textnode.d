@@ -55,12 +55,20 @@ class TextNode : Node
         }
     }
 
-    final string text() const
+    /**
+     * Gets text property
+     * @return text
+     */
+    public final string text() const
     {
         return _text;
     }
 
-    final void text(string newText)
+    /**
+     * Sets text property and emits prop changed signal if changed
+     * @param newText
+     */
+    public final void text(string newText)
     in
     {
         assert (newText !is null);
@@ -78,14 +86,21 @@ class TextNode : Node
         }
     }
 
-    final PgFontDescription fontDesc()
+    /**
+     * Gets Pango Font Description
+     */
+    public final PgFontDescription fontDesc()
     {
         if (_fontDesc is null)
             _fontDesc = new PgFontDescription("Sans", 10);
         return _fontDesc;
     }
 
-    final void fontSize(double newSize)
+    /**
+     * Sets font size property and emits changed signal if changed
+     * @param new font size
+     */
+    public final void fontSize(double newSize)
     in
     {
         assert (newSize >= 1.0);
@@ -100,12 +115,20 @@ class TextNode : Node
         }
     }
 
-    final double fontSize()
+    /**
+     * Gets font size property value
+     * @return font size
+     */
+    public final double fontSize()
     {
         return cast(double)fontDesc.getSize() / cast(double)PANGO_SCALE;
     }
 
-    override void doPaintNode(Context ct)
+    /**
+     * Paints text
+     * @param ct - Cairo Context
+     */
+    public override void doPaintNode(Context ct)
     {
         ct.save();
         alias Math!double.ceil ceil;

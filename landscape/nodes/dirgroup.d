@@ -216,26 +216,26 @@ class DirGroup : FileNode
         }
     }
 
-    final void addDir(DirGroup dirGroup)
+    public final void addDir(DirGroup dirGroup)
     {
         addChild(dirGroup);
         dirs ~= dirGroup;
         updateLayout();
     }
 
-    final void addDoc(DocNode doc)
+    public final void addDoc(DocNode doc)
     {
         addChild(doc);
         docs ~= doc;
     }
 
-    final void setShowExpand(bool b)
+    public final void setShowExpand(bool b)
     {
         bShowExpand = b;
         updateBounds();
     }
 
-    final bool isShowExpand()
+    public final bool isShowExpand()
     {
         return bShowExpand;
     }
@@ -245,7 +245,7 @@ class DirGroup : FileNode
         return mNumDocs > 0 ? format("%d", mNumDocs) : "";
     }
 
-    override Vec2d tailPoint(Vec2d alignment)
+    public override Vec2d tailPoint(Vec2d alignment)
     {
         return bounds.alignedPoint(alignment);
     }
