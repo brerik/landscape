@@ -231,7 +231,7 @@ class Node
             parent.removeChild(this);
     }
 
-    void addChild(Node child)
+    public void addChild(Node child)
     {
         if (child.parent is this)
             return;
@@ -242,7 +242,7 @@ class Node
         setDirty();
     }
 
-    void addChild(Node child, string target)
+    public void addChild(Node child, string target)
     {
         foreach (Node n; children) {
             if (n.name == target) {
@@ -267,7 +267,7 @@ class Node
         onMouseReleasedDlgs ~= dlg;
     }
 
-    void removeChild(Node child)
+    public void removeChild(Node child)
     {
         if (child.parent !is this)
             return;
@@ -442,37 +442,37 @@ class Node
             children[i].doPaint(ct);
     }
 
-    final bool isRoot()
+    public final bool isRoot()
     {
         return parent is null;
     }
 
-    final bool isChild()
+    public final bool isChild()
     {
         return parent !is null;
     }
 
-    final bool hasParent()
+    public final bool hasParent()
     {
         return parent !is null;
     }
 
-    final bool hasChildren()
+    public final bool hasChildren()
     {
         return children.length > 0;
     }
 
-    final size_t numChildren()
+    public final size_t numChildren()
     {
         return children.length;
     }
 
-    final Node childAt(size_t i)
+    public final Node childAt(size_t i)
     {
         return children[i];
     }
 
-    final void moveTo(Vec2d newOffset)
+    public final void moveTo(Vec2d newOffset)
     {
         if (newOffset != bounds.pos)
         {
@@ -481,7 +481,7 @@ class Node
         }
     }
 
-    final void moveBy(Vec2d amount) {
+    public final void moveBy(Vec2d amount) {
         if (amount != Vec2d.zero)
         {
             offset = offset + amount;
@@ -489,11 +489,11 @@ class Node
         }
     }
 
-    const(Vec2d) tailPoint(Vec2d alignment) {
+    public const(Vec2d) tailPoint(Vec2d alignment) {
         return bounds.alignedPoint(alignment);
     }
 
-    final void resizeTo(in Dim2d newSize)
+    public final void resizeTo(in Dim2d newSize)
     {
         if (newSize != bounds.dim)
         {
@@ -553,7 +553,7 @@ class Node
         return boundsDirty || layoutDirty || totalBoundsDirty;
     }
 
-    final const(Box2d) absBounds()
+    public final const(Box2d) absBounds()
     {
         Box2d a = bounds;
         for (Node p = parent; p !is null; p = p.parent)
@@ -657,12 +657,12 @@ class Node
 
     final const(Box2d) marginBounds() const
     {
-        return bounds.addInsets(margin);
+        return bounds + margin;
     }
 
-    final const(Box2d) insetsBounds() const
+    final const(Box2d) insetBounds() const
     {
-        return bounds.addInsets(insets);
+        return bounds - insets;
     }
 
     final void doPaintBounds(Context ct)
@@ -772,11 +772,6 @@ class Node
     public final bool isShown() const
     {
         return visible && bounds.width > 0 && bounds.height > 0;
-    }
-
-    public final Box2d insettedBounds() const
-    {
-        return bounds - insets;
     }
 
     /**

@@ -101,7 +101,7 @@ class DocNode : FileNode
     {
         CutCornerRectNode rl = new CutCornerRectNode();
         rl.name = "BoxNode";
-        rl.bounds = insettedBounds;
+        rl.bounds = insetBounds;
         rl.insets.setAll(0);
         rl.cut = Vec2d(4,4);
         rl.bgColor.set(1,1,1,1);
@@ -119,7 +119,7 @@ class DocNode : FileNode
         rl.fontSize = 9.0;
         rl.alignment = Vec2d(.5,.5);
         rl.insets.setAll(4);
-        rl.bounds = insettedBounds;
+        rl.bounds = insetBounds;
         return rl;
     }
 
@@ -135,7 +135,7 @@ class DocNode : FileNode
 
     override void updateLayout()
     {
-        docLeaf.bounds = insettedBounds;
-        textLeaf.bounds = insettedBounds;
+        docLeaf.bounds = insetBounds;
+        textLeaf.bounds = insetBounds;
     }
 }

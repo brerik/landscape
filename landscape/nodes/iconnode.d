@@ -41,7 +41,7 @@ class IconNode : Node
 
     override void doPaintNode(Context ct)
     {
-        auto r = insettedBounds;
+        auto r = insetBounds;
         ct.setSourceRgb(.5,1,.5);
         ct.rectangle(r.x + (r.width - iconSize.width) * alignment.x, r.y + (r.height - iconSize.height) * alignment.y, iconSize.width, iconSize.height);
         ct.fill();

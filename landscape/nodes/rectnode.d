@@ -84,7 +84,7 @@ class CutCornerRectNode : RectNode
 
     final Box2d rectToPaint(double aLineWidth) const
     {
-        Box2d r = insettedBounds;
+        Box2d r = insetBounds;
         r.x = r.floorX + lineWidth / 2.0;
         r.y = r.floorY + lineWidth / 2.0;
         r.width = r.ceilWidth - lineWidth;
