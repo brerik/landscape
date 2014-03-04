@@ -64,8 +64,14 @@ class Node
         insets = "insets",
         offset = "offset",
         alignment = "alignment",
-        layer = "layer"
+        layer = "layer",
+        animated = "animated",
+        margin = "margin",
+        animOffset = "animOffset",
+        animBounds = "animBounds",
+        bounds = "bounds"
     }
+
     static immutable LAYOUT_ALL = -1;
     static immutable NO_DIM = Dim2d.zero;
     static immutable NO_INSETS = Insets2d.zero;
@@ -75,10 +81,10 @@ class Node
     Dim2d minDim = Dim2d.zero;
     Dim2d prefDim = Dim2d.zero;
     Dim2d fitDim = Dim2d.zero;
-    Box2d bounds = Box2d.zero;
-    Box2d visBounds = Box2d.zero;
+    Box2d _bounds = Box2d.zero;
+    Box2d _animBounds = Box2d.zero;
     Box2d totalBounds = Box2d.zero;
-    Insets2d margin = NO_MARGIN;
+    Insets2d _margin = NO_MARGIN;
     Insets2d _insets = NO_INSETS;
     Color4d _fgColor = Color4d(.2,.2,.2,1);
     Color4d _bgColor = Color4d(.9,.9,.9,1);
@@ -93,8 +99,10 @@ class Node
     bool isPaintBounds;
     bool _selected;
     bool _pressed;
+    bool _animated;
     int _layer;
     Vec2d _offset = Vec2d.zero;
+    Vec2d _animOffset = Vec2d.zero;
     Vec2d _alignment = Vec2d.zero;
 
     bool delegate(in Vec2d, uint clickCount) onMousePressedDlgs[];
@@ -109,6 +117,7 @@ class Node
     mixin Signal!(string, Color4d, Color4d) changedColor4dSignal;
     mixin Signal!(string, Insets2d, Insets2d) changedInsets2dSignal;
     mixin Signal!(string, Vec2d, Vec2d) changedVector2dSignal;
+    mixin Signal!(string, Box2d, Box2d) changedBox2dSignal;
     mixin Signal!(MouseEvent) mouseEventSignal;
 
     public final void connect(changedBoolSignal.slot_t s)
@@ -200,6 +209,19 @@ class Node
     public final void emit(string propName, in Vec2d newValue, in Vec2d oldValue)
     {
         changedVector2dSignal.emit(propName, newValue, oldValue);
+    }
+
+    public final void connect(changedBox2dSignal.slot_t s)
+    {
+        changedBox2dSignal.connect(s);
+    }
+    public final void disconnect(changedBox2dSignal.slot_t s)
+    {
+        changedBox2dSignal.disconnect(s);
+    }
+    public final void emit(string propName, in Box2d newValue, in Box2d oldValue)
+    {
+        changedBox2dSignal.emit(propName, newValue, oldValue);
     }
 
     public final void connect(mouseEventSignal.slot_t s)
@@ -1025,6 +1047,156 @@ class Node
     public final const(int) layer() const
     {
         return _layer;
+    }
+
+    /**
+     * Sets animated property and emits changed signal if changed
+     * @param new animated value
+     */
+    public final void animated(bool b)
+    {
+        if (b != _animated)
+        {
+            _animated = b;
+            emit(PropName.animated, b, !b);
+        }
+    }
+
+    /**
+     * Gets the animated property
+     * @return animated value
+     */
+    public final bool animated() const
+    {
+        return _animated;
+    }
+
+    /**
+     * Sets margin property and emits changed signal if changed
+     * @param new margin
+     */
+    public final void margin(in Insets2d newMargin)
+    {
+        if (newMargin != _margin)
+        {
+            auto oldMargin = _margin;
+            _margin = newMargin;
+            emit(PropName.margin, newMargin, oldMargin);
+        }
+    }
+
+    /**
+     * Gets margin property as const ref
+     * @return margin
+     */
+    public final ref const(Insets2d) margin() const
+    {
+        return _margin;
+    }
+
+    /**
+     * Gets margin property as mutable ref
+     * @return margin
+     */
+    public final ref Insets2d margin()
+    {
+        return _margin;
+    }
+
+    /**
+     * Sets animated offset property and emits changed signal if changed
+     * @param new animated offset
+     */
+    public final void animOffset(in Vec2d newAnimOffset)
+    {
+        if (newAnimOffset != _animOffset)
+        {
+            auto oldAnimOffset = _animOffset;
+            _animOffset = newAnimOffset;
+            emit(PropName.animOffset, newAnimOffset, oldAnimOffset);
+        }
+    }
+
+    /**
+     * Gets animated offset property as const ref
+     * @return animated offset
+     */
+    public final ref const(Vec2d) animOffset() const
+    {
+        return _animOffset;
+    }
+
+    /**
+     * Gets animated offset property as mutable ref
+     * @return animated offset
+     */
+    public final ref Vec2d animOffset()
+    {
+        return _animOffset;
+    }
+
+    /**
+     * Sets animated boundaries property and emits changed signal if changed
+     * @param new animated boundaries
+     */
+    public final void animBounds(in Box2d newAnimBounds)
+    {
+        if (newAnimBounds != _animBounds)
+        {
+            auto oldAnimBounds = _animBounds;
+            _animBounds = newAnimBounds;
+            emit(PropName.animBounds, newAnimBounds, oldAnimBounds);
+        }
+    }
+
+    /**
+     * Gets animated boundaries property as const ref
+     * @return animated boundaries
+     */
+    public final ref const(Box2d) animBounds() const
+    {
+        return _animBounds;
+    }
+
+    /**
+     * Gets animated boundaries property as mutable ref
+     * @return animated boundaries
+     */
+    public final ref Box2d animBounds()
+    {
+        return _animBounds;
+    }
+
+    /**
+     * Sets boundaries property and emits changed signal if changed
+     * @param new boundaries
+     */
+    public final void bounds(in Box2d newBounds)
+    {
+        if (newBounds != _bounds)
+        {
+            auto oldBounds = _bounds;
+            _bounds = newBounds;
+            emit(PropName.bounds, newBounds, oldBounds);
+        }
+    }
+
+    /**
+     * Gets boundaries property as const ref
+     * @return boundaries
+     */
+    public final ref const(Box2d) bounds() const
+    {
+        return _bounds;
+    }
+
+    /**
+     * Gets boundaries property as mutable ref
+     * @return boundaries
+     */
+    public final ref Box2d bounds()
+    {
+        return _bounds;
     }
 }
 
