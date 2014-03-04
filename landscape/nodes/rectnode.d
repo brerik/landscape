@@ -27,6 +27,10 @@ import cairo.Context;
 
 class RectNode : Node
 {
+    enum PropName : string
+    {
+        lineWidth = "lineWidth"
+    }
     double _lineWidth = 1;
     bool isDraw = true;
     bool isFill = true;
@@ -36,18 +40,26 @@ class RectNode : Node
         super();
     }
 
-    final void lineWidth(double newLineWidth)
+    /**
+     * Sets line width property and emits changed signal if changed
+     * @param newLineWidth
+     */
+    public final void lineWidth(double newLineWidth)
     {
         if (newLineWidth != _lineWidth)
         {
             auto oldLineWidth = _lineWidth;
             _lineWidth = newLineWidth;
-            emit("lineWidth", newLineWidth, oldLineWidth);
+            emit(PropName.lineWidth, newLineWidth, oldLineWidth);
             redraw();
         }
     }
 
-    final double lineWidth() const
+    /**
+     * Gets line width property
+     * @return line width
+     */
+    public final double lineWidth() const
     {
         return _lineWidth;
     }
@@ -72,31 +84,112 @@ class RectNode : Node
 
 class CutCornerRectNode : RectNode
 {
-    Vec2d topLeft = Vec2d(4,4);
-    Vec2d topRight = Vec2d(4,4);
-    Vec2d bottomLeft = Vec2d(4,4);
-    Vec2d bottomRight = Vec2d(4,4);
-
-    void cut(in Vec2d c)
+    enum PropName : string
     {
-        topLeft = topRight = bottomLeft = bottomRight = c;
+        topLeftCut = "topLeftCut",
+        topRightCut = "topRightCut",
+        bottomLeftCut = "bottomLeftCut",
+        bottomRightCut = "bottomRightCut"
+    }
+
+    private Vec2d _topLeftCut = Vec2d(4,4);
+    private Vec2d _topRightCut = Vec2d(4,4);
+    private Vec2d _bottomLeftCut = Vec2d(4,4);
+    private Vec2d _bottomRightCut = Vec2d(4,4);
+
+    public final void cut(in Vec2d c)
+    {
+        topLeftCut = c;
+        topRightCut = c;
+        bottomLeftCut = c;
+        bottomRightCut = c;
+    }
+
+    public final void topLeftCut(in Vec2d newVal)
+    {
+        if (newVal != _topLeftCut)
+        {
+            auto oldVal = _topLeftCut;
+            _topLeftCut = newVal;
+            emit(PropName.topLeftCut, newVal, oldVal);
+        }
+    }
+    public final ref const(Vec2d) topLeftCut() const
+    {
+        return _topLeftCut;
+    }
+
+    public final void topRightCut(in Vec2d newVal)
+    {
+        if (newVal != _topRightCut)
+        {
+            auto oldVal = _topRightCut;
+            _topRightCut = newVal;
+            emit(PropName.topRightCut, newVal, oldVal);
+        }
+    }
+    public final ref const(Vec2d) topRightCut() const
+    {
+        return _topRightCut;
+    }
+
+    public final void bottomLeftCut(in Vec2d newVal)
+    {
+        if (newVal != _bottomLeftCut)
+        {
+            auto oldVal = _bottomLeftCut;
+            _bottomLeftCut = newVal;
+            emit(PropName.bottomLeftCut, newVal, oldVal);
+        }
+    }
+    public final ref const(Vec2d) bottomLeftCut() const
+    {
+        return _bottomLeftCut;
+    }
+
+    public final void bottomRightCut(in Vec2d newVal)
+    {
+        if (newVal != _bottomRightCut)
+        {
+            auto oldVal = _bottomRightCut;
+            _bottomRightCut = newVal;
+            emit(PropName.bottomRightCut, newVal, oldVal);
+        }
+    }
+    public final ref const(Vec2d) bottomRightCut() const
+    {
+        return _bottomRightCut;
     }
 
     final Box2d rectToPaint(double aLineWidth) const
     {
         Box2d r = insetBounds;
-        r.x = r.floorX + lineWidth / 2.0;
-        r.y = r.floorY + lineWidth / 2.0;
-        r.width = r.ceilWidth - lineWidth;
-        r.height = r.ceilHeight - lineWidth;
+        r.x = r.floorX + aLineWidth / 2.0;
+        r.y = r.floorY + aLineWidth / 2.0;
+        r.width = r.ceilWidth - aLineWidth;
+        r.height = r.ceilHeight - aLineWidth;
         return r;
     }
 
     override void doPaintNode(Context ct)
     {
+        void doOutline()
+        {
+            auto r = rectToPaint(lineWidth);
+            ct.moveTo(r.left, r.top + topLeftCut.y);
+            ct.lineTo(r.left + topLeftCut.x, r.top);
+            ct.lineTo(r.right - topRightCut.x, r.top);
+            ct.lineTo(r.right, r.top + topRightCut.y);
+            ct.lineTo(r.right, r.bottom - bottomRightCut.y);
+            ct.lineTo(r.right - bottomRightCut.x, r.bottom);
+            ct.lineTo(r.left + bottomLeftCut.x, r.bottom);
+            ct.lineTo(r.left, r.bottom - bottomLeftCut.y);
+            ct.lineTo(r.left, r.bottom - bottomLeftCut.y);
+            ct.lineTo(r.left, r.top + topLeftCut.y);
+        }
         if (isFill)
         {
-            doOutline(ct);
+            doOutline();
             ct.setSourceRgb(bgColor.red, bgColor.green, bgColor.blue);
             ct.fill();
         }
@@ -104,23 +197,9 @@ class CutCornerRectNode : RectNode
         {
             ct.setLineWidth(lineWidth);
             ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
-            doOutline(ct);
+            doOutline();
             ct.stroke();
         }
     }
 
-    final void doOutline(Context ct)
-    {
-        auto r = rectToPaint(lineWidth);
-        ct.moveTo(r.left, r.top + topLeft.y);
-        ct.lineTo(r.left + topLeft.x, r.top);
-        ct.lineTo(r.right-topRight.x, r.top);
-        ct.lineTo(r.right, r.top + topRight.y);
-        ct.lineTo(r.right, r.bottom - bottomRight.y);
-        ct.lineTo(r.right-bottomRight.x, r.bottom);
-        ct.lineTo(r.left + bottomLeft.x, r.bottom);
-        ct.lineTo(r.left, r.bottom - bottomLeft.y);
-        ct.lineTo(r.left, r.bottom - bottomLeft.y);
-        ct.lineTo(r.left, r.top + topLeft.y);
-    }
 }

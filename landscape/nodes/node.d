@@ -442,26 +442,41 @@ class Node
             children[i].doPaint(ct);
     }
 
+    /**
+     * @return true if node has no parent
+     */
     public final bool isRoot()
     {
         return parent is null;
     }
 
+    /**
+     * @return true if node is a child aka has a parent
+     */
     public final bool isChild()
     {
         return parent !is null;
     }
 
+    /**
+     * @return true if node has a parent
+     */
     public final bool hasParent()
     {
         return parent !is null;
     }
 
+    /**
+     * @return true if node has at least one child
+     */
     public final bool hasChildren()
     {
         return children.length > 0;
     }
 
+    /**
+     * @return number of children
+     */
     public final size_t numChildren()
     {
         return children.length;
@@ -655,11 +670,17 @@ class Node
         }
     }
 
+    /**
+     * @return bounds plus margin
+     */
     final const(Box2d) marginBounds() const
     {
         return bounds + margin;
     }
 
+    /**
+     * @return bounds minus insets
+     */
     final const(Box2d) insetBounds() const
     {
         return bounds - insets;
