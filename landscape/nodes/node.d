@@ -63,7 +63,8 @@ class Node
         bgColor = "bgColor",
         insets = "insets",
         offset = "offset",
-        alignment = "alignment"
+        alignment = "alignment",
+        layer = "layer"
     }
     static immutable LAYOUT_ALL = -1;
     static immutable NO_DIM = Dim2d.zero;
@@ -92,7 +93,7 @@ class Node
     bool isPaintBounds;
     bool _selected;
     bool _pressed;
-    int layer;
+    int _layer;
     Vec2d _offset = Vec2d.zero;
     Vec2d _alignment = Vec2d.zero;
 
@@ -693,6 +694,7 @@ class Node
     {
         return visibleNodesOf(children);
     }
+
     final Node[] shownChildren()
     {
         return shownNodesOf(children);
@@ -733,16 +735,29 @@ class Node
         return l;
     }
 
+
+    /**
+     * Gets offset property as const ref
+     * @return offset
+     */
     final ref const(Vec2d) offset() const
     {
         return _offset;
     }
 
+    /**
+     * Gets offset property as mutable ref
+     * @return offset
+     */
     final ref Vec2d offset()
     {
         return _offset;
     }
 
+    /**
+     * Sets offset property and emits signal if changed
+     * @param newOffset - new offset
+     */
     final void offset(in Vec2d newOffset)
     {
         if (newOffset != _offset)
@@ -763,6 +778,9 @@ class Node
         return bounds - insets;
     }
 
+    /**
+     * Sets selected property
+     */
     public final void selected(bool b)
     {
         if (_selected != b)
@@ -771,11 +789,18 @@ class Node
             emit(PropName.selected, b, !b);
         }
     }
+
+    /**
+     * Gets selected property
+     */
     public final bool selected() const
     {
         return _selected;
     }
 
+    /**
+     * Sets visible property and emits changed signal if changed
+     */
     public final void visible(bool b)
     {
         if (_visible != b)
@@ -784,11 +809,18 @@ class Node
             emit(PropName.visible, b, !b);
         }
     }
+
+    /**
+     * Gets visible property
+     */
     public final bool visible() const
     {
         return _visible;
     }
 
+    /**
+     * Sets pressed property and emits signal if changed
+     */
     public final void pressed(bool b)
     {
         if (_pressed != b)
@@ -797,19 +829,38 @@ class Node
             emit(PropName.pressed, b, !b);
         }
     }
+
+    /**
+     * Gets pressed property
+     * @return pressed
+     */
     public final bool pressed() const
     {
         return _pressed;
     }
 
+    /**
+     * Gets foreground color property as const ref
+     * @return foreground color
+     */
     public final ref const(Color4d) fgColor() const
     {
         return _fgColor;
     }
+
+    /**
+     * Gets foreground color property as mutable ref
+     * @return foreground color
+     */
     public final ref Color4d fgColor()
     {
         return _fgColor;
     }
+
+    /**
+     * Sets foreground color property and emits fgColor changed signal
+     * @param newFgColor - new foreground color
+     */
     public final void fgColor(in Color4d newFgColor)
     {
         if (_fgColor != newFgColor)
@@ -820,18 +871,26 @@ class Node
         }
     }
 
+    /**
+     * Gets background color property as const ref
+     * @return background color
+     */
     public final ref const(Color4d) bgColor() const
     {
         return _bgColor;
     }
 
+    /**
+     * Gets background color property as mutable ref
+     * @return background color
+     */
     public final ref Color4d bgColor()
     {
         return _bgColor;
     }
 
     /**
-     * Sets background color and emits bgColor changed signal
+     * Sets background color property and emits bgColor changed signal
      * @param newBgColor - new background color
      */
     public final void bgColor(in Color4d newBgColor)
@@ -845,7 +904,7 @@ class Node
     }
 
     /**
-     * Sets fgColor and bgColor and emits their changed signals
+     * Sets fgColor and bgColor proprty and emits their changed signals
      * @param NodeColor - foreground color and background color
      */
     public final void nodeColor(in NodeColor c)
@@ -855,7 +914,7 @@ class Node
     }
 
     /**
-     * Gets fgColor and bgColor
+     * Gets fgColor and bgColor property
      * @return NodeColor[fgColor, bgColor]
      */
     public final const(NodeColor) nodeColor() const
@@ -865,7 +924,7 @@ class Node
     }
 
     /**
-     * Sets insets and emits insets changed signal
+     * Sets insets property and emits changed signal
      * @param new insets
      */
     public final void insets(in Insets2d newInsets)
@@ -879,7 +938,7 @@ class Node
     }
 
     /**
-     * Gets insets as const ref
+     * Gets insets property as const ref
      * @return insets
      */
     public final ref const(Insets2d) insets() const
@@ -888,7 +947,7 @@ class Node
     }
 
     /**
-     * Gets insets as mutable ref
+     * Gets insets property as mutable ref
      * @return insets
      */
     public final ref Insets2d insets()
@@ -897,7 +956,7 @@ class Node
     }
 
     /**
-     * Sets alignment and emits alignment changed signal
+     * Sets alignment property and emits alignment changed signal
      * @param new alignment
      */
     public final void alignment(in Vec2d newAlignment)
@@ -911,7 +970,7 @@ class Node
     }
 
     /**
-     * Gets alignment as const ref
+     * Gets alignment property as const ref
      * @return alignment
      */
     public final ref const(Vec2d) alignment() const
@@ -920,12 +979,35 @@ class Node
     }
 
     /**
-     * Gets alignment as mutable ref
+     * Gets alignment property as mutable ref
      * @return alignment
      */
     public final ref Vec2d alignment()
     {
         return _alignment;
+    }
+
+    /**
+     * Sets layer property and emits changed signal
+     * @param newLayer
+     */
+    public final void layer(int newLayer)
+    {
+        if (newLayer != _layer)
+        {
+            auto oldLayer = _layer;
+            _layer = newLayer;
+            emit(PropName.layer, newLayer, oldLayer);
+        }
+    }
+
+    /**
+     * Gets layer property
+     * @return layer
+     */
+    public final const(int) layer() const
+    {
+        return _layer;
     }
 }
 

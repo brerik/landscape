@@ -22,20 +22,10 @@ struct Pair(T)
     T first;
     T second;
 
-    Pair opCall(T first, T second)
+    static Pair opCall(T first, T second)
     {
         Pair p = {first, second};
         return p;
     }
 }
 
-struct Changed(T)
-{
-    T oldValue;
-    T newValue;
-    Changed opCall(T oldValue, T newValue)
-    {
-        Changed c = {oldValue, newValue};
-        return c;
-    }
-}

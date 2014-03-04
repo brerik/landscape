@@ -615,7 +615,7 @@ class DirGroup : FileNode
             return true;
         }
 
-        void watchNamedBool(string name, bool newValue, bool oldValue)
+        void watchNamedBool(string name, bool newValue, bool oldValuez)
         {
             if (name == "selected")
             {
