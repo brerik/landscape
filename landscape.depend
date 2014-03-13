@@ -588,10 +588,10 @@
 	<std/math.d>
 	<std/stdio.d>
 
-1392902788 source:/home/erik/projects/landscape/brew/misc.d
+1393892064 source:/home/erik/projects/landscape/brew/misc.d
 	<brew/math.d>
 
-1392902783 source:/home/erik/projects/landscape/brew/pair.d
+1393891891 source:/home/erik/projects/landscape/brew/pair.d
 
 1392902778 source:/home/erik/projects/landscape/brew/polar.d
 
@@ -639,7 +639,7 @@
 
 1392978505 /home/erik/projects/landscape/glogg/file.d
 
-1392902688 source:/home/erik/projects/landscape/landscape/main.d
+1393965027 source:/home/erik/projects/landscape/landscape/main.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/dirgroup.d>
 	<landscape/map.d>
@@ -671,15 +671,15 @@
 	<glib/Str.d>
 	<core/sys/windows/windows.d>
 
-1392905064 /home/erik/projects/landscape/landscape/nodes/node.d
+1393952514 /home/erik/projects/landscape/landscape/nodes/node.d
 
-1392905014 /home/erik/projects/landscape/landscape/nodes/dirgroup.d
+1393894858 /home/erik/projects/landscape/landscape/nodes/dirgroup.d
 
-1392902695 /home/erik/projects/landscape/landscape/map.d
+1393887593 /home/erik/projects/landscape/landscape/map.d
 
-1392902788 /home/erik/projects/landscape/brew/misc.d
+1393892064 /home/erik/projects/landscape/brew/misc.d
 
-1392902695 source:/home/erik/projects/landscape/landscape/map.d
+1393887593 source:/home/erik/projects/landscape/landscape/map.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/dirgroup.d>
 	<brew/insets.d>
@@ -724,7 +724,7 @@
 	<landscape/nodes/node.d>
 	<cairo/Context.d>
 
-1392905014 source:/home/erik/projects/landscape/landscape/nodes/dirgroup.d
+1393894858 source:/home/erik/projects/landscape/landscape/nodes/dirgroup.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/filenode.d>
 	<landscape/map.d>
@@ -759,13 +759,13 @@
 
 1392902630 /home/erik/projects/landscape/landscape/nodes/filenode.d
 
-1392902652 /home/erik/projects/landscape/landscape/nodes/rectnode.d
+1393899231 /home/erik/projects/landscape/landscape/nodes/rectnode.d
 
-1392902669 /home/erik/projects/landscape/landscape/nodes/textnode.d
+1393952871 /home/erik/projects/landscape/landscape/nodes/textnode.d
 
-1392902662 /home/erik/projects/landscape/landscape/nodes/signnode.d
+1393891985 /home/erik/projects/landscape/landscape/nodes/signnode.d
 
-1392902626 /home/erik/projects/landscape/landscape/nodes/docnode.d
+1393896456 /home/erik/projects/landscape/landscape/nodes/docnode.d
 
 1392902606 /home/erik/projects/landscape/landscape/nodes/circlenode.d
 
@@ -776,7 +776,7 @@
 1392902619 source:/home/erik/projects/landscape/landscape/nodes/dirnode.d
 	<landscape/nodes/filenode.d>
 
-1392902626 source:/home/erik/projects/landscape/landscape/nodes/docnode.d
+1393896456 source:/home/erik/projects/landscape/landscape/nodes/docnode.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/textnode.d>
 	<landscape/nodes/rectnode.d>
@@ -799,13 +799,13 @@
 	<gtkc/glib.d>
 	<core/stdc/stdio.d>
 
-1392902636 /home/erik/projects/landscape/landscape/nodes/iconnode.d
+1393896469 /home/erik/projects/landscape/landscape/nodes/iconnode.d
 
 1392902630 source:/home/erik/projects/landscape/landscape/nodes/filenode.d
 	<landscape/nodes/node.d>
 	<gio/File.d>
 
-1392902636 source:/home/erik/projects/landscape/landscape/nodes/iconnode.d
+1393896469 source:/home/erik/projects/landscape/landscape/nodes/iconnode.d
 	<landscape/nodes/node.d>
 	<brew/box.d>
 	<brew/vec.d>
@@ -817,7 +817,7 @@
 	<cairo/Context.d>
 	<std/stdio.d>
 
-1392905064 source:/home/erik/projects/landscape/landscape/nodes/node.d
+1393952514 source:/home/erik/projects/landscape/landscape/nodes/node.d
 	<brew/math.d>
 	<brew/box.d>
 	<brew/dim.d>
@@ -836,7 +836,7 @@
 
 1392902773 /home/erik/projects/landscape/brew/tween.d
 
-1392902652 source:/home/erik/projects/landscape/landscape/nodes/rectnode.d
+1393899231 source:/home/erik/projects/landscape/landscape/nodes/rectnode.d
 	<landscape/nodes/node.d>
 	<brew/dim.d>
 	<brew/box.d>
@@ -845,11 +845,11 @@
 	<brew/math.d>
 	<cairo/Context.d>
 
-1392902662 source:/home/erik/projects/landscape/landscape/nodes/signnode.d
+1393891985 source:/home/erik/projects/landscape/landscape/nodes/signnode.d
 	<landscape/nodes/node.d>
 	<cairo/Context.d>
 
-1392902669 source:/home/erik/projects/landscape/landscape/nodes/textnode.d
+1393952871 source:/home/erik/projects/landscape/landscape/nodes/textnode.d
 	<landscape/nodes/node.d>
 	<brew/math.d>
 	<brew/box.d>
@@ -864,15 +864,15 @@
 	<pango/PgFontDescription.d>
 	<gtkc/pangotypes.d>
 
-1392985336 source:/home/erik/projects/landscape/landscape/events/event.d
+1393848338 source:/home/erik/projects/landscape/landscape/events/event.d
 
-1392975496 source:/home/erik/projects/landscape/landscape/events/mouseevent.d
+1393849120 source:/home/erik/projects/landscape/landscape/events/mouseevent.d
 	<landscape/events/event.d>
 	<brew/vec.d>
 
-1392985336 /home/erik/projects/landscape/landscape/events/event.d
+1393848338 /home/erik/projects/landscape/landscape/events/event.d
 
-1392975496 /home/erik/projects/landscape/landscape/events/mouseevent.d
+1393849120 /home/erik/projects/landscape/landscape/events/mouseevent.d
 
 1392974224 source:/home/erik/projects/landscape/landscape/events/handler.d
 
@@ -884,7 +884,7 @@
 
 1392902797 /home/erik/projects/landscape/brew/mat.d
 
-1393318562 source:/home/erik/projects/landscape/landscape/sprites/sprite.d
+1393843187 source:/home/erik/projects/landscape/landscape/sprites/sprite.d
 	<landscape/events/renderevent.d>
 	<landscape/events/mouseevent.d>
 	<landscape/events/updateevent.d>
@@ -909,10 +909,14 @@
 1392975469 /home/erik/projects/landscape/landscape/events/eventhandler.d
 	<landscape/events/event.d>
 
-1392985406 source:/home/erik/projects/landscape/landscape/sprites/dirsprite.d
+1393365740 source:/home/erik/projects/landscape/landscape/sprites/dirsprite.d
 	<landscape/sprites/sprite.d>
+	<landscape/events/renderevent.d>
+	<landscape/events/mouseevent.d>
+	<landscape/events/updateevent.d>
+	<landscape/events/event.d>
 
-1393318562 /home/erik/projects/landscape/landscape/sprites/sprite.d
+1393843187 /home/erik/projects/landscape/landscape/sprites/sprite.d
 
 1393318651 source:/home/erik/projects/landscape/landscape/events/updateevent.d
 	<landscape/events/event.d>
@@ -920,4 +924,6 @@
 1392975227 /home/erik/projects/landscape/landscape/events/renderevent.d
 
 1393318651 /home/erik/projects/landscape/landscape/events/updateevent.d
+
+1393366112 source:/home/erik/projects/landscape/landscape/events/boolevent.d
 

@@ -25,10 +25,10 @@
 				<Option type="0" />
 				<Option compiler="dmd" />
 				<Compiler>
-					<Add option="-release" />
-					<Add option="-inline" />
-					<Add option="-O" />
 					<Add option="-w" />
+					<Add option="-release" />
+					<Add option="-O" />
+					<Add option="-inline" />
 				</Compiler>
 				<Linker>
 					<Add option="landscape.def" />
