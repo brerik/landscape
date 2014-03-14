@@ -543,7 +543,7 @@
 
 1392411396 source:/home/erik/projects/landscape/resources.rc
 
-1392973622 source:/home/erik/projects/landscape/brew/box.d
+1394729375 source:/home/erik/projects/landscape/brew/box.d
 	<brew/vec.d>
 	<brew/dim.d>
 	<brew/math.d>
@@ -551,81 +551,81 @@
 	<std/string.d>
 	<std/stdio.d>
 
-1392902764 /home/erik/projects/landscape/brew/vec.d
+1394729375 /home/erik/projects/landscape/brew/vec.d
 
-1392973725 /home/erik/projects/landscape/brew/dim.d
+1394729375 /home/erik/projects/landscape/brew/dim.d
 
-1392902792 /home/erik/projects/landscape/brew/math.d
+1394729375 /home/erik/projects/landscape/brew/math.d
 
-1392902807 /home/erik/projects/landscape/brew/insets.d
+1394729375 /home/erik/projects/landscape/brew/insets.d
 
-1392902822 source:/home/erik/projects/landscape/brew/color.d
+1394759507 source:/home/erik/projects/landscape/brew/color.d
 	<brew/math.d>
 	<std/string.d>
 
-1392973725 source:/home/erik/projects/landscape/brew/dim.d
+1394729375 source:/home/erik/projects/landscape/brew/dim.d
 	<brew/math.d>
 	<brew/vec.d>
 	<std/string.d>
 	<std/stdio.d>
 
-1392902810 source:/home/erik/projects/landscape/brew/fun.d
+1394729375 source:/home/erik/projects/landscape/brew/fun.d
 	<brew/math.d>
 
-1392902807 source:/home/erik/projects/landscape/brew/insets.d
+1394729375 source:/home/erik/projects/landscape/brew/insets.d
 	<std/string.d>
 
-1392902802 source:/home/erik/projects/landscape/brew/loc.d
+1394729375 source:/home/erik/projects/landscape/brew/loc.d
 	<std/string.d>
 
-1392902797 source:/home/erik/projects/landscape/brew/mat.d
+1394729375 source:/home/erik/projects/landscape/brew/mat.d
 	<brew/vec.d>
 	<std/string.d>
 	<std/stdio.d>
 	<std/math.d>
 
-1392902792 source:/home/erik/projects/landscape/brew/math.d
+1394729375 source:/home/erik/projects/landscape/brew/math.d
 	<std/math.d>
 	<std/stdio.d>
 
-1393892064 source:/home/erik/projects/landscape/brew/misc.d
+1394729375 source:/home/erik/projects/landscape/brew/misc.d
 	<brew/math.d>
 
-1393891891 source:/home/erik/projects/landscape/brew/pair.d
+1394729375 source:/home/erik/projects/landscape/brew/pair.d
 
-1392902778 source:/home/erik/projects/landscape/brew/polar.d
+1394729375 source:/home/erik/projects/landscape/brew/polar.d
 
-1392902773 source:/home/erik/projects/landscape/brew/tween.d
+1394729375 source:/home/erik/projects/landscape/brew/tween.d
 
-1392902764 source:/home/erik/projects/landscape/brew/vec.d
+1394729375 source:/home/erik/projects/landscape/brew/vec.d
 	<brew/math.d>
 	<std/string.d>
 	<std/stdio.d>
 
-1392978505 source:/home/erik/projects/landscape/glogg/file.d
+1394729375 source:/home/erik/projects/landscape/glogg/file.d
 	<glogg/string.d>
 	<gio/File.d>
 	<gtkc/gio.d>
 
-1392902870 /home/erik/projects/landscape/glogg/string.d
+1394729375 /home/erik/projects/landscape/glogg/string.d
 
-1392978515 source:/home/erik/projects/landscape/glogg/gdk.d
+1394729375 source:/home/erik/projects/landscape/glogg/gdk.d
 	<brew/color.d>
 	<gdk/RGBA.d>
 
-1392902822 /home/erik/projects/landscape/brew/color.d
+1394759507 /home/erik/projects/landscape/brew/color.d
 
-1392902870 source:/home/erik/projects/landscape/glogg/string.d
+1394729375 source:/home/erik/projects/landscape/glogg/string.d
 	<glib/Str.d>
 	<glib/Unicode.d>
 	<gtkc/gio.d>
 
-1392902875 source:/home/erik/projects/landscape/glogg/strutil.d
+1394729375 source:/home/erik/projects/landscape/glogg/strutil.d
 
-1392902674 source:/home/erik/projects/landscape/landscape/event.d
+1394729375 source:/home/erik/projects/landscape/landscape/event.d
 	<brew/vec.d>
 
-1392902680 source:/home/erik/projects/landscape/landscape/fileutil.d
+1394729375 source:/home/erik/projects/landscape/landscape/fileutil.d
 	<gio/File.d>
 	<std/string.d>
 	<std/system.d>
@@ -637,9 +637,9 @@
 	<std/c/windows/windows.d>
 	<std/windows/charset.d>
 
-1392978505 /home/erik/projects/landscape/glogg/file.d
+1394729375 /home/erik/projects/landscape/glogg/file.d
 
-1393965027 source:/home/erik/projects/landscape/landscape/main.d
+1394759219 source:/home/erik/projects/landscape/landscape/main.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/dirgroup.d>
 	<landscape/map.d>
@@ -671,15 +671,15 @@
 	<glib/Str.d>
 	<core/sys/windows/windows.d>
 
-1393952514 /home/erik/projects/landscape/landscape/nodes/node.d
+1394729374 /home/erik/projects/landscape/landscape/nodes/node.d
 
-1393894858 /home/erik/projects/landscape/landscape/nodes/dirgroup.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/dirgroup.d
 
-1393887593 /home/erik/projects/landscape/landscape/map.d
+1394761230 /home/erik/projects/landscape/landscape/map.d
 
-1393892064 /home/erik/projects/landscape/brew/misc.d
+1394729375 /home/erik/projects/landscape/brew/misc.d
 
-1393887593 source:/home/erik/projects/landscape/landscape/map.d
+1394761230 source:/home/erik/projects/landscape/landscape/map.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/dirgroup.d>
 	<brew/insets.d>
@@ -689,6 +689,7 @@
 	<brew/misc.d>
 	<brew/math.d>
 	<brew/color.d>
+	<brew/cairo.d>
 	<glogg/gdk.d>
 	<gtk/MainWindow.d>
 	<gtk/AboutDialog.d>
@@ -709,22 +710,23 @@
 	<gtkc/pangotypes.d>
 	<gtkc/gtktypes.d>
 	<gtkc/giotypes.d>
+	<gtkc/cairotypes.d>
 	<cairo/Context.d>
 	<cairo/FontOption.d>
+	<cairo/Surface.d>
 	<pango/PgContext.d>
 	<std/stdio.d>
-	<core/memory.d>
 
-1392973622 /home/erik/projects/landscape/brew/box.d
+1394729375 /home/erik/projects/landscape/brew/box.d
 
-1392978515 /home/erik/projects/landscape/glogg/gdk.d
+1394729375 /home/erik/projects/landscape/glogg/gdk.d
 
-1392902606 source:/home/erik/projects/landscape/landscape/nodes/circlenode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/circlenode.d
 	<std/string.d>
 	<landscape/nodes/node.d>
 	<cairo/Context.d>
 
-1393894858 source:/home/erik/projects/landscape/landscape/nodes/dirgroup.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/dirgroup.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/filenode.d>
 	<landscape/map.d>
@@ -757,26 +759,26 @@
 	<ed.d>
 	<true.d>
 
-1392902630 /home/erik/projects/landscape/landscape/nodes/filenode.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/filenode.d
 
-1393899231 /home/erik/projects/landscape/landscape/nodes/rectnode.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/rectnode.d
 
-1393952871 /home/erik/projects/landscape/landscape/nodes/textnode.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/textnode.d
 
-1393891985 /home/erik/projects/landscape/landscape/nodes/signnode.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/signnode.d
 
-1393896456 /home/erik/projects/landscape/landscape/nodes/docnode.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/docnode.d
 
-1392902606 /home/erik/projects/landscape/landscape/nodes/circlenode.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/circlenode.d
 
-1392902810 /home/erik/projects/landscape/brew/fun.d
+1394729375 /home/erik/projects/landscape/brew/fun.d
 
-1392902680 /home/erik/projects/landscape/landscape/fileutil.d
+1394729375 /home/erik/projects/landscape/landscape/fileutil.d
 
-1392902619 source:/home/erik/projects/landscape/landscape/nodes/dirnode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/dirnode.d
 	<landscape/nodes/filenode.d>
 
-1393896456 source:/home/erik/projects/landscape/landscape/nodes/docnode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/docnode.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/textnode.d>
 	<landscape/nodes/rectnode.d>
@@ -799,13 +801,13 @@
 	<gtkc/glib.d>
 	<core/stdc/stdio.d>
 
-1393896469 /home/erik/projects/landscape/landscape/nodes/iconnode.d
+1394729375 /home/erik/projects/landscape/landscape/nodes/iconnode.d
 
-1392902630 source:/home/erik/projects/landscape/landscape/nodes/filenode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/filenode.d
 	<landscape/nodes/node.d>
 	<gio/File.d>
 
-1393896469 source:/home/erik/projects/landscape/landscape/nodes/iconnode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/iconnode.d
 	<landscape/nodes/node.d>
 	<brew/box.d>
 	<brew/vec.d>
@@ -817,7 +819,7 @@
 	<cairo/Context.d>
 	<std/stdio.d>
 
-1393952514 source:/home/erik/projects/landscape/landscape/nodes/node.d
+1394729374 source:/home/erik/projects/landscape/landscape/nodes/node.d
 	<brew/math.d>
 	<brew/box.d>
 	<brew/dim.d>
@@ -834,9 +836,9 @@
 	<std/signals.d>
 	<landscape/events/mouseevent.d>
 
-1392902773 /home/erik/projects/landscape/brew/tween.d
+1394729375 /home/erik/projects/landscape/brew/tween.d
 
-1393899231 source:/home/erik/projects/landscape/landscape/nodes/rectnode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/rectnode.d
 	<landscape/nodes/node.d>
 	<brew/dim.d>
 	<brew/box.d>
@@ -845,11 +847,11 @@
 	<brew/math.d>
 	<cairo/Context.d>
 
-1393891985 source:/home/erik/projects/landscape/landscape/nodes/signnode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/signnode.d
 	<landscape/nodes/node.d>
 	<cairo/Context.d>
 
-1393952871 source:/home/erik/projects/landscape/landscape/nodes/textnode.d
+1394729375 source:/home/erik/projects/landscape/landscape/nodes/textnode.d
 	<landscape/nodes/node.d>
 	<brew/math.d>
 	<brew/box.d>
@@ -864,15 +866,15 @@
 	<pango/PgFontDescription.d>
 	<gtkc/pangotypes.d>
 
-1393848338 source:/home/erik/projects/landscape/landscape/events/event.d
+1394729374 source:/home/erik/projects/landscape/landscape/events/event.d
 
-1393849120 source:/home/erik/projects/landscape/landscape/events/mouseevent.d
+1394729374 source:/home/erik/projects/landscape/landscape/events/mouseevent.d
 	<landscape/events/event.d>
 	<brew/vec.d>
 
-1393848338 /home/erik/projects/landscape/landscape/events/event.d
+1394729374 /home/erik/projects/landscape/landscape/events/event.d
 
-1393849120 /home/erik/projects/landscape/landscape/events/mouseevent.d
+1394729374 /home/erik/projects/landscape/landscape/events/mouseevent.d
 
 1392974224 source:/home/erik/projects/landscape/landscape/events/handler.d
 
@@ -882,9 +884,9 @@
 	<brew/vec.d>
 	<cairo/Context.d>
 
-1392902797 /home/erik/projects/landscape/brew/mat.d
+1394729375 /home/erik/projects/landscape/brew/mat.d
 
-1393843187 source:/home/erik/projects/landscape/landscape/sprites/sprite.d
+1394729375 source:/home/erik/projects/landscape/landscape/sprites/sprite.d
 	<landscape/events/renderevent.d>
 	<landscape/events/mouseevent.d>
 	<landscape/events/updateevent.d>
@@ -897,10 +899,10 @@
 
 1392974224 /home/erik/projects/landscape/landscape/events/handler.d
 
-1392975469 source:/home/erik/projects/landscape/landscape/events/eventhandler.d
+1394729375 source:/home/erik/projects/landscape/landscape/events/eventhandler.d
 	<landscape/events/event.d>
 
-1392975227 source:/home/erik/projects/landscape/landscape/events/renderevent.d
+1394729375 source:/home/erik/projects/landscape/landscape/events/renderevent.d
 	<landscape/events/event.d>
 	<brew/mat.d>
 	<brew/vec.d>
@@ -909,21 +911,27 @@
 1392975469 /home/erik/projects/landscape/landscape/events/eventhandler.d
 	<landscape/events/event.d>
 
-1393365740 source:/home/erik/projects/landscape/landscape/sprites/dirsprite.d
+1394729375 source:/home/erik/projects/landscape/landscape/sprites/dirsprite.d
 	<landscape/sprites/sprite.d>
 	<landscape/events/renderevent.d>
 	<landscape/events/mouseevent.d>
 	<landscape/events/updateevent.d>
 	<landscape/events/event.d>
 
-1393843187 /home/erik/projects/landscape/landscape/sprites/sprite.d
+1394729375 /home/erik/projects/landscape/landscape/sprites/sprite.d
 
-1393318651 source:/home/erik/projects/landscape/landscape/events/updateevent.d
+1394729375 source:/home/erik/projects/landscape/landscape/events/updateevent.d
 	<landscape/events/event.d>
 
-1392975227 /home/erik/projects/landscape/landscape/events/renderevent.d
+1394729375 /home/erik/projects/landscape/landscape/events/renderevent.d
 
-1393318651 /home/erik/projects/landscape/landscape/events/updateevent.d
+1394729375 /home/erik/projects/landscape/landscape/events/updateevent.d
 
 1393366112 source:/home/erik/projects/landscape/landscape/events/boolevent.d
+
+1394760501 source:/home/erik/projects/landscape/brew/cairo.d
+	<brew/color.d>
+	<cairo/Context.d>
+
+1394760501 /home/erik/projects/landscape/brew/cairo.d
 

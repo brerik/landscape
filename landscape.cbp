@@ -19,7 +19,6 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option platforms="Windows;" />
 				<Option output="bin/Release/Landscape" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="0" />
@@ -28,11 +27,7 @@
 					<Add option="-w" />
 					<Add option="-release" />
 					<Add option="-O" />
-					<Add option="-inline" />
 				</Compiler>
-				<Linker>
-					<Add option="landscape.def" />
-				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
@@ -45,6 +40,7 @@
 			<Add library="dl" />
 		</Linker>
 		<Unit filename="brew/box.d" />
+		<Unit filename="brew/cairo.d" />
 		<Unit filename="brew/color.d" />
 		<Unit filename="brew/dim.d" />
 		<Unit filename="brew/fun.d" />

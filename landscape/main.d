@@ -66,6 +66,9 @@ Other link options
 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/i386-linux-gnu
 
 
+WINDOWS
+landscape.def
+
 */
 
 

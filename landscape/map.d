@@ -16,39 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 module landscape.map;
-private import landscape.nodes.node;
-private import landscape.nodes.dirgroup;
-private import brew.insets;
-private import brew.box;
-private import brew.vec;
-private import brew.dim;
-private import brew.misc;
-private import brew.math;
-private import brew.color;
-private import glogg.gdk;
-private import gtk.MainWindow;
-private import gtk.AboutDialog;
-private import gtk.Label;
-private import gtk.Button;
-private import gtk.Box;
-private import gtk.Main;
-private import gtk.Widget;
-private import gtk.Layout;
-private import gtk.Scrollbar;
-private import gtk.Adjustment;
-private import gtk.ScrolledWindow;
-private import gtk.DrawingArea;
-private import gdk.DragContext;
-private import gdk.Event;
-private import gio.FileEnumerator;
-private import gio.File;
-private import gtkc.pangotypes;
-private import gtkc.gtktypes;
-private import gtkc.giotypes;
-private import cairo.Context;
-private import cairo.FontOption;
-private import pango.PgContext;
-private import std.stdio;
+import landscape.nodes.node;
+import landscape.nodes.dirgroup;
+import brew.insets;
+import brew.box;
+import brew.vec;
+import brew.dim;
+import brew.misc;
+import brew.math;
+import brew.color;
+import brew.cairo;
+import glogg.gdk;
+import gtk.MainWindow;
+import gtk.AboutDialog;
+import gtk.Label;
+import gtk.Button;
+import gtk.Box;
+import gtk.Main;
+import gtk.Widget;
+import gtk.Layout;
+import gtk.Scrollbar;
+import gtk.Adjustment;
+import gtk.ScrolledWindow;
+import gtk.DrawingArea;
+import gdk.DragContext;
+import gdk.Event;
+import gio.FileEnumerator;
+import gio.File;
+import gtkc.pangotypes;
+import gtkc.gtktypes;
+import gtkc.giotypes;
+import gtkc.cairotypes;
+import cairo.Context;
+import cairo.FontOption;
+import cairo.Surface;
+import pango.PgContext;
+import std.stdio;
 
 struct FsUtil
 {
@@ -86,6 +89,7 @@ class Map : DrawingArea
     static immutable SCALE_BOUNDS = Interval!double(0.2, 2.0);
     static immutable SCALE_GRANULARITY = 0.1;
     static immutable INSETS = Insets2d(400,400,400,400);
+    static immutable BG_COLOR = Color4d(0.9, 0.9, 0.9, 1.0);
     Adjustment hAdj, vAdj;
     private Vec2d oldMouseCoords = Vec2d.zero;
     double mScale = 1.0;
@@ -96,34 +100,71 @@ class Map : DrawingArea
     bool boundsDirty;
     Color4d bgColor;
     Vec2d offset = Vec2d.zero;
+    Surface surface;
+
+
     this()
     {
         super();
         bounds = Box2d.zero;
-        bgColor = Color4d(.9,.9,.9);
-        overrideBackgroundColor(StateFlags.NORMAL, GloggGtk.toRGBA(bgColor));
+        bgColor = BG_COLOR;
         addOnButtonPress(&onMouseButtonPress);
         addOnButtonRelease(&onMouseButtonRelease);
         addOnMotionNotify(&onMouseMotion);
         addOnScroll(&onMouseScroll);
-        addOnDraw(&onMyDraw);
+        addOnDraw(&onDrawCb);
+        addOnConfigure(&onConfigureEventCb);
+        addOnDestroy(&onDestroyCb);
         root = new Root();
         addRoot(buildDir(GioFile.parseName("~")));
         cleanUp();
     }
 
-    final bool onMyDraw(Context ct, Widget wgt)
+    final void clearSurface()
+    {
+        assert (surface);
+        Context cr = Context.create(surface);
+        setSourceRgba(cr, bgColor);
+        cr.paint();
+        delete cr;
+    }
+
+    final bool onConfigureEventCb(Event ev, Widget wt)
+    {
+      if (surface)
+        surface.destroy();
+
+      surface = new Surface(getWindow(), CairoContent.COLOR, getAllocatedWidth(), getAllocatedHeight());
+      clearSurface();
+      return true;
+    }
+
+    final bool onDrawCb(Context cr, Widget wt)
+    {
+        drawMap();
+        cr.setSourceSurface(surface, 0, 0);
+        cr.paint();
+        return false;
+    }
+
+    final void drawMap()
     {
         cleanUp();
-        ct.translate(Mathd.floor(offset.x), Mathd.floor(offset.y));
+        Context cr = Context.create(surface);
+        setSourceRgba(cr, bgColor);
+        cr.paint();
+        cr.translate(Mathd.floor(offset.x), Mathd.floor(offset.y));
         if (scale != 1.0)
-            ct.scale(scale, scale);
-        doPaint(ct);
+            cr.scale(scale, scale);
+        root.doPaint(cr);
+        delete cr;
+    }
 
-        ct.newPath();
-        import core.memory;
-        GC.collect();
-        return false;
+    final void onDestroyCb(Widget wt)
+    {
+        if (surface)
+            surface.destroy();
+        surface = null;
     }
 
     final DirGroup buildDir(GioFile f)
@@ -217,11 +258,6 @@ class Map : DrawingArea
     final void addRoot(Node node)
     {
         root.addChild(node);
-    }
-
-    final void doPaint(Context ct)
-    {
-        root.doPaint(ct);
     }
 
     final void cleanUp()
