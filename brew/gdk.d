@@ -1,5 +1,5 @@
 /*
- * Glögg Gdkd Utilities
+ * Brew Miscellaneous Library for GDK Extensions
  * Copyright (C) 2013-2014 Erik Wikforss
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,33 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-module glogg.gtk;
+module brew.gdk;
 import brew.color;
 import brew.vec;
 import gdk.RGBA;
 import gdk.Event;
 
-struct GloggGtk
+RGBA toRGBA(in Color4d c)
 {
-    static RGBA toRGBA(in Color4d c)
-    {
-        return new RGBA(c.red, c.green, c.blue, c.alpha);
-    }
+    return new RGBA(c.red, c.green, c.blue, c.alpha);
+}
 
-    static RGBA toRGBA(in Color3d c)
-    {
-        return new RGBA(c.red, c.green, c.blue, 1.0);
-    }
+RGBA toRGBA(in Color3d c)
+{
+    return new RGBA(c.red, c.green, c.blue, 1.0);
+}
 
-    static RGBA toRGBA(in Color4f c)
-    {
-        return new RGBA(c.red, c.green, c.blue, c.alpha);
-    }
+RGBA toRGBA(in Color4f c)
+{
+    return new RGBA(c.red, c.green, c.blue, c.alpha);
+}
 
-    static RGBA toRGBA(in Color3f c)
-    {
-        return new RGBA(c.red, c.green, c.blue, 1.0);
-    }
+RGBA toRGBA(in Color3f c)
+{
+    return new RGBA(c.red, c.green, c.blue, 1.0);
 }
 
 /**

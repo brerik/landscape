@@ -1,5 +1,5 @@
 /*
- * Brew Miscellaneous Library by Brother Erik Wikforss
+ * Brew Miscellaneous Library for Dimensions
  * Copyright (C) 2013-2014 Erik Wikforss
  *
  * This program is free software: you can redistribute it and/or modify

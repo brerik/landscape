@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-module glogg.string;
+module brew.gstr;
 import glib.Str;
 import glib.Unicode;
 private import gtkc.gio;
@@ -23,7 +23,7 @@ private import gtkc.gio;
 /**
  * GLIB Str Extensions
  */
-public final class GloggStr
+public final class GStr
 {
 
 	/*************************************************

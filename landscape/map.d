@@ -27,7 +27,7 @@ import brew.misc;
 import brew.math;
 import brew.color;
 import brew.cairo;
-import glogg.gdk;
+import brew.gdk;
 import gtk.MainWindow;
 import gtk.AboutDialog;
 import gtk.Label;

@@ -551,7 +551,7 @@
 	<std/string.d>
 	<std/stdio.d>
 
-1394729375 /home/erik/projects/landscape/brew/vec.d
+1395015735 /home/erik/projects/landscape/brew/vec.d
 
 1394729375 /home/erik/projects/landscape/brew/dim.d
 
@@ -597,7 +597,7 @@
 
 1394729375 source:/home/erik/projects/landscape/brew/tween.d
 
-1394729375 source:/home/erik/projects/landscape/brew/vec.d
+1395015735 source:/home/erik/projects/landscape/brew/vec.d
 	<brew/math.d>
 	<std/string.d>
 	<std/stdio.d>
@@ -609,9 +609,11 @@
 
 1394729375 /home/erik/projects/landscape/glogg/string.d
 
-1394729375 source:/home/erik/projects/landscape/glogg/gdk.d
+1395016229 source:/home/erik/projects/landscape/glogg/gdk.d
 	<brew/color.d>
+	<brew/vec.d>
 	<gdk/RGBA.d>
+	<gdk/Event.d>
 
 1394759507 /home/erik/projects/landscape/brew/color.d
 
@@ -671,17 +673,18 @@
 	<glib/Str.d>
 	<core/sys/windows/windows.d>
 
-1394729374 /home/erik/projects/landscape/landscape/nodes/node.d
+1395017696 /home/erik/projects/landscape/landscape/nodes/node.d
 
 1394729375 /home/erik/projects/landscape/landscape/nodes/dirgroup.d
 
-1394761230 /home/erik/projects/landscape/landscape/map.d
+1395018887 /home/erik/projects/landscape/landscape/map.d
 
 1394729375 /home/erik/projects/landscape/brew/misc.d
 
-1394761230 source:/home/erik/projects/landscape/landscape/map.d
+1395018887 source:/home/erik/projects/landscape/landscape/map.d
 	<landscape/nodes/node.d>
 	<landscape/nodes/dirgroup.d>
+	<landscape/nodes/rectnode.d>
 	<brew/insets.d>
 	<brew/box.d>
 	<brew/vec.d>
@@ -716,10 +719,11 @@
 	<cairo/Surface.d>
 	<pango/PgContext.d>
 	<std/stdio.d>
+	<core/memory.d>
 
 1394729375 /home/erik/projects/landscape/brew/box.d
 
-1394729375 /home/erik/projects/landscape/glogg/gdk.d
+1395045711 /home/erik/projects/landscape/glogg/gdk.d
 
 1394729375 source:/home/erik/projects/landscape/landscape/nodes/circlenode.d
 	<std/string.d>
@@ -819,7 +823,7 @@
 	<cairo/Context.d>
 	<std/stdio.d>
 
-1394729374 source:/home/erik/projects/landscape/landscape/nodes/node.d
+1395017696 source:/home/erik/projects/landscape/landscape/nodes/node.d
 	<brew/math.d>
 	<brew/box.d>
 	<brew/dim.d>

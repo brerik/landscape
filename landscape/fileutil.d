@@ -21,8 +21,8 @@ import std.string;
 import std.system;
 import std.stdio;
 import std.utf;
-import glogg.string;
-import glogg.file;
+import brew.gstr;
+import brew.gio;
 import std.c.stdlib;
 alias gio.File.File GioFile;
 
