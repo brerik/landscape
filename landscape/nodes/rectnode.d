@@ -25,26 +25,28 @@ import brew.color;
 import brew.math;
 import cairo.Context;
 
+/**
+ * Node with rectangular frame
+ */
 class RectNode : Node
 {
     enum PropName : string
     {
-        lineWidth = "lineWidth"
+        lineWidth = "lineWidth",
+        outlined = "outlined",
+        filled = "filled"
     }
-    double _lineWidth = 1;
-    bool isDraw = true;
-    bool isFill = true;
 
-    this()
-    {
-        super();
-    }
+    double _lineWidth = 1.0;
+    bool _outlined = true;
+    bool _filled = true;
+
 
     /**
      * Sets line width property and emits changed signal if changed
      * @param newLineWidth
      */
-    public final void lineWidth(double newLineWidth)
+    final void lineWidth(double newLineWidth)
     {
         if (newLineWidth != _lineWidth)
         {
@@ -59,20 +61,20 @@ class RectNode : Node
      * Gets line width property
      * @return line width
      */
-    public final double lineWidth() const
+    final double lineWidth() const
     {
         return _lineWidth;
     }
 
     override void doPaintNode(Context ct)
     {
-        if (isFill)
+        if (filled)
         {
             ct.rectangle(bounds.x+insets.left, bounds.y+insets.top, bounds.width-insets.width, bounds.height-insets.height);
             ct.setSourceRgb(bgColor.red, bgColor.green, bgColor.blue);
             ct.fill();
         }
-        if (isDraw)
+        if (outlined && lineWidth > 0)
         {
             ct.setLineWidth(lineWidth);
             ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
@@ -80,10 +82,41 @@ class RectNode : Node
             ct.stroke();
         }
     }
+
+    final bool outlined() const
+    {
+        return _outlined;
+    }
+
+    final void outlined(bool b)
+    {
+        if (b != _outlined)
+        {
+            _outlined = b;
+            emit(PropName.outlined, _outlined, !_outlined);
+        }
+    }
+    final bool filled() const
+    {
+        return _filled;
+    }
+
+    final void filled(bool b)
+    {
+        if (b != _filled)
+        {
+            _filled = b;
+            emit(PropName.filled, _filled, !_filled);
+        }
+    }
 }
 
+/**
+ * Node with rectangular frame with cut curners
+ */
 class CutCornerRectNode : RectNode
 {
+    static immutable DEFAULT_CUT = Vec2d(4,4);
     enum PropName : string
     {
         topLeftCut = "topLeftCut",
@@ -92,12 +125,12 @@ class CutCornerRectNode : RectNode
         bottomRightCut = "bottomRightCut"
     }
 
-    private Vec2d _topLeftCut = Vec2d(4,4);
-    private Vec2d _topRightCut = Vec2d(4,4);
-    private Vec2d _bottomLeftCut = Vec2d(4,4);
-    private Vec2d _bottomRightCut = Vec2d(4,4);
+    Vec2d _topLeftCut = DEFAULT_CUT;
+    Vec2d _topRightCut = DEFAULT_CUT;
+    Vec2d _bottomLeftCut = DEFAULT_CUT;
+    Vec2d _bottomRightCut = DEFAULT_CUT;
 
-    public final void cut(in Vec2d c)
+    final void cut(in Vec2d c)
     {
         topLeftCut = c;
         topRightCut = c;
@@ -105,7 +138,7 @@ class CutCornerRectNode : RectNode
         bottomRightCut = c;
     }
 
-    public final void topLeftCut(in Vec2d newVal)
+    final void topLeftCut(in Vec2d newVal)
     {
         if (newVal != _topLeftCut)
         {
@@ -114,12 +147,13 @@ class CutCornerRectNode : RectNode
             emit(PropName.topLeftCut, newVal, oldVal);
         }
     }
-    public final ref const(Vec2d) topLeftCut() const
+
+    final ref const(Vec2d) topLeftCut() const
     {
         return _topLeftCut;
     }
 
-    public final void topRightCut(in Vec2d newVal)
+    final void topRightCut(in Vec2d newVal)
     {
         if (newVal != _topRightCut)
         {
@@ -128,12 +162,13 @@ class CutCornerRectNode : RectNode
             emit(PropName.topRightCut, newVal, oldVal);
         }
     }
-    public final ref const(Vec2d) topRightCut() const
+
+    final ref const(Vec2d) topRightCut() const
     {
         return _topRightCut;
     }
 
-    public final void bottomLeftCut(in Vec2d newVal)
+    final void bottomLeftCut(in Vec2d newVal)
     {
         if (newVal != _bottomLeftCut)
         {
@@ -142,12 +177,13 @@ class CutCornerRectNode : RectNode
             emit(PropName.bottomLeftCut, newVal, oldVal);
         }
     }
-    public final ref const(Vec2d) bottomLeftCut() const
+
+    final ref const(Vec2d) bottomLeftCut() const
     {
         return _bottomLeftCut;
     }
 
-    public final void bottomRightCut(in Vec2d newVal)
+    final void bottomRightCut(in Vec2d newVal)
     {
         if (newVal != _bottomRightCut)
         {
@@ -156,7 +192,8 @@ class CutCornerRectNode : RectNode
             emit(PropName.bottomRightCut, newVal, oldVal);
         }
     }
-    public final ref const(Vec2d) bottomRightCut() const
+
+    final ref const(Vec2d) bottomRightCut() const
     {
         return _bottomRightCut;
     }
@@ -187,13 +224,13 @@ class CutCornerRectNode : RectNode
             ct.lineTo(r.left, r.bottom - bottomLeftCut.y);
             ct.lineTo(r.left, r.top + topLeftCut.y);
         }
-        if (isFill)
+        if (filled)
         {
             doOutline();
             ct.setSourceRgb(bgColor.red, bgColor.green, bgColor.blue);
             ct.fill();
         }
-        if (isDraw && lineWidth > 0)
+        if (outlined && lineWidth > 0)
         {
             ct.setLineWidth(lineWidth);
             ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
