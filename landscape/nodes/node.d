@@ -363,6 +363,13 @@ class Node
         return b;
     }
 
+    final const(Box2d) computeTotalBounds(Box2d startBounds = Box2d(0,0,0,0)) {
+        Box2d b = startBounds;
+        foreach(Node child; shownChildren)
+            b = b.unionWith(child.transformedTotalBounds);
+        return b;
+    }
+
     final const(Box2d) transformedTotalBounds() const
     {
         return totalBounds.translated(offset);

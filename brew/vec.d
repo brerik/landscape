@@ -627,6 +627,16 @@ struct Vec(int D, T)
         static if (D==3) return Vec!(D,T)(roundX,roundY,roundZ);
         static if (D==4) return Vec!(D,T)(roundX,roundY,roundZ,roundW);
     }
+
+    bool isNan() const
+    {
+        return this == nan;
+    }
+
+    bool isZero() const
+    {
+        return this == zero;
+    }
 }
 
 alias Vec!(1,float) Vec1f;

@@ -18,6 +18,7 @@
 module landscape.map;
 import landscape.nodes.node;
 import landscape.nodes.dirgroup;
+import landscape.nodes.rectnode;
 import brew.insets;
 import brew.box;
 import brew.vec;
@@ -52,36 +53,7 @@ import cairo.FontOption;
 import cairo.Surface;
 import pango.PgContext;
 import std.stdio;
-
-struct FsUtil
-{
-    static Vec2d getScrollDeltas(Event ev)
-    {
-        ScrollDirection sd;
-        if (ev.getScrollDirection(sd))
-        {
-            switch (sd)
-            {
-                case ScrollDirection.UP:
-                    return Vec2d(0,-1);
-                case ScrollDirection.DOWN:
-                    return Vec2d(0,1);
-                case ScrollDirection.LEFT:
-                    return Vec2d(-1,0);
-                case ScrollDirection.RIGHT:
-                    return Vec2d(1,0);
-                case ScrollDirection.SMOOTH:
-                    Vec2d d;
-                    if (ev.getScrollDeltas(d.x, d.y))
-                        return d;
-                    return Vec2d.zero;
-                default:
-                    return Vec2d.zero;
-            }
-        }
-        return Vec2d.zero;
-    }
-}
+import core.memory;
 
 class Map : DrawingArea
 {
@@ -89,7 +61,7 @@ class Map : DrawingArea
     static immutable SCALE_BOUNDS = Interval!double(0.2, 2.0);
     static immutable SCALE_GRANULARITY = 0.1;
     static immutable INSETS = Insets2d(400,400,400,400);
-    static immutable BG_COLOR = Color4d(0.9, 0.9, 0.9, 1.0);
+    static immutable BG_COLOR = Color4d(0.5, 0.5, 0.5, 1.0);
     Adjustment hAdj, vAdj;
     private Vec2d oldMouseCoords = Vec2d.zero;
     double mScale = 1.0;
@@ -101,7 +73,6 @@ class Map : DrawingArea
     Color4d bgColor;
     Vec2d offset = Vec2d.zero;
     Surface surface;
-
 
     this()
     {
@@ -144,6 +115,8 @@ class Map : DrawingArea
         drawMap();
         cr.setSourceSurface(surface, 0, 0);
         cr.paint();
+        delete cr;
+        GC.collect;
         return false;
     }
 
@@ -176,36 +149,30 @@ class Map : DrawingArea
 
     final bool onMouseButtonPress(Event ev, Widget wt)
     {
-        ev.getRootCoords(oldMouseCoords.x, oldMouseCoords.y);
-
+        oldMouseCoords = getRootCoords(ev);
         pressed = true;
         uint clickCount;
         Vec2d coords;
         ev.getCoords(coords.x, coords.y);
         ev.getClickCount(clickCount);
         root.dispatchMouseButtonPressed((coords-offset)/scale, clickCount);
-//        writefln("onMouseButtonPress coords(%f,%f)", coords.x, coords.y);
-
         return true;
     }
 
     final bool onMouseButtonRelease(Event ev, Widget wt)
     {
-        //writefln("onMouseButtonRelease");
         pressed = false;
-        Vec2d coords;
-        uint clickCount;
-        ev.getCoords(coords.x, coords.y);
-        ev.getClickCount(clickCount);
-        root.dispatchMouseButtonReleased((coords-offset)/scale, clickCount);
+        Vec2d coords = getCoords(ev);
+        uint clickCount = getClickCount(ev);
+        if (coords != Vec2d.nan)
+            root.dispatchMouseButtonReleased((coords-offset)/scale, clickCount);
         return true;
     }
 
     final bool onMouseMotion(Event ev, Widget wt)
     {
-        //writefln("onMouseMotion");
-        Vec2d newMouseCoords;
-        if (pressed && 0 != ev.getRootCoords(newMouseCoords.x, newMouseCoords.y))
+        Vec2d newMouseCoords = getRootCoords(ev);
+        if (pressed && newMouseCoords != Vec2d.nan)
         {
             offset += newMouseCoords - oldMouseCoords;
             oldMouseCoords = newMouseCoords;
@@ -213,9 +180,9 @@ class Map : DrawingArea
         }
         else
         {
-            Vec2d coords;
-            ev.getCoords(coords.x, coords.y);
-            root.dispatchMouseMotion((coords-offset)/scale);
+            Vec2d coords = getCoords(ev);
+            if (coords != Vec2d.nan)
+                root.dispatchMouseMotion((coords-offset)/scale);
         }
         return true;
     }
@@ -226,10 +193,13 @@ class Map : DrawingArea
         int res = ev.getState(mod);
         if (res && mod & ModifierType.CONTROL_MASK)
         {
-            Vec2d d = FsUtil.getScrollDeltas(ev);
-            scale = scale * (1 + (0.1 * d.y));
-            queueDraw();
-            return true;
+            Vec2d d = getScrollDeltas(ev);
+            if (d != Vec2d.nan)
+            {
+                scale = scale * (1 + (0.1 * d.y));
+                queueDraw();
+                return true;
+            }
         }
         return false;
     }
@@ -276,7 +246,6 @@ class Map : DrawingArea
         root.offset = -ttb.pos;
         root.updateTotalBounds();
         bounds = root.transformedTotalBounds / scale + INSETS;
-//        setSize(cast(int)(ttb.width), cast(int)(ttb.height));
     }
 
     final void setLayoutDirty()
@@ -306,8 +275,16 @@ class Map : DrawingArea
 //        Box2d tot = root.transformedTotalBounds / scale + INSETS;
 //    }
 
-    class Root : Node
+    class Root : CutCornerRectNode
     {
+        this()
+        {
+            cut = Vec2d.fill(8.0);
+            fgColor = Color4d(0.2, 0.2, 0.2, 1.0);
+            bgColor = Color4d(0.9, 0.9, 0.9, 1.0);
+            lineWidth = 2.0;
+        }
+
         override void redraw()
         {
             queueDraw();
@@ -324,7 +301,13 @@ class Map : DrawingArea
                 m = 50;
                 next = next + c.totalBounds.height;
             }
+            updateBounds();
             updateTotalBounds();
+        }
+
+        override void updateBounds()
+        {
+            bounds = computeTotalBounds() + Insets2d(160,160,100,100);
         }
     }
 }
