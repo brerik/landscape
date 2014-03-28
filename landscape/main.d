@@ -45,7 +45,7 @@ import gio.FileEnumerator;
 import gio.File;
 import cairo.Context;
 import glib.Str;
-
+import core.runtime;
 private import stdlib = core.stdc.stdlib : exit;
 
 /*

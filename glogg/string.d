@@ -43,7 +43,7 @@ public final class GloggStr
 	{
 		if ( s is null )
 		return cast(wstring)null;
-		long words;
+		int words;
         auto s2 = cast(const(wchar)[])Unicode.utf8_ToUtf16(s, words);
 		return s2.idup;
 	}
@@ -58,7 +58,7 @@ public final class GloggStr
 		return cast(string)null;
 		if (len == 0)
             len = wcslen(s);
-		long words;
+		int words;
         return Unicode.utf16_ToUtf8(cast(ushort[])(s[0..len].dup), words);
 	}
 
@@ -70,7 +70,7 @@ public final class GloggStr
 	{
 		if ( s is null )
 		return cast(string)null;
-		long words;
+		int words;
         wchar s1[] = s[0..$].dup;
         auto s2 = Unicode.utf16_ToUtf8(cast(ushort[])(s1), words);
 		return s2.idup;

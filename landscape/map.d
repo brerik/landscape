@@ -92,7 +92,7 @@ class Map : DrawingArea
     static immutable BG_COLOR = Color4d(0.9, 0.9, 0.9, 1.0);
     Adjustment hAdj, vAdj;
     private Vec2d oldMouseCoords = Vec2d.zero;
-    double mScale = 1.0;
+    double _scale = 1.0;
     bool pressed;
     Box2d bounds;
     Root root;
@@ -101,7 +101,6 @@ class Map : DrawingArea
     Color4d bgColor;
     Vec2d offset = Vec2d.zero;
     Surface surface;
-
 
     this()
     {
@@ -236,16 +235,16 @@ class Map : DrawingArea
 
     final double scale() const
     {
-        return mScale;
+        return _scale;
     }
 
     final void scale(double aScale)
     {
         double newScale = SCALE_BOUNDS.clamp(Mathd.round(aScale, SCALE_GRANULARITY));
-        if (newScale != mScale)
+        if (newScale != _scale)
         {
-            double oldScale = mScale;
-            mScale = newScale;
+            double oldScale = _scale;
+            _scale = newScale;
             scaleChanged(oldScale, newScale);
         }
     }

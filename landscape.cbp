@@ -30,14 +30,9 @@
 				</Compiler>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add option="-I/usr/include/dmd/gtkd2" />
-		</Compiler>
 		<Linker>
-			<Add option="-L/usr/lib/x86_64-linux-gnu" />
-			<Add option="-L/usr/lib/i386-linux-gnu" />
-			<Add library="gtkd2" />
-			<Add library="dl" />
+			<Add option="landscape.def" />
+			<Add library="gtkd" />
 		</Linker>
 		<Unit filename="brew/box.d" />
 		<Unit filename="brew/cairo.d" />
