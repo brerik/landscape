@@ -19,7 +19,7 @@ module landscape.main;
 import landscape.nodes.node;
 import landscape.nodes.dirgroup;
 import landscape.map;
-import glogg.string;
+import brew.gstr;
 import brew.math;
 import brew.misc;
 import std.stdio;
@@ -130,14 +130,14 @@ version(Windows)
     string[] getCommandLineArgs(LPSTR lpCmdLine)
     {
         int numArgs;
-        wstring cmd = GloggStr.toWString(Str.toString(lpCmdLine));
+        wstring cmd = GStr.toWString(Str.toString(lpCmdLine));
         LPWSTR* lines = CommandLineToArgvW(cmd.toUTF16z, &numArgs);
         if (lines is null)
             return null;
         string args[];
         args.length = numArgs;
         for (uint i = 0; i < numArgs; i++)
-            args[i] = GloggStr.toString(lines[i]);
+            args[i] = GStr.toString(lines[i]);
         LocalFree(lines);
         return args;
     }

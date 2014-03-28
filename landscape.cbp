@@ -39,6 +39,9 @@
 		<Unit filename="brew/color.d" />
 		<Unit filename="brew/dim.d" />
 		<Unit filename="brew/fun.d" />
+		<Unit filename="brew/gdk.d" />
+		<Unit filename="brew/gio.d" />
+		<Unit filename="brew/gstr.d" />
 		<Unit filename="brew/insets.d" />
 		<Unit filename="brew/loc.d" />
 		<Unit filename="brew/mat.d" />
@@ -48,10 +51,6 @@
 		<Unit filename="brew/polar.d" />
 		<Unit filename="brew/tween.d" />
 		<Unit filename="brew/vec.d" />
-		<Unit filename="glogg/file.d" />
-		<Unit filename="glogg/gdk.d" />
-		<Unit filename="glogg/string.d" />
-		<Unit filename="glogg/strutil.d" />
 		<Unit filename="landscape.def" />
 		<Unit filename="landscape/event.d" />
 		<Unit filename="landscape/events/boolevent.d" />
