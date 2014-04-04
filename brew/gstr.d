@@ -1,6 +1,6 @@
 /*
- * Glögg Gdkd Utilities
- * Copyright (C) 2013-2014 Erik Wikforss
+ * Brew Miscellaneous Library for GStr
+ * Copyright (C) 2013-2014 erik wikforss
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public final class GStr
 	{
 		if ( s is null )
 		return cast(wstring)null;
-		long words;
+		int words;
         auto s2 = cast(const(wchar)[])Unicode.utf8_ToUtf16(s, words);
 		return s2.idup;
 	}
@@ -58,7 +58,7 @@ public final class GStr
 		return cast(string)null;
 		if (len == 0)
             len = wcslen(s);
-		long words;
+		int words;
         return Unicode.utf16_ToUtf8(cast(ushort[])(s[0..len].dup), words);
 	}
 
@@ -70,7 +70,7 @@ public final class GStr
 	{
 		if ( s is null )
 		return cast(string)null;
-		long words;
+		int words;
         wchar s1[] = s[0..$].dup;
         auto s2 = Unicode.utf16_ToUtf8(cast(ushort[])(s1), words);
 		return s2.idup;

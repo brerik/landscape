@@ -1,6 +1,6 @@
 /*
  * Landscape Filesystem Browser
- * Copyright (C) 2013-2014 Erik Wikforss
+ * Copyright (C) 2013-2014 erik wikforss
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ class Map : DrawingArea
     static immutable BG_COLOR = Color4d(0.5, 0.5, 0.5, 1.0);
     Adjustment hAdj, vAdj;
     private Vec2d oldMouseCoords = Vec2d.zero;
-    double mScale = 1.0;
+    double _scale = 1.0;
     bool pressed;
     Box2d bounds;
     Root root;
@@ -118,7 +118,6 @@ class Map : DrawingArea
         drawMap();
         cr.setSourceSurface(surface, 0, 0);
         cr.paint();
-        delete cr;
         GC.collect;
         return false;
     }
@@ -217,21 +216,21 @@ class Map : DrawingArea
 
     final double scale() const
     {
-        return mScale;
+        return _scale;
     }
 
     final void scale(double aScale)
     {
         double newScale = SCALE_BOUNDS.clamp(Mathd.round(aScale, SCALE_GRANULARITY));
-        if (newScale != mScale)
+        if (newScale != _scale)
         {
-            double oldScale = mScale;
-            mScale = newScale;
+            double oldScale = _scale;
+            _scale = newScale;
             scaleChanged(oldScale, newScale);
         }
     }
 
-    void scaleChanged(double oldScale, double newScale)
+    final void scaleChanged(double oldScale, double newScale)
     {
         setDirty();
     }

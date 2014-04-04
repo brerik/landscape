@@ -1,6 +1,6 @@
 /*
- * Brew Miscellaneous Library by Brother Erik Wikforss
- * Copyright (C) 2013-2014 Erik Wikforss
+ * Brew Miscellaneous Library by Brother erik wikforss
+ * Copyright (C) 2013-2014 erik wikforss
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
