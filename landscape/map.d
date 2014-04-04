@@ -19,6 +19,7 @@ module landscape.map;
 import landscape.nodes.node;
 import landscape.nodes.dirgroup;
 import landscape.nodes.rectnode;
+import landscape.selection;
 import brew.insets;
 import brew.box;
 import brew.vec;
@@ -73,12 +74,14 @@ class Map : DrawingArea
     Color4d bgColor;
     Vec2d offset = Vec2d.zero;
     Surface surface;
+    Selection _selection;
 
     this()
     {
         super();
         bounds = Box2d.zero;
         bgColor = BG_COLOR;
+        _selection = new Selection();
         addOnButtonPress(&onMouseButtonPress);
         addOnButtonRelease(&onMouseButtonRelease);
         addOnMotionNotify(&onMouseMotion);
@@ -165,8 +168,16 @@ class Map : DrawingArea
         Vec2d coords = getCoords(ev);
         uint clickCount = getClickCount(ev);
         if (coords != Vec2d.nan)
-            root.dispatchMouseButtonReleased((coords-offset)/scale, clickCount);
+        {
+            if (!root.dispatchMouseButtonReleased((coords-offset)/scale, clickCount))
+                handleMouseButtonReleased(coords, clickCount);
+        }
         return true;
+    }
+
+    final void handleMouseButtonReleased(Vec2d coords, uint clickCount)
+    {
+        _selection.deselectAll();
     }
 
     final bool onMouseMotion(Event ev, Widget wt)

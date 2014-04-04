@@ -65,7 +65,7 @@ class DirGroup : FileNode
     static immutable TAIL_LINE_WIDTH = 1.0;
     static immutable CHILD_DIR_SPACING = 8.0;
     static immutable CHILD_DIR_SPACING_EXPANDED = 12.0;
-
+    static immutable GRID_SIZE_PREF = Dim2i(4,6);
     ExpandSign dirExpand;
     OpenSign dirOpen;
     DirSymbol dirSymbol;
@@ -77,6 +77,9 @@ class DirGroup : FileNode
     DirGroup dirs[];
     DocNode docs[];
     bool imported;
+    Dim2i _gridSizeMin;
+    Dim2i _gridSizePref;
+    Dim2i _gridSizeMax;
 
     this(GioFile aFile)
     {
@@ -92,7 +95,9 @@ class DirGroup : FileNode
         addChild(dirText = createDirText(displayName));
         dirExpand.addOnMousePressedDlg(&onExpandDlg);
         dirOpen.addOnMousePressedDlg(&onOpenDocsDlg);
-
+        _gridSizePref = GRID_SIZE_PREF;
+        _gridSizeMin = Dim2i(2,-1);
+        _gridSizeMax = Dim2i(4,-1);
 
     }
 
@@ -460,10 +465,10 @@ class DirGroup : FileNode
             const INSETS = Insets2d.fill(4);
             const CELL_SIZE = DocNode.BOUNDS.dim;
             const SPACE = Vec2d(4,4);
-            int length;
+            int length = Mathi.clamp(visDocs.length, _gridSizeMin.width, _gridSizeMax.width);
 
-            for (length = 1; cast(double)length / (cast(double)visDocs.length / cast(double)length) < Mathd.sqrt2; length++)
-                continue;
+//            for (length = 1; cast(double)length / (cast(double)visDocs.length / cast(double)length) < Mathd.sqrt2; length++)
+//                continue;
             int col = 0;
             int row = 0;
             foreach (Node d; visDocs)
