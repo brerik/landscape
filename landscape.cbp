@@ -77,6 +77,7 @@
 		<Unit filename="landscape/nodes/rectnode.d" />
 		<Unit filename="landscape/nodes/signnode.d" />
 		<Unit filename="landscape/nodes/textnode.d" />
+		<Unit filename="landscape/selection.d" />
 		<Unit filename="landscape/sprites/dirsprite.d" />
 		<Unit filename="landscape/sprites/sprite.d" />
 		<Unit filename="resources.rc">
