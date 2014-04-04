@@ -1,6 +1,6 @@
 /*
  * Brew Miscellaneous Library for Location
- * Copyright (C) 2013-2014 Erik Wikforss
+ * Copyright (C) 2013-2014 erik wikforss
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

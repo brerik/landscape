@@ -1,6 +1,6 @@
 /*
  * Landscape Filesystem Browser
- * Copyright (C) 2013-2014 Erik Wikforss
+ * Copyright (C) 2013-2014 erik wikforss
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,7 +115,6 @@ class Map : DrawingArea
         drawMap();
         cr.setSourceSurface(surface, 0, 0);
         cr.paint();
-        delete cr;
         GC.collect;
         return false;
     }
@@ -220,7 +219,7 @@ class Map : DrawingArea
         }
     }
 
-    void scaleChanged(double oldScale, double newScale)
+    final void scaleChanged(double oldScale, double newScale)
     {
         setDirty();
     }
