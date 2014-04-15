@@ -25,7 +25,6 @@ private import gtkc.gio;
  */
 public final class GStr
 {
-
 	/*************************************************
 	 * Convert C-style 0 terminated string s to char[] string.
 	 * copied from phobos
@@ -42,8 +41,9 @@ public final class GStr
 	public static wstring toWString(string s)
 	{
 		if ( s is null )
-		return cast(wstring)null;
-		int words;
+            return cast(wstring)null;
+
+        ptrdiff_t words;
         auto s2 = cast(const(wchar)[])Unicode.utf8_ToUtf16(s, words);
 		return s2.idup;
 	}
@@ -58,7 +58,7 @@ public final class GStr
 		return cast(string)null;
 		if (len == 0)
             len = wcslen(s);
-		int words;
+		ptrdiff_t words;
         return Unicode.utf16_ToUtf8(cast(ushort[])(s[0..len].dup), words);
 	}
 
@@ -70,7 +70,7 @@ public final class GStr
 	{
 		if ( s is null )
 		return cast(string)null;
-		int words;
+		ptrdiff_t words;
         wchar s1[] = s[0..$].dup;
         auto s2 = Unicode.utf16_ToUtf8(cast(ushort[])(s1), words);
 		return s2.idup;

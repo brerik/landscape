@@ -69,6 +69,10 @@ Other link options
 WINDOWS
 landscape.def
 
+Linker settings
+Link libraries
+gtkd
+
 */
 
 

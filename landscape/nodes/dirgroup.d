@@ -462,10 +462,10 @@ class DirGroup : FileNode
         DocNode visDocs[] = visibleDocs;
         if (visDocs.length > 0)
         {
-            const INSETS = Insets2d.fill(4);
-            const CELL_SIZE = DocNode.BOUNDS.dim;
-            const SPACE = Vec2d(4,4);
-            int length = Mathi.clamp(visDocs.length, _gridSizeMin.width, _gridSizeMax.width);
+            immutable INSETS = Insets2d.fill(4);
+            immutable CELL_SIZE = DocNode.BOUNDS.dim;
+            immutable SPACE = Vec2d(4,4);
+            int length = Mathi.clamp(cast(int)visDocs.length, _gridSizeMin.width, _gridSizeMax.width);
 
 //            for (length = 1; cast(double)length / (cast(double)visDocs.length / cast(double)length) < Mathd.sqrt2; length++)
 //                continue;
