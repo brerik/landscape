@@ -37,7 +37,7 @@ class OpenSign : SignNode
 
     void signChanged(string name, int newSign, int oldSign)
     {
-        if (name == "sign")
+        if (name == PropName.sign)
         {
             switch (newSign)
             {
@@ -84,7 +84,7 @@ class ExpandSign : SignNode
 
     void signChanged(string name, int newSign, int oldSign)
     {
-        if (name == "sign")
+        if (name == PropName.sign)
         {
             switch (newSign)
             {
