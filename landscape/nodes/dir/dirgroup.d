@@ -15,13 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-module landscape.nodes.dirgroup;
+module landscape.nodes.dir.dirgroup;
+import landscape.nodes.dir.dirnode;
 import landscape.nodes.node;
 import landscape.nodes.filenode;
 import landscape.map;
 import landscape.nodes.rectnode;
 import landscape.nodes.textnode;
-import landscape.nodes.signnode;
+import landscape.nodes.dir.dirsign;
 import landscape.nodes.docnode;
 import landscape.nodes.circlenode;
 import brew.misc;
@@ -54,14 +55,8 @@ class DirGroup : FileNode
         immutable BG_COLOR = Color4d(1,1,.8,1);
         immutable FG_COLOR = Color4d(0,0,0,1);
         immutable DIR_GROUP_OUTLINE_COLOR = Color4d(0.4, 0.4, 0.5);
-        immutable BOUNDS = Box2d(0, 0,240, 24);
         immutable FG_OPEN_COLOR = Color4d(.25,.25,.25,1);
         immutable BG_OPEN_COLOR = Color4d(1,1,1,1);
-        immutable SHOW_DOCS_SIGN = SignNode.SignType.DOWN;
-        immutable HIDE_DOCS_SIGN = SignNode.SignType.UP;
-        immutable SHOW_DIRS_SIGN = SignNode.SignType.RIGHT;
-        immutable HIDE_DIRS_SIGN = SignNode.SignType.LEFT;
-        immutable HIDE_SIGN = SignNode.SignType.NONE;
         immutable TAIL_COLOR = Color4d(0.2, 0.2, 0.3, 1.0);
         immutable TAIL_LINE_WIDTH = 1.0;
         immutable CHILD_DIR_SPACING = 8.0;
@@ -111,7 +106,7 @@ class DirGroup : FileNode
         sl.name = "OpenSignNode";
         sl.bgColor = BG_OPEN_COLOR;
         sl.fgColor = Color4d(.2,.2,.2);
-        sl.sign = HIDE_SIGN;
+        sl.sign = OpenSign.HIDDEN;
         sl.visible = false;
         return sl;
     }
@@ -120,7 +115,7 @@ class DirGroup : FileNode
     {
         ExpandSign sl = new ExpandSign();
         sl.name = "ExpandSignNode";
-        sl.sign = HIDE_SIGN;
+        sl.sign = ExpandSign.HIDDEN;
         sl.bgColor = BG_OPEN_COLOR;
         sl.fgColor = Color4d(.2,.2,.2);
         sl.visible = false;
@@ -153,9 +148,9 @@ class DirGroup : FileNode
 
     final bool onExpandDlg(in Vec2d point, uint clickCount)
     {
-        if (dirExpand.sign == SHOW_DIRS_SIGN)
+        if (dirExpand.sign == ExpandSign.OPEN)
             showDirsAndUpdate();
-        else if (dirExpand.sign == HIDE_DIRS_SIGN)
+        else if (dirExpand.sign == ExpandSign.CLOSE)
             hideDirsAndUpdate();
         else
             return false;
@@ -165,8 +160,8 @@ class DirGroup : FileNode
     final void importAllChildren(int level)
     {
         alias gio.FileInfo.FileInfo GioFileInfo;
-        dirExpand.sign = HIDE_SIGN;
-        dirOpen.sign = HIDE_SIGN;
+        dirExpand.sign = ExpandSign.HIDDEN;
+        dirOpen.sign = OpenSign.HIDDEN;
         imported = true;
         auto e = file.enumerateChildren("standard::*", FileQueryInfoFlags.NONE, null);
         GioFileInfo[] dirInfos;
@@ -190,7 +185,7 @@ class DirGroup : FileNode
             auto f = e.getChild(i);
             auto child = new DirGroup(f);
             addDir(child);
-            dirExpand.sign = HIDE_DIRS_SIGN;
+            dirExpand.sign = ExpandSign.CLOSE;
         }
         foreach (GioFileInfo i; docInfos)
         {
@@ -198,32 +193,32 @@ class DirGroup : FileNode
                 auto child = new DocNode(f);
                 child.visible = true;
                 addDoc(child);
-                dirOpen.sign = HIDE_DOCS_SIGN;
+                dirOpen.sign = OpenSign.CLOSE;
         }
         e.close(null);
         if ((dirs.length > 6 && isChildDir) || (dirs.length > 0 && level-1 == 0))
         {
             hideDirs();
-            dirExpand.sign = SHOW_DIRS_SIGN;
+            dirExpand.sign = ExpandSign.OPEN;
         }
 
         if (hasDocs)
         {
             hideDocs();
-            dirOpen.sign = SHOW_DOCS_SIGN;
+            dirOpen.sign = OpenSign.OPEN;
         }
         if (!hasDirs && !hasDocs)
         {
-            dirSymbol.nodeColor = DirSymbol.NODE_COLOR.WHITE;
+            dirSymbol.nodeColor = DirSymbol.WHITE;
         }
         foreach (DirGroup dir; visibleDirs)
             dir.importAllChildren(level-1);
         setLayoutDirty();
         cleanLayout();
-        if (totalBounds.height > 600 && dirExpand.sign == HIDE_DIRS_SIGN && isChildDir)
+        if (totalBounds.height > 600 && dirExpand.sign == ExpandSign.CLOSE && isChildDir)
         {
             hideDirs();
-            dirExpand.sign = SHOW_DIRS_SIGN;
+            dirExpand.sign = ExpandSign.OPEN;
             setLayoutDirty();
             cleanLayout();
         }
@@ -265,9 +260,9 @@ class DirGroup : FileNode
 
     final bool onOpenDocsDlg(in Vec2d point, uint clickCount)
     {
-        if (dirOpen.sign == SHOW_DOCS_SIGN)
+        if (dirOpen.sign == OpenSign.OPEN)
             showDocsAndUpdate();
-        else if (dirOpen.sign == HIDE_DOCS_SIGN)
+        else if (dirOpen.sign == OpenSign.CLOSE)
             hideDocsAndUpdate();
         else
             return false;
@@ -290,13 +285,13 @@ class DirGroup : FileNode
         if (hasDirs)
         {
             showDirs();
-            dirExpand.sign = HIDE_DIRS_SIGN;
+            dirExpand.sign = ExpandSign.CLOSE;
             foreach (Node c; dirs)
                 c.setLayoutDirty();
         }
         else
         {
-            dirExpand.sign = HIDE_SIGN;
+            dirExpand.sign = ExpandSign.HIDDEN;
         }
         redraw();
     }
@@ -312,13 +307,13 @@ class DirGroup : FileNode
         if (hasDirs)
         {
             hideDirs();
-            dirExpand.sign = SHOW_DIRS_SIGN;
+            dirExpand.sign = ExpandSign.OPEN;
             foreach (Node c; dirs)
                 c.setLayoutDirty();
         }
         else
         {
-            dirExpand.sign = HIDE_SIGN;
+            dirExpand.sign = ExpandSign.HIDDEN;
         }
         redraw();
     }
@@ -336,13 +331,13 @@ class DirGroup : FileNode
         if (hasDocs)
         {
             showDocs();
-            dirOpen.sign = HIDE_DOCS_SIGN;
+            dirOpen.sign = OpenSign.CLOSE;
             foreach (Node c; docs)
                 c.setLayoutDirty();
         }
         else
         {
-            dirOpen.sign = HIDE_SIGN;
+            dirOpen.sign = OpenSign.HIDDEN;
         }
         redraw();
     }
@@ -359,13 +354,13 @@ class DirGroup : FileNode
         if (hasDocs)
         {
             hideDocs();
-            dirOpen.sign = SHOW_DOCS_SIGN;
+            dirOpen.sign = OpenSign.OPEN;
             foreach (Node c; docs)
                 c.setLayoutDirty();
         }
         else
         {
-            dirOpen.sign = HIDE_SIGN;
+            dirOpen.sign = OpenSign.HIDDEN;
         }
         redraw();
     }
@@ -568,195 +563,17 @@ class DirGroup : FileNode
 
     final bool isDocsShown()
     {
-        return dirOpen.sign() == HIDE_DOCS_SIGN;
+        return dirOpen.sign() == OpenSign.CLOSE;
     }
 
     final bool isDirsShown()
     {
-        return dirExpand.sign == HIDE_DIRS_SIGN;
+        return dirExpand.sign == ExpandSign.CLOSE;
     }
 
     override void updateBounds()
     {
 
-    }
-
-    class DirSymbol : CutCornerRectNode
-    {
-        enum NODE_COLOR : NodeColor
-        {
-            GREY = NodeColor(Color4d(0.2, 0.2, 0.2, 1.0), Color4d(0.8, 0.8, 0.8, 1.0)),
-            BLUE = NodeColor(Color4d(0.0, 0.1, 0.5, 1.0), Color4d(0.6, 0.7, 1.0, 1.0)),
-            RED = NodeColor(Color4d(0.5, 0.0, 0.1, 1.0), Color4d(1.0, 0.6, 0.7, 1.0)),
-            GREEN = NodeColor(Color4d(0.0, 0.5, 0.1, 1.0), Color4d(0.6, 1.0, 0.7, 1.0)),
-            YELLOW = NodeColor(Color4d(0.6, 0.5, 0.0, 1.0), Color4d(1.0, 1.0, 0.5, 1.0)),
-            VIOLET = NodeColor(Color4d(0.5, 0.2, 0.6, 1.0), Color4d(0.7, 0.65, 1.0, 1.0)),
-            WHITE = NodeColor(Color4d(0.5, 0.5, 0.5, 1.0), Color4d(1.0, 1.0, 1.0, 1.0)),
-            OCEAN = NodeColor(Color4d(0.0, 0.5, 0.5, 1.0), Color4d(0.3, 0.8, 0.8, 1.0)),
-        }
-
-        static {
-            immutable NODE_COLORS = [NODE_COLOR.GREY, NODE_COLOR.BLUE,
-                    NODE_COLOR.RED, NODE_COLOR.GREEN, NODE_COLOR.YELLOW,
-                    NODE_COLOR.VIOLET, NODE_COLOR.WHITE, NODE_COLOR.OCEAN];
-
-            auto _nextColor = 0;
-        }
-
-
-        private enum INSETS : Insets2d
-        {
-            SELECTED = Insets2d.zero,
-            DEFAULT = Insets2d.ones,
-        }
-        private enum LINE_WIDTH : double
-        {
-            SELECTED = 2.0,
-            DEFAULT = 1.0,
-        }
-        private enum CUT : Vec2d
-        {
-            DEFAULT = Vec2d(4,4),
-        }
-
-        this()
-        {
-            super();
-            connect(&watchNamedBool);
-            addOnMousePressedDlg(&onSelectedDlg);
-            nodeColor = NODE_COLORS[_nextColor++ % NODE_COLORS.length];
-            updateRect();
-        }
-
-        final bool onSelectedDlg(in Vec2d point, uint clickCount)
-        {
-            selected = !selected;
-            if (clickCount == 2)
-            {
-                FileUtil.openFile(file);
-            }
-            else if (clickCount == 1)
-            {
-                writefln("Clicked %s"w, file.getPath);
-            }
-            return true;
-        }
-
-        void watchNamedBool(string name, bool newValue, bool oldValuez)
-        {
-            if (name == "selected")
-            {
-                updateRect();
-            }
-        }
-
-        final void updateRect()
-        {
-            cut = CUT.DEFAULT;
-            lineWidth = selected ? LINE_WIDTH.SELECTED : LINE_WIDTH.DEFAULT;
-            insets = selected ? INSETS.SELECTED : INSETS.DEFAULT;
-        }
-
-        Box2d tailBounds()
-        {
-            return bounds - INSETS.SELECTED;
-        }
-
-        override void doPaintNode(Context ct)
-        {
-            super.doPaintNode(ct);
-            if (bounds.height > BOUNDS.height)
-            {
-                immutable TOP = 21;
-                auto r = rectToPaint(lineWidth);
-                ct.setLineWidth(lineWidth);
-                ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
-                ct.moveTo(r.left + CUT.DEFAULT.x, r.top + TOP);
-                ct.lineTo(r.right - CUT.DEFAULT.x, r.top + TOP);
-                ct.stroke();
-            }
-        }
-    }
-
-    class OpenSign : SignNode
-    {
-        this()
-        {
-            connect(&signChanged);
-            drawRing = false;
-        }
-
-        void signChanged(string name, int newSign, int oldSign)
-        {
-            if (name == "sign")
-            {
-                switch (newSign)
-                {
-                    case SHOW_DOCS_SIGN:
-                        signColor.set(0,0,.25);
-                        insets = Insets2d(5,5,5,5);
-                        visible = true;
-                        break;
-                    case HIDE_DOCS_SIGN:
-                        signColor.set(.25,0,0);
-                        insets= Insets2d(5,5,5,5);
-                        visible = true;
-                        break;
-                    case HIDE_SIGN:
-                        signColor.set(0,0,0);
-                        insets = Insets2d(5,5,5,5);
-                        visible = false;
-                        break;
-                    default:
-                        signColor.set(0,0,0);
-                        insets = Insets2d(5,5,5,5);
-                        visible = true;
-                        break;
-                }
-                setLayoutDirty();
-                redraw();
-            }
-        }
-    }
-
-    class ExpandSign : SignNode
-    {
-        this()
-        {
-            connect(&signChanged);
-            drawRing = false;
-        }
-
-        void signChanged(string name, int newSign, int oldSign)
-        {
-            if (name == "sign")
-            {
-                switch (newSign)
-                {
-                    case SHOW_DIRS_SIGN:
-                        signColor.set(0,.25,0);
-                        visible = true;
-                        bounds.dim = Dim2d(20,20);
-                        break;
-                    case HIDE_DIRS_SIGN:
-                        signColor.set(.25,0,0);
-                        visible = true;
-                        bounds.dim = Dim2d(20,20);
-                        break;
-                    case HIDE_SIGN:
-                        signColor.set(0,0,0);
-                        visible = false;
-                        break;
-                    default:
-                        signColor.set(0,0,0);
-                        visible = true;
-                        bounds.dim = Dim2d(20,20);
-                        break;
-                }
-                setLayoutDirty();
-                redraw();
-            }
-        }
     }
 
     final bool isChildDir()

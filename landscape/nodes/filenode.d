@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 module landscape.nodes.filenode;
-import landscape.nodes.node;
+public import landscape.nodes.node;
 import gio.File;
 alias gio.File.File GioFile;
 

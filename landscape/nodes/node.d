@@ -71,7 +71,7 @@ class Node
         fitDim = "fitDim",
     }
 
-    enum NODE_COLOR : NodeColor {
+    enum COLOR : NodeColor {
         DEFAULT = NodeColor(Color4d(.2,.2,.2,1), Color4d(.9,.9,.9,1))
     }
     static
@@ -90,7 +90,7 @@ class Node
         Box2d _totalBounds = Box2d.zero;
         Insets2d _margin = NO_MARGIN;
         Insets2d _insets = NO_INSETS;
-        NodeColor _color = NODE_COLOR.DEFAULT;
+        NodeColor _color = COLOR.DEFAULT;
         Node _parent;
         Node[] _children;
         bool boundsDirty;

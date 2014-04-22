@@ -18,7 +18,7 @@
 module landscape.map;
 import landscape.nodes.node;
 import landscape.nodes.rootnode;
-import landscape.nodes.dirgroup;
+import landscape.nodes.dir.dirgroup;
 import landscape.nodes.rectnode;
 import landscape.selection;
 import brew.insets;

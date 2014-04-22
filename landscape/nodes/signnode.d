@@ -30,7 +30,7 @@ class SignNode : Node
         LEFT,
         RIGHT,
         DOWN,
-        UP
+        UP,
     }
 
     enum PropName : string

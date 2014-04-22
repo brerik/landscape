@@ -97,6 +97,10 @@ struct Insets(int D, T)
     static if (D>=3) mixin TInsets3!T;
     static if (D>=4) mixin TInsets4!T;
 
+    enum {
+        ONES = fill(1),
+        ZERO = fill(0),
+    }
 
     static if (D==1)
     {
