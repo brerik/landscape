@@ -49,19 +49,19 @@ import std.c.stdio;
 
 class DirGroup : FileNode
 {
-    static
+    enum
     {
-        immutable IMPORT_ALL = -1;
-        immutable BG_COLOR = Color4d(1,1,.8,1);
-        immutable FG_COLOR = Color4d(0,0,0,1);
-        immutable DIR_GROUP_OUTLINE_COLOR = Color4d(0.4, 0.4, 0.5);
-        immutable FG_OPEN_COLOR = Color4d(.25,.25,.25,1);
-        immutable BG_OPEN_COLOR = Color4d(1,1,1,1);
-        immutable TAIL_COLOR = Color4d(0.2, 0.2, 0.3, 1.0);
-        immutable TAIL_LINE_WIDTH = 1.0;
-        immutable CHILD_DIR_SPACING = 8.0;
-        immutable CHILD_DIR_SPACING_EXPANDED = 12.0;
-        immutable GRID_SIZE_PREF = Dim2i(4,6);
+        IMPORT_ALL = -1,
+        BG_COLOR = Color4d(1,1,.8,1),
+        FG_COLOR = Color4d(0,0,0,1),
+        DIR_GROUP_OUTLINE_COLOR = Color4d(0.4, 0.4, 0.5),
+        FG_OPEN_COLOR = Color4d(.25,.25,.25,1),
+        BG_OPEN_COLOR = Color4d(1,1,1,1),
+        TAIL_COLOR = Color4d(0.2, 0.2, 0.3, 1.0),
+        TAIL_LINE_WIDTH = 1.0,
+        CHILD_DIR_SPACING = 8.0,
+        CHILD_DIR_SPACING_EXPANDED = 12.0,
+        GRID_SIZE_PREF = Dim2i(4,6),
     }
     private {
         ExpandSign dirExpand;

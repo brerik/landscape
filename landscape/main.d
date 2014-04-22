@@ -82,7 +82,10 @@ gtkd
  */
 class MyWindow : MainWindow
 {
-    static immutable APP_NAME = "Landscape Filesystem Browser";
+    enum
+    {
+        APP_NAME = "Landscape Filesystem Browser",
+    }
 
     Label StatusLbl;
 

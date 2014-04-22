@@ -22,18 +22,18 @@ import cairo.Context;
 
 class SignNode : Node
 {
-    enum SignType : int
+    enum SignType
     {
-        NONE,
-        PLUS,
-        MINUS,
-        LEFT,
-        RIGHT,
-        DOWN,
-        UP,
+        NONE = 0,
+        PLUS = 1,
+        MINUS = 2,
+        LEFT = 3,
+        RIGHT = 4,
+        DOWN = 5,
+        UP = 6,
     }
 
-    enum PropName : string
+    enum PropName
     {
         signColor = "signColor",
         sign = "sign",

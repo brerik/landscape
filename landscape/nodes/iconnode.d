@@ -30,12 +30,21 @@ import std.stdio;
 
 class IconNode : Node
 {
-    Dim2d iconSize;
+    enum
+    {
+        DEFAULT_ICON_SIZE = Dim2d(100,100),
+    }
+    enum PropName
+    {
+        iconSize = "iconSize",
+    }
+
+    Dim2d _iconSize;
 
     this()
     {
         super();
-        iconSize = Dim2d(100,100);
+        _iconSize = DEFAULT_ICON_SIZE;
         alignment = Vec2d.halves;
     }
 
@@ -45,5 +54,20 @@ class IconNode : Node
         ct.setSourceRgb(.5,1,.5);
         ct.rectangle(r.x + (r.width - iconSize.width) * alignment.x, r.y + (r.height - iconSize.height) * alignment.y, iconSize.width, iconSize.height);
         ct.fill();
+    }
+
+    ref const(Dim2d) iconSize() const
+    {
+        return _iconSize;
+    }
+
+    void iconSize(in Dim2d newSize)
+    {
+        if (newSize != _iconSize)
+        {
+            auto oldSize = _iconSize;
+            _iconSize = newSize;
+            emit(PropName.iconSize, newSize, oldSize);
+        }
     }
 }

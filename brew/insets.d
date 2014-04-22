@@ -238,7 +238,8 @@ struct Insets(int D, T)
     }
 
 }
-
+alias Insets insets_t;
+alias insets_t!(2,double) insets_2d;
 alias Insets!(1,int) Insets1i;
 alias Insets!(2,int) Insets2i;
 alias Insets!(3,int) Insets3i;

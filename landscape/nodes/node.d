@@ -47,7 +47,7 @@ struct NodeDim
 
 class Node
 {
-    enum PropName : string
+    enum PropName
     {
         selected = "selected",
         pressed = "pressed",
@@ -71,15 +71,13 @@ class Node
         fitDim = "fitDim",
     }
 
-    enum COLOR : NodeColor {
-        DEFAULT = NodeColor(Color4d(.2,.2,.2,1), Color4d(.9,.9,.9,1))
-    }
-    static
-    {
-        immutable LAYOUT_ALL = -1;
-        immutable NO_DIM = Dim2d.zero;
-        immutable NO_INSETS = Insets2d.zero;
-        immutable NO_MARGIN = Insets2d.zero;
+    enum {
+        DEFAULT_COLOR = NodeColor(Color4d(.2,.2,.2,1), Color4d(.9,.9,.9,1)),
+        LAYOUT_ALL = -1,
+        NO_DIM = Dim2d.zero,
+        NO_INSETS = Insets2d.zero,
+        NO_MARGIN = Insets2d.zero,
+        DEFAULT_LAYER = 0,
     }
 
     private {
@@ -90,7 +88,7 @@ class Node
         Box2d _totalBounds = Box2d.zero;
         Insets2d _margin = NO_MARGIN;
         Insets2d _insets = NO_INSETS;
-        NodeColor _color = COLOR.DEFAULT;
+        NodeColor _color = DEFAULT_COLOR;
         Node _parent;
         Node[] _children;
         bool boundsDirty;
@@ -103,7 +101,7 @@ class Node
         bool _selected;
         bool _pressed;
         bool _animated;
-        int _layer;
+        int _layer = DEFAULT_LAYER;
         Vec2d _offset = Vec2d.zero;
         Vec2d _animOffset = Vec2d.zero;
         Vec2d _alignment = Vec2d.zero;

@@ -64,10 +64,14 @@ import core.memory;
 class Map : DrawingArea
 {
     alias gio.File.File GioFile;
-    static immutable SCALE_BOUNDS = Interval!double(0.2, 2.0);
-    static immutable SCALE_GRANULARITY = 0.1;
-    static immutable INSETS = Insets2d(400,400,400,400);
-    static immutable BG_COLOR = Color4d(0.25, 0.25, 0.25, 1.0);
+    enum
+    {
+        SCALE_BOUNDS = Intervald(0.2, 2.0),
+        SCALE_GRANULARITY = 0.1,
+        INSETS = Insets2d(400,400,400,400),
+        BG_COLOR = Color4d(0.25, 0.25, 0.25, 1.0),
+    }
+
     Adjustment hAdj, vAdj;
     private Vec2d oldMouseCoords = Vec2d.zero;
     double _scale = 1.0;

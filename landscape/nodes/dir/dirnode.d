@@ -28,8 +28,6 @@ import cairo.Context;
 
 class DirSymbol : CutCornerRectNode
 {
-
-
     enum
     {
         GREY = NodeColor(Color4d(0.2, 0.2, 0.2, 1.0), Color4d(0.8, 0.8, 0.8, 1.0)),

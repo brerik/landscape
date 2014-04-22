@@ -46,6 +46,10 @@ struct Interval(T)
         return Math!T.clampBelow(value, min);
     }
 }
+alias Interval!double Intervald;
+alias Interval!float Intervalf;
+alias Interval!int Intervali;
+alias Interval!long Intervall;
 
 enum CardinalDirection
 {

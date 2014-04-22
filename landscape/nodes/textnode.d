@@ -32,6 +32,12 @@ import gtkc.pangotypes;
 
 class TextNode : Node
 {
+    enum PropName
+    {
+        text = "text",
+        fontSize = "fontSize",
+    }
+
     string _text;
     PgFontDescription _fontDesc;
     PgLayout _textLayout;
@@ -77,7 +83,7 @@ class TextNode : Node
             _text = newText;
             if (_textLayout !is null)
                 _textLayout.setText(_text);
-            emit("text", newText, oldText);
+            emit(PropName.text, newText, oldText);
         }
     }
 
@@ -106,7 +112,7 @@ class TextNode : Node
         if (oldSize != newSize)
         {
             fontDesc.setSize(cast(int)(newSize * cast(double)PANGO_SCALE));
-            emit("fontSize", newSize, oldSize);
+            emit(PropName.fontSize, newSize, oldSize);
         }
     }
 

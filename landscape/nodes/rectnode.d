@@ -30,7 +30,7 @@ import cairo.Context;
  */
 class RectNode : Node
 {
-    enum PropName : string
+    enum PropName
     {
         lineWidth = "lineWidth",
         outlined = "outlined",

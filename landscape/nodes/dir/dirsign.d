@@ -20,7 +20,7 @@ public import landscape.nodes.signnode;
 import brew.insets;
 import brew.dim;
 
-final class OpenSign : SignNode
+class OpenSign : SignNode
 {
     enum
     {
@@ -35,7 +35,7 @@ final class OpenSign : SignNode
         drawRing = false;
     }
 
-    final void signChanged(string name, int newSign, int oldSign)
+    void signChanged(string name, int newSign, int oldSign)
     {
         if (name == "sign")
         {
@@ -68,7 +68,7 @@ final class OpenSign : SignNode
     }
 }
 
-final class ExpandSign : SignNode
+class ExpandSign : SignNode
 {
     enum {
         OPEN = SignType.RIGHT,
@@ -82,7 +82,7 @@ final class ExpandSign : SignNode
         drawRing = false;
     }
 
-    final void signChanged(string name, int newSign, int oldSign)
+    void signChanged(string name, int newSign, int oldSign)
     {
         if (name == "sign")
         {

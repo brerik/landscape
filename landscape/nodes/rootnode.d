@@ -24,14 +24,15 @@ import brew.insets;
 
 class RootNode : CutCornerRectNode
 {
-    enum NODE_COLOR : NodeColor {
-        ROOT = NodeColor(Color4d(0.1, 0.1, 0.1, 1.0), Color4d(0.9, 0.9, 0.9, 1.0))
+    enum  {
+        ROOT_COLOR = NodeColor(Color4d(0.1, 0.1, 0.1, 1.0), Color4d(0.9, 0.9, 0.9, 1.0)),
+        ROOT_PADDING = Insets2d(160,160,100,100),
     }
 
     this()
     {
         cut = Vec2d.fill(8.0);
-        nodeColor = NODE_COLOR.ROOT;
+        nodeColor = ROOT_COLOR;
         lineWidth = 2.0;
     }
 
@@ -52,6 +53,6 @@ class RootNode : CutCornerRectNode
 
     override void updateBounds()
     {
-        bounds = computeTotalBounds() + Insets2d(160,160,100,100);
+        bounds = computeTotalBounds() + ROOT_PADDING;
     }
 }

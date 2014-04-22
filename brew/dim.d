@@ -294,6 +294,7 @@ struct Dim(int D, T)
         return res;
     }
 }
+
 alias Dim!(1,float) Dim1f;
 alias Dim!(2,float) Dim2f;
 alias Dim!(3,float) Dim3f;
