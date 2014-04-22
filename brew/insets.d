@@ -236,8 +236,8 @@ struct Insets(int D, T)
         i.swapSides();
         return i;
     }
-
 }
+
 alias Insets insets_t;
 alias insets_t!(2,double) insets_2d;
 alias Insets!(1,int) Insets1i;

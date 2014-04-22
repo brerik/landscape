@@ -66,9 +66,9 @@ class Map : DrawingArea
     alias gio.File.File GioFile;
     enum
     {
-        SCALE_BOUNDS = Intervald(0.2, 2.0),
+        SCALE_INTERVAL = Intervald(0.2, 2.0),
         SCALE_GRANULARITY = 0.1,
-        INSETS = Insets2d(400,400,400,400),
+        MAP_INSETS = Insets2d(400,400,400,400),
         BG_COLOR = Color4d(0.25, 0.25, 0.25, 1.0),
     }
 
@@ -230,13 +230,28 @@ class Map : DrawingArea
 
     final void scale(double aScale)
     {
-        double newScale = SCALE_BOUNDS.clamp(Mathd.round(aScale, SCALE_GRANULARITY));
+        double newScale = clampRoundScale(aScale);
         if (newScale != _scale)
         {
             double oldScale = _scale;
             _scale = newScale;
             scaleChanged(oldScale, newScale);
         }
+    }
+
+    final double clampRoundScale(double aScale)
+    {
+        return clampScale(roundScale(aScale));
+    }
+
+    final double clampScale(double aScale)
+    {
+        return SCALE_INTERVAL.clamp(aScale);
+    }
+
+    final double roundScale(double aScale)
+    {
+        return Mathd.round(aScale, SCALE_GRANULARITY);
     }
 
     final void scaleChanged(double oldScale, double newScale)
@@ -261,10 +276,10 @@ class Map : DrawingArea
 
     final void updateBounds()
     {
-        Box2d ttb = root.totalBounds * scale + INSETS;
+        Box2d ttb = root.totalBounds * scale + MAP_INSETS;
         root.offset = -ttb.pos;
         root.updateTotalBounds();
-        bounds = root.transformedTotalBounds / scale + INSETS;
+        bounds = root.transformedTotalBounds / scale + MAP_INSETS;
     }
 
     final void setLayoutDirty()
@@ -291,7 +306,7 @@ class Map : DrawingArea
 //    final Box2d getAdjustments()
 //    {
 //        Box2d vis = Box2d(offset.x, offset.y, getWidth() / scale, getHeight() / scale);
-//        Box2d tot = root.transformedTotalBounds / scale + INSETS;
+//        Box2d tot = root.transformedTotalBounds / scale + MAP_INSETS;
 //    }
 
     class Root : RootNode
