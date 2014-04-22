@@ -17,7 +17,7 @@
  */
 module landscape.nodes.dir.dirnode;
 import landscape.nodes.filenode;
-import landscape.nodes.rectnode;
+import landscape.nodes.framenode;
 import landscape.fileutil;
 import brew.color;
 import brew.insets;
@@ -26,7 +26,7 @@ import brew.box;
 import brew.dim;
 import cairo.Context;
 
-class DirSymbol : CutCornerRectNode
+class DirSymbol : CutFrameNode
 {
     enum
     {

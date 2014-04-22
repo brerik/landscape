@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-module landscape.nodes.rectnode;
+module landscape.nodes.framenode;
 import std.string, std.stdio;
 import landscape.nodes.node;
 import brew.dim;
@@ -28,7 +28,7 @@ import cairo.Context;
 /**
  * Node with rectangular frame
  */
-class RectNode : Node
+class FrameNode : Node
 {
     enum PropName
     {
@@ -114,7 +114,7 @@ class RectNode : Node
 /**
  * Node with rectangular frame with cut curners
  */
-class CutCornerRectNode : RectNode
+class CutFrameNode : FrameNode
 {
     static immutable DEFAULT_CUT = Vec2d(4,4);
     enum PropName : string

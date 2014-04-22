@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-module landscape.nodes.docnode;
+module landscape.nodes.doc.docnode;
 import landscape.nodes.node;
 import landscape.nodes.textnode;
-import landscape.nodes.rectnode;
+import landscape.nodes.framenode;
 import landscape.nodes.circlenode;
 import landscape.nodes.iconnode;
 import landscape.nodes.filenode;
@@ -44,16 +44,18 @@ alias gio.File.File GioFile;
 
 class DocNode : FileNode
 {
-    static immutable BOUNDS = Box2d(0,0,1.0,Mathd.invSqrt2)*110;
+    enum {
+        DOC_BOUNDS = Box2d(0,0,1.0,Mathd.invSqrt2)*110,
+    }
 
-    CutCornerRectNode docLeaf;
+    CutFrameNode docLeaf;
     TextNode textLeaf;
 
     this(GioFile aFile)
     {
         super(aFile);
         name = aFile.getBasename();
-        bounds = BOUNDS;
+        bounds = DOC_BOUNDS;
         insets.setAll(0);
         addChild(docLeaf = createBoxNode());
         addChild(textLeaf = createTextNode(displayName));
@@ -96,9 +98,9 @@ class DocNode : FileNode
         docLeaf.insets = Insets2d.fill(selected ? 0 : 1);
     }
 
-    final CutCornerRectNode createBoxNode()
+    final CutFrameNode createBoxNode()
     {
-        CutCornerRectNode rl = new CutCornerRectNode();
+        CutFrameNode rl = new CutFrameNode();
         rl.name = "BoxNode";
         rl.bounds = insetBounds;
         rl.insets.setAll(0);

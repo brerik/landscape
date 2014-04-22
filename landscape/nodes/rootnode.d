@@ -17,12 +17,12 @@
  */
 module landscape.nodes.rootnode;
 import landscape.nodes.node;
-import landscape.nodes.rectnode;
+import landscape.nodes.framenode;
 import brew.vec;
 import brew.color;
 import brew.insets;
 
-class RootNode : CutCornerRectNode
+class RootNode : CutFrameNode
 {
     enum  {
         ROOT_COLOR = NodeColor(Color4d(0.1, 0.1, 0.1, 1.0), Color4d(0.9, 0.9, 0.9, 1.0)),

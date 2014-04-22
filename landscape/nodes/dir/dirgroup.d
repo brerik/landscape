@@ -20,10 +20,10 @@ import landscape.nodes.dir.dirnode;
 import landscape.nodes.node;
 import landscape.nodes.filenode;
 import landscape.map;
-import landscape.nodes.rectnode;
+import landscape.nodes.framenode;
 import landscape.nodes.textnode;
 import landscape.nodes.dir.dirsign;
-import landscape.nodes.docnode;
+import landscape.nodes.doc.docnode;
 import landscape.nodes.circlenode;
 import brew.misc;
 import brew.box;
@@ -63,7 +63,8 @@ class DirGroup : FileNode
         CHILD_DIR_SPACING_EXPANDED = 12.0,
         GRID_SIZE_PREF = Dim2i(4,6),
     }
-    private {
+    private
+    {
         ExpandSign dirExpand;
         OpenSign dirOpen;
         DirSymbol dirSymbol;
@@ -466,7 +467,7 @@ class DirGroup : FileNode
         if (visDocs.length > 0)
         {
             immutable INSETS = Insets2d.fill(4);
-            immutable CELL_SIZE = DocNode.BOUNDS.dim;
+            immutable CELL_SIZE = DocNode.DOC_BOUNDS.dim;
             immutable SPACE = Vec2d(4,4);
             int length = Mathi.clamp(cast(int)visDocs.length, _gridSizeMin.width, _gridSizeMax.width);
 
