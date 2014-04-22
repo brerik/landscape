@@ -21,39 +21,41 @@ private import std.string;
 
 mixin template ColorRed(T)
 {
-    T red;
-
-    int redi() const
-    {
-        return cast(int)(red * 255);
-    }
+    T _red;
+    T red() const                       { return _red; }
+    void red(T r)                       { _red = r; }
+    int redi() const                    { return cast(int)(_red * 255); }
+    void redi(int r)                    { _red = cast(T)(r / 255); }
 }
+
 mixin template ColorGreen(T)
 {
-    T green;
-
-    int greeni() const
-    {
-        return cast(int)(green * 255);
-    }
+    T _green;
+    T green() const                     { return _green; }
+    void green(T g)                     { _green = g; }
+    int greeni() const                  { return cast(int)(_green * 255); }
+    void greeni(int g)                  { _green = cast(T)(g / 255); }
 }
 mixin template ColorBlue(T)
 {
-    T blue;
-
-    int bluei() const
-    {
-        return cast(int)(blue * 255);
-    }
+    T _blue;
+    T blue() const                      { return _blue; }
+    void blue(T b)                      { _blue = b; }
+    int bluei() const                   { return cast(int)(_blue * 255); }
+    void bluei(int b)                   { _blue = cast(T)(b / 255); }
 }
 mixin template ColorAlpha(T)
 {
-    T alpha;
-
-    int alphai() const
-    {
-        return cast(int)(alpha * 255);
-    }
+    T _alpha;
+    T alpha() const                     { return _alpha; }
+    void alpha(T a)                     { _alpha = a; }
+    int alphai() const                  { return cast(int)(_alpha * 255); }
+    void alphai(int a)                  { _alpha = cast(T)(a / 255); }
+}
+mixin template ColorAlpha1(T)
+{
+    T alpha() const                     { return 1; }
+    int alphai() const                  { return 255; }
 }
 
 struct Color(int D, T)
@@ -63,10 +65,18 @@ struct Color(int D, T)
     static if (D>=2) mixin ColorGreen!T;
     static if (D>=3) mixin ColorBlue!T;
     static if (D>=4) mixin ColorAlpha!T;
+    static if (D<4) mixin ColorAlpha1!T;
 
     static if (D==3)
     {
-        pure static Color!(3,T)opCall(T red, T green, T blue)
+        /**
+         * Creates a RGB color
+         * @param red component
+         * @param green component
+         * @param blue component
+         * @param alpha ignored
+         */
+        pure static Color!(3,T)opCall(T red, T green, T blue, T alpha = 1)
         {
             Color!(3,T) p = {red, green, blue};
             return p;
@@ -75,6 +85,13 @@ struct Color(int D, T)
 
     static if (D==4)
     {
+        /**
+         * Creates a RGBA color
+         * @param red component
+         * @param green component
+         * @param blue component
+         * @param alpha component
+         */
         pure static Color!(4,T)opCall(T red, T green, T blue, T alpha = 1)
         {
             Color!(4,T) p = {red, green, blue, alpha};
@@ -82,28 +99,35 @@ struct Color(int D, T)
         }
     }
 
-    pure static Color black()
-    {
-        static if (D==3) return Color!(3,T)(0,0,0);
-        static if (D==4) return Color!(4,T)(0,0,0,1);
+    enum {
+        BLACK = Color(0,0,0),
+        WHITE = Color(1,1,1),
+        ZERO = Color(0,0,0,0),
+        GREEN = Color(0,1,0),
+        DK_BLUE = Color(0,0,.5),
+        BLUE = Color(0,0,1),
+        RED = Color(1,0,0),
+        ORANGE = Color(1,.5,0),
+        OLIVE = Color(.5,.5,0),
+        YELLOW = Color(1,1,0),
+        PALE = Color(1,1,.5),
+        CYAN = Color(0,1,1),
+        MAGENTA = Color(1,0,1),
+        PINK = Color(1,.5,1),
+        GREY = Color(.5,.5,.5),
+        NAN = Color(T.nan,T.nan,T.nan,T.nan),
     }
 
-    pure static Color zero()
-    {
-        static if (D==3) return Color!(3,T)(0,0,0);
-        static if (D==4) return Color!(4,T)(0,0,0,0);
-    }
-
+    @property
     pure static Color nan()
     {
-        static if (D==3) return Color!(3,T)(T.nan,T.nan,T.nan);
-        static if (D==4) return Color!(4,T)(T.nan,T.nan,T.nan,T.nan);
+        return Color(T.nan,T.nan,T.nan,T.nan);
     }
 
-    pure static Color white()
+    @property
+    pure static Color zero()
     {
-        static if (D==3) return Color!(3,T)(1,1,1);
-        static if (D==4) return Color!(4,T)(1,1,1,1);
+        return Color(0,0,0,0);
     }
 
     string toString() const

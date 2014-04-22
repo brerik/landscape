@@ -46,7 +46,7 @@ class SignNode : Node
     static immutable INSETS = Insets2d(5, 5, 5, 5);
 
     private SignType _sign = SignType.NONE;
-    private Color4d _signColor = Color4d.black;
+    private Color4d _signColor = Color4d.BLACK;
     private double _lineWidth = 1.0;
     private double _signLineWidth = 1.0;
     private bool _drawRing = true;

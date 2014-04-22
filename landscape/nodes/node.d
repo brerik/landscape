@@ -34,8 +34,8 @@ import landscape.events.mouseevent;
 
 struct NodeColor
 {
-    Color4d fgColor;
-    Color4d bgColor;
+    Color4d fgColor = Color4d.BLACK;
+    Color4d bgColor = Color4d.WHITE;
 }
 struct NodeDim
 {
@@ -92,7 +92,7 @@ class Node
         Insets2d _insets = NO_INSETS;
         NodeColor _color = NODE_COLOR.DEFAULT;
         Node _parent;
-        Node _children[];
+        Node[] _children;
         bool boundsDirty;
         bool layoutDirty;
         bool totalBoundsDirty;
