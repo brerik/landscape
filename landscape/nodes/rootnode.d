@@ -27,13 +27,16 @@ class RootNode : CutCornerRectNode
     enum  {
         ROOT_COLOR = NodeColor(Color4d(0.1, 0.1, 0.1, 1.0), Color4d(0.9, 0.9, 0.9, 1.0)),
         ROOT_PADDING = Insets2d(160,160,100,100),
+        ROOT_CUT = Vec2d.fill(8),
+        ROOT_LINE_WIDTH = 2.0,
+        NODE_SPACING = 50,
     }
 
     this()
     {
-        cut = Vec2d.fill(8.0);
+        cut = ROOT_CUT;
         nodeColor = ROOT_COLOR;
-        lineWidth = 2.0;
+        lineWidth = ROOT_LINE_WIDTH;
     }
 
     override void updateLayout()
@@ -44,7 +47,7 @@ class RootNode : CutCornerRectNode
         {
             c.updateTotalBounds();
             c.offset.y = next - c.totalBounds.top + m;
-            m = 50;
+            m = NODE_SPACING;
             next = next + c.totalBounds.height;
         }
         updateBounds();

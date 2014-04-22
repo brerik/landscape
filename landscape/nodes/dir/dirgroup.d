@@ -433,11 +433,11 @@ class DirGroup : FileNode
                 d.cleanTotalBounds();
                 d.offset.x = pos1.x;
                 d.offset.y = pos1.y - d.bounds.top + marginY;
-                if (d.isDirsShown)
+                if (d.isDirsOrDocsShown)
                     d.offset.y = Mathd.max(d.offset.y, pos2.y - d.totalBounds.top + CHILD_DIR_SPACING_EXPANDED);
                 marginY = CHILD_DIR_SPACING;
                 pos1.y = d.transformedBounds.bottom;
-                if (d.isDirsShown)
+                if (d.isDirsOrDocsShown)
                     pos2.y = d.transformedTotalBounds.bottom;
             }
             Box2d dirBounds = computeDirBounds();
@@ -559,6 +559,11 @@ class DirGroup : FileNode
     final bool hasDirs() const
     {
         return dirs.length > 0;
+    }
+
+    final bool isDirsOrDocsShown()
+    {
+        return isDirsShown || isDocsShown;
     }
 
     final bool isDocsShown()
