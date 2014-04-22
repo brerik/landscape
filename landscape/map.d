@@ -17,6 +17,7 @@
  */
 module landscape.map;
 import landscape.nodes.node;
+import landscape.nodes.rootnode;
 import landscape.nodes.dirgroup;
 import landscape.nodes.rectnode;
 import landscape.selection;
@@ -56,13 +57,17 @@ import pango.PgContext;
 import std.stdio;
 import core.memory;
 
+/**
+ * Map component
+ *
+ */
 class Map : DrawingArea
 {
     alias gio.File.File GioFile;
     static immutable SCALE_BOUNDS = Interval!double(0.2, 2.0);
     static immutable SCALE_GRANULARITY = 0.1;
     static immutable INSETS = Insets2d(400,400,400,400);
-    static immutable BG_COLOR = Color4d(0.5, 0.5, 0.5, 1.0);
+    static immutable BG_COLOR = Color4d(0.25, 0.25, 0.25, 1.0);
     Adjustment hAdj, vAdj;
     private Vec2d oldMouseCoords = Vec2d.zero;
     double _scale = 1.0;
@@ -285,39 +290,11 @@ class Map : DrawingArea
 //        Box2d tot = root.transformedTotalBounds / scale + INSETS;
 //    }
 
-    class Root : CutCornerRectNode
+    class Root : RootNode
     {
-        this()
-        {
-            cut = Vec2d.fill(8.0);
-            fgColor = Color4d(0.2, 0.2, 0.2, 1.0);
-            bgColor = Color4d(0.9, 0.9, 0.9, 1.0);
-            lineWidth = 2.0;
-        }
-
         override void redraw()
         {
             queueDraw();
-        }
-
-        override void updateLayout()
-        {
-            double next = 0;
-            double m = 0;
-            foreach(Node c; visibleChildren)
-            {
-                c.updateTotalBounds();
-                c.offset.y = next - c.totalBounds.top + m;
-                m = 50;
-                next = next + c.totalBounds.height;
-            }
-            updateBounds();
-            updateTotalBounds();
-        }
-
-        override void updateBounds()
-        {
-            bounds = computeTotalBounds() + Insets2d(160,160,100,100);
         }
     }
 }

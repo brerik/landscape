@@ -37,6 +37,13 @@ struct NodeColor
     Color4d fgColor;
     Color4d bgColor;
 }
+struct NodeDim
+{
+    Dim2d min = Dim2d.zero;
+    Dim2d max = Dim2d.zero;
+    Dim2d pref = Dim2d.zero;
+    Dim2d fit = Dim2d.zero;
+}
 
 class Node
 {
@@ -55,41 +62,52 @@ class Node
         margin = "margin",
         animOffset = "animOffset",
         animBounds = "animBounds",
-        bounds = "bounds"
+        bounds = "bounds",
+        totalBounds = "totalBounds",
+        name = "name",
+        minDim = "minDim",
+        maxDim = "maxDim",
+        prefDim = "prefDim",
+        fitDim = "fitDim",
     }
 
-    static immutable LAYOUT_ALL = -1;
-    static immutable NO_DIM = Dim2d.zero;
-    static immutable NO_INSETS = Insets2d.zero;
-    static immutable NO_MARGIN = Insets2d.zero;
-    string name;
-    Dim2d maxDim = Dim2d.zero;
-    Dim2d minDim = Dim2d.zero;
-    Dim2d prefDim = Dim2d.zero;
-    Dim2d fitDim = Dim2d.zero;
-    Box2d _bounds = Box2d.zero;
-    Box2d _animBounds = Box2d.zero;
-    Box2d totalBounds = Box2d.zero;
-    Insets2d _margin = NO_MARGIN;
-    Insets2d _insets = NO_INSETS;
-    Color4d _fgColor = Color4d(.2,.2,.2,1);
-    Color4d _bgColor = Color4d(.9,.9,.9,1);
-    Node parent;
-    Node children[];
-    bool boundsDirty;
-    bool layoutDirty;
-    bool totalBoundsDirty;
-    bool _visible;
-    bool showChildren;
-    bool isPaintTotalBounds;
-    bool isPaintBounds;
-    bool _selected;
-    bool _pressed;
-    bool _animated;
-    int _layer;
-    Vec2d _offset = Vec2d.zero;
-    Vec2d _animOffset = Vec2d.zero;
-    Vec2d _alignment = Vec2d.zero;
+    enum NODE_COLOR : NodeColor {
+        DEFAULT = NodeColor(Color4d(.2,.2,.2,1), Color4d(.9,.9,.9,1))
+    }
+    static
+    {
+        immutable LAYOUT_ALL = -1;
+        immutable NO_DIM = Dim2d.zero;
+        immutable NO_INSETS = Insets2d.zero;
+        immutable NO_MARGIN = Insets2d.zero;
+    }
+
+    private {
+        string _name;
+        NodeDim _dim;
+        Box2d _bounds = Box2d.zero;
+        Box2d _animBounds = Box2d.zero;
+        Box2d _totalBounds = Box2d.zero;
+        Insets2d _margin = NO_MARGIN;
+        Insets2d _insets = NO_INSETS;
+        NodeColor _color = NODE_COLOR.DEFAULT;
+        Node _parent;
+        Node _children[];
+        bool boundsDirty;
+        bool layoutDirty;
+        bool totalBoundsDirty;
+        bool _visible;
+        bool showChildren;
+        bool isPaintTotalBounds;
+        bool isPaintBounds;
+        bool _selected;
+        bool _pressed;
+        bool _animated;
+        int _layer;
+        Vec2d _offset = Vec2d.zero;
+        Vec2d _animOffset = Vec2d.zero;
+        Vec2d _alignment = Vec2d.zero;
+    }
 
     bool delegate(in Vec2d, uint clickCount) onMousePressedDlgs[];
     bool delegate(in Vec2d, uint clickCount) onMouseReleasedDlgs[];
@@ -104,126 +122,134 @@ class Node
     mixin Signal!(string, Insets2d, Insets2d) changedInsets2dSignal;
     mixin Signal!(string, Vec2d, Vec2d) changedVector2dSignal;
     mixin Signal!(string, Box2d, Box2d) changedBox2dSignal;
+    mixin Signal!(string, Dim2d, Dim2d) changedDim2dSignal;
     mixin Signal!(MouseEvent) mouseEventSignal;
 
-    public final void connect(changedBoolSignal.slot_t s)
+    final
     {
-        changedBoolSignal.connect(s);
-    }
-    public final void disconnect(changedBoolSignal.slot_t s)
-    {
-        changedBoolSignal.disconnect(s);
-    }
-    public final void emit(string propName, bool newValue, bool oldValue)
-    {
-        changedBoolSignal.emit(propName, newValue, oldValue);
+        void connect(changedBoolSignal.slot_t s)
+        {
+            changedBoolSignal.connect(s);
+        }
+        void disconnect(changedBoolSignal.slot_t s)
+        {
+            changedBoolSignal.disconnect(s);
+        }
+        void emit(string propName, bool newValue, bool oldValue)
+        {
+            changedBoolSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedDoubleSignal.slot_t s)
+        {
+            changedDoubleSignal.connect(s);
+        }
+        void disconnect(changedDoubleSignal.slot_t s)
+        {
+            changedDoubleSignal.disconnect(s);
+        }
+        void emit(string propName, double newValue, double oldValue)
+        {
+            changedDoubleSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedStringSignal.slot_t s)
+        {
+            changedStringSignal.connect(s);
+        }
+        void disconnect(changedStringSignal.slot_t s)
+        {
+            changedStringSignal.disconnect(s);
+        }
+        void emit(string propName, string newValue, string oldValue)
+        {
+            changedStringSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedIntSignal.slot_t s)
+        {
+            changedIntSignal.connect(s);
+        }
+        void disconnect(changedIntSignal.slot_t s)
+        {
+            changedIntSignal.disconnect(s);
+        }
+        void emit(string propName, int newValue, int oldValue)
+        {
+            changedIntSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedColor4dSignal.slot_t s)
+        {
+            changedColor4dSignal.connect(s);
+        }
+        void disconnect(changedColor4dSignal.slot_t s)
+        {
+            changedColor4dSignal.disconnect(s);
+        }
+        void emit(string propName, in Color4d newValue, in Color4d oldValue)
+        {
+            changedColor4dSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedInsets2dSignal.slot_t s)
+        {
+            changedInsets2dSignal.connect(s);
+        }
+        void disconnect(changedInsets2dSignal.slot_t s)
+        {
+            changedInsets2dSignal.disconnect(s);
+        }
+        void emit(string propName, in Insets2d newValue, in Insets2d oldValue)
+        {
+            changedInsets2dSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedVector2dSignal.slot_t s)
+        {
+            changedVector2dSignal.connect(s);
+        }
+        void disconnect(changedVector2dSignal.slot_t s)
+        {
+            changedVector2dSignal.disconnect(s);
+        }
+        void emit(string propName, in Vec2d newValue, in Vec2d oldValue)
+        {
+            changedVector2dSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedBox2dSignal.slot_t s)
+        {
+            changedBox2dSignal.connect(s);
+        }
+        void disconnect(changedBox2dSignal.slot_t s)
+        {
+            changedBox2dSignal.disconnect(s);
+        }
+        void emit(string propName, in Box2d newValue, in Box2d oldValue)
+        {
+            changedBox2dSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(changedDim2dSignal.slot_t s)
+        {
+            changedDim2dSignal.connect(s);
+        }
+        void disconnect(changedDim2dSignal.slot_t s)
+        {
+            changedDim2dSignal.disconnect(s);
+        }
+        void emit(string propName, in Dim2d newValue, in Dim2d oldValue)
+        {
+            changedDim2dSignal.emit(propName, newValue, oldValue);
+        }
+        void connect(mouseEventSignal.slot_t s)
+        {
+            mouseEventSignal.connect(s);
+        }
+        void disconnect(mouseEventSignal.slot_t s)
+        {
+            mouseEventSignal.disconnect(s);
+        }
+        void emit(MouseEvent s)
+        {
+            mouseEventSignal.emit(s);
+        }
     }
 
-    public final void connect(changedDoubleSignal.slot_t s)
-    {
-        changedDoubleSignal.connect(s);
-    }
-    public final void disconnect(changedDoubleSignal.slot_t s)
-    {
-        changedDoubleSignal.disconnect(s);
-    }
-    public final void emit(string propName, double newValue, double oldValue)
-    {
-        changedDoubleSignal.emit(propName, newValue, oldValue);
-    }
-
-    public final void connect(changedStringSignal.slot_t s)
-    {
-        changedStringSignal.connect(s);
-    }
-    public final void disconnect(changedStringSignal.slot_t s)
-    {
-        changedStringSignal.disconnect(s);
-    }
-    public final void emit(string propName, string newValue, string oldValue)
-    {
-        changedStringSignal.emit(propName, newValue, oldValue);
-    }
-
-    public final void connect(changedIntSignal.slot_t s)
-    {
-        changedIntSignal.connect(s);
-    }
-    public final void disconnect(changedIntSignal.slot_t s)
-    {
-        changedIntSignal.disconnect(s);
-    }
-    public final void emit(string propName, int newValue, int oldValue)
-    {
-        changedIntSignal.emit(propName, newValue, oldValue);
-    }
-
-    public final void connect(changedColor4dSignal.slot_t s)
-    {
-        changedColor4dSignal.connect(s);
-    }
-    public final void disconnect(changedColor4dSignal.slot_t s)
-    {
-        changedColor4dSignal.disconnect(s);
-    }
-    public final void emit(string propName, in Color4d newValue, in Color4d oldValue)
-    {
-        changedColor4dSignal.emit(propName, newValue, oldValue);
-    }
-
-    public final void connect(changedInsets2dSignal.slot_t s)
-    {
-        changedInsets2dSignal.connect(s);
-    }
-    public final void disconnect(changedInsets2dSignal.slot_t s)
-    {
-        changedInsets2dSignal.disconnect(s);
-    }
-    public final void emit(string propName, in Insets2d newValue, in Insets2d oldValue)
-    {
-        changedInsets2dSignal.emit(propName, newValue, oldValue);
-    }
-
-    public final void connect(changedVector2dSignal.slot_t s)
-    {
-        changedVector2dSignal.connect(s);
-    }
-    public final void disconnect(changedVector2dSignal.slot_t s)
-    {
-        changedVector2dSignal.disconnect(s);
-    }
-    public final void emit(string propName, in Vec2d newValue, in Vec2d oldValue)
-    {
-        changedVector2dSignal.emit(propName, newValue, oldValue);
-    }
-
-    public final void connect(changedBox2dSignal.slot_t s)
-    {
-        changedBox2dSignal.connect(s);
-    }
-    public final void disconnect(changedBox2dSignal.slot_t s)
-    {
-        changedBox2dSignal.disconnect(s);
-    }
-    public final void emit(string propName, in Box2d newValue, in Box2d oldValue)
-    {
-        changedBox2dSignal.emit(propName, newValue, oldValue);
-    }
-
-    public final void connect(mouseEventSignal.slot_t s)
-    {
-        mouseEventSignal.connect(s);
-    }
-    public final void disconnect(mouseEventSignal.slot_t s)
-    {
-        mouseEventSignal.disconnect(s);
-    }
-    public final void emit(MouseEvent s)
-    {
-        mouseEventSignal.emit(s);
-    }
-
-    public this()
+    this()
     {
         visible = true;
         layer = 0;
@@ -239,7 +265,7 @@ class Node
             parent.removeChild(this);
     }
 
-    public void addChild(Node child)
+    void addChild(Node child)
     {
         if (child.parent is this)
             return;
@@ -250,7 +276,7 @@ class Node
         setDirty();
     }
 
-    public void addChild(Node child, string target)
+    void addChild(Node child, string target)
     {
         foreach (Node n; children) {
             if (n.name == target) {
@@ -270,12 +296,12 @@ class Node
         onMousePressedDlgs ~= dlg;
     }
 
-    final void addOnMouseReleasedDlg(bool delegate(in Vec2d, uint clickCount) dlg)
+    void addOnMouseReleasedDlg(bool delegate(in Vec2d, uint clickCount) dlg)
     {
         onMouseReleasedDlgs ~= dlg;
     }
 
-    public void removeChild(Node child)
+    void removeChild(Node child)
     {
         if (child.parent !is this)
             return;
@@ -292,7 +318,7 @@ class Node
         }
     }
 
-    final const(string) path()
+    const(string) path()
     {
         string a = name;
         if (parent is null)
@@ -460,7 +486,7 @@ class Node
     /**
      * @return true if node has no parent
      */
-    public final bool isRoot()
+    final bool isRoot()
     {
         return parent is null;
     }
@@ -468,7 +494,7 @@ class Node
     /**
      * @return true if node is a child aka has a parent
      */
-    public final bool isChild()
+    final bool isChild()
     {
         return parent !is null;
     }
@@ -476,7 +502,7 @@ class Node
     /**
      * @return true if node has a parent
      */
-    public final bool hasParent()
+    final bool hasParent()
     {
         return parent !is null;
     }
@@ -484,7 +510,7 @@ class Node
     /**
      * @return true if node has at least one child
      */
-    public final bool hasChildren()
+    final bool hasChildren()
     {
         return children.length > 0;
     }
@@ -492,17 +518,17 @@ class Node
     /**
      * @return number of children
      */
-    public final size_t numChildren()
+    final size_t numChildren()
     {
         return children.length;
     }
 
-    public final Node childAt(size_t i)
+    final Node childAt(size_t i)
     {
         return children[i];
     }
 
-    public final void moveTo(Vec2d newOffset)
+    final void moveTo(Vec2d newOffset)
     {
         if (newOffset != bounds.pos)
         {
@@ -511,7 +537,7 @@ class Node
         }
     }
 
-    public final void moveBy(Vec2d amount) {
+    final void moveBy(Vec2d amount) {
         if (amount != Vec2d.zero)
         {
             offset = offset + amount;
@@ -519,11 +545,11 @@ class Node
         }
     }
 
-    public const(Vec2d) tailPoint(Vec2d alignment) {
+    const(Vec2d) tailPoint(Vec2d alignment) {
         return bounds.alignedPoint(alignment);
     }
 
-    public final void resizeTo(in Dim2d newSize)
+    final void resizeTo(in Dim2d newSize)
     {
         if (newSize != bounds.dim)
         {
@@ -583,7 +609,7 @@ class Node
         return boundsDirty || layoutDirty || totalBoundsDirty;
     }
 
-    public final const(Box2d) absBounds()
+    final const(Box2d) absBounds()
     {
         Box2d a = bounds;
         for (Node p = parent; p !is null; p = p.parent)
@@ -805,7 +831,7 @@ class Node
         }
     }
 
-    public final bool isShown() const
+    final bool isShown() const
     {
         return visible && bounds.width > 0 && bounds.height > 0;
     }
@@ -813,7 +839,7 @@ class Node
     /**
      * Sets selected property
      */
-    public final void selected(bool b)
+    final void selected(bool b)
     {
         if (_selected != b)
         {
@@ -825,7 +851,7 @@ class Node
     /**
      * Gets selected property
      */
-    public final bool selected() const
+    final bool selected() const
     {
         return _selected;
     }
@@ -833,7 +859,7 @@ class Node
     /**
      * Sets visible property and emits changed signal if changed
      */
-    public final void visible(bool b)
+    final void visible(bool b)
     {
         if (_visible != b)
         {
@@ -845,7 +871,7 @@ class Node
     /**
      * Gets visible property
      */
-    public final bool visible() const
+    final bool visible() const
     {
         return _visible;
     }
@@ -853,7 +879,7 @@ class Node
     /**
      * Sets pressed property and emits signal if changed
      */
-    public final void pressed(bool b)
+    final void pressed(bool b)
     {
         if (_pressed != b)
         {
@@ -866,7 +892,7 @@ class Node
      * Gets pressed property
      * @return pressed
      */
-    public final bool pressed() const
+    final bool pressed() const
     {
         return _pressed;
     }
@@ -875,30 +901,30 @@ class Node
      * Gets foreground color property as const ref
      * @return foreground color
      */
-    public final ref const(Color4d) fgColor() const
+    final ref const(Color4d) fgColor() const
     {
-        return _fgColor;
+        return _color.fgColor;
     }
 
     /**
      * Gets foreground color property as mutable ref
      * @return foreground color
      */
-    public final ref Color4d fgColor()
+    final ref Color4d fgColor()
     {
-        return _fgColor;
+        return _color.fgColor;
     }
 
     /**
      * Sets foreground color property and emits fgColor changed signal
      * @param newFgColor - new foreground color
      */
-    public final void fgColor(in Color4d newFgColor)
+    final void fgColor(in Color4d newFgColor)
     {
-        if (_fgColor != newFgColor)
+        if (_color.fgColor != newFgColor)
         {
-            auto oldFgColor = _fgColor;
-            _fgColor = newFgColor;
+            auto oldFgColor = _color.fgColor;
+            _color.fgColor = newFgColor;
             emit(PropName.fgColor, newFgColor, oldFgColor);
         }
     }
@@ -907,59 +933,59 @@ class Node
      * Gets background color property as const ref
      * @return background color
      */
-    public final ref const(Color4d) bgColor() const
+    final ref const(Color4d) bgColor() const
     {
-        return _bgColor;
+        return _color.bgColor;
     }
 
     /**
      * Gets background color property as mutable ref
      * @return background color
      */
-    public final ref Color4d bgColor()
+    final ref Color4d bgColor()
     {
-        return _bgColor;
+        return _color.bgColor;
     }
 
     /**
      * Sets background color property and emits bgColor changed signal
      * @param newBgColor - new background color
      */
-    public final void bgColor(in Color4d newBgColor)
+    final void bgColor(in Color4d newBgColor)
     {
-        if (_bgColor != newBgColor)
+        if (_color.bgColor != newBgColor)
         {
-            auto oldBgColor = _bgColor;
-            _bgColor = newBgColor;
+            auto oldBgColor = _color.bgColor;
+            _color.bgColor = newBgColor;
             emit(PropName.bgColor, newBgColor, oldBgColor);
         }
     }
 
     /**
      * Sets fgColor and bgColor proprty and emits their changed signals
+     * emits bgColor and fgColor signal
      * @param NodeColor - foreground color and background color
      */
-    public final void nodeColor(in NodeColor c)
+    final void nodeColor(in NodeColor nc)
     {
-        fgColor = c.fgColor;
-        bgColor = c.bgColor;
+        fgColor = nc.fgColor;
+        bgColor = nc.bgColor;
     }
 
     /**
      * Gets fgColor and bgColor property
      * @return NodeColor[fgColor, bgColor]
      */
-    public final const(NodeColor) nodeColor() const
+    final ref const(NodeColor) nodeColor() const
     {
-        NodeColor c = {fgColor, bgColor};
-        return c;
+        return _color;
     }
 
     /**
      * Sets insets property and emits changed signal
      * @param new insets
      */
-    public final void insets(in Insets2d newInsets)
+    final void insets(in Insets2d newInsets)
     {
         if (newInsets != _insets)
         {
@@ -973,7 +999,7 @@ class Node
      * Gets insets property as const ref
      * @return insets
      */
-    public final ref const(Insets2d) insets() const
+    final ref const(Insets2d) insets() const
     {
         return _insets;
     }
@@ -982,7 +1008,7 @@ class Node
      * Gets insets property as mutable ref
      * @return insets
      */
-    public final ref Insets2d insets()
+    final ref Insets2d insets()
     {
         return _insets;
     }
@@ -991,7 +1017,7 @@ class Node
      * Sets alignment property and emits alignment changed signal
      * @param new alignment
      */
-    public final void alignment(in Vec2d newAlignment)
+    final void alignment(in Vec2d newAlignment)
     {
         if (newAlignment != _alignment)
         {
@@ -1005,7 +1031,7 @@ class Node
      * Gets alignment property as const ref
      * @return alignment
      */
-    public final ref const(Vec2d) alignment() const
+    final ref const(Vec2d) alignment() const
     {
         return _alignment;
     }
@@ -1014,7 +1040,7 @@ class Node
      * Gets alignment property as mutable ref
      * @return alignment
      */
-    public final ref Vec2d alignment()
+    final ref Vec2d alignment()
     {
         return _alignment;
     }
@@ -1023,7 +1049,7 @@ class Node
      * Sets layer property and emits changed signal
      * @param newLayer
      */
-    public final void layer(int newLayer)
+    final void layer(int newLayer)
     {
         if (newLayer != _layer)
         {
@@ -1037,7 +1063,7 @@ class Node
      * Gets layer property
      * @return layer
      */
-    public final const(int) layer() const
+    final const(int) layer() const
     {
         return _layer;
     }
@@ -1046,7 +1072,7 @@ class Node
      * Sets animated property and emits changed signal if changed
      * @param new animated value
      */
-    public final void animated(bool b)
+    final void animated(bool b)
     {
         if (b != _animated)
         {
@@ -1059,7 +1085,7 @@ class Node
      * Gets the animated property
      * @return animated value
      */
-    public final bool animated() const
+    final bool animated() const
     {
         return _animated;
     }
@@ -1068,7 +1094,7 @@ class Node
      * Sets margin property and emits changed signal if changed
      * @param new margin
      */
-    public final void margin(in Insets2d newMargin)
+    final void margin(in Insets2d newMargin)
     {
         if (newMargin != _margin)
         {
@@ -1082,7 +1108,7 @@ class Node
      * Gets margin property as const ref
      * @return margin
      */
-    public final ref const(Insets2d) margin() const
+    final ref const(Insets2d) margin() const
     {
         return _margin;
     }
@@ -1091,7 +1117,7 @@ class Node
      * Gets margin property as mutable ref
      * @return margin
      */
-    public final ref Insets2d margin()
+    final ref Insets2d margin()
     {
         return _margin;
     }
@@ -1100,7 +1126,7 @@ class Node
      * Sets animated offset property and emits changed signal if changed
      * @param new animated offset
      */
-    public final void animOffset(in Vec2d newAnimOffset)
+    final void animOffset(in Vec2d newAnimOffset)
     {
         if (newAnimOffset != _animOffset)
         {
@@ -1114,7 +1140,7 @@ class Node
      * Gets animated offset property as const ref
      * @return animated offset
      */
-    public final ref const(Vec2d) animOffset() const
+    final ref const(Vec2d) animOffset() const
     {
         return _animOffset;
     }
@@ -1123,7 +1149,7 @@ class Node
      * Gets animated offset property as mutable ref
      * @return animated offset
      */
-    public final ref Vec2d animOffset()
+    final ref Vec2d animOffset()
     {
         return _animOffset;
     }
@@ -1132,7 +1158,7 @@ class Node
      * Sets animated boundaries property and emits changed signal if changed
      * @param new animated boundaries
      */
-    public final void animBounds(in Box2d newAnimBounds)
+    final void animBounds(in Box2d newAnimBounds)
     {
         if (newAnimBounds != _animBounds)
         {
@@ -1146,7 +1172,7 @@ class Node
      * Gets animated boundaries property as const ref
      * @return animated boundaries
      */
-    public final ref const(Box2d) animBounds() const
+    final ref const(Box2d) animBounds() const
     {
         return _animBounds;
     }
@@ -1155,7 +1181,7 @@ class Node
      * Gets animated boundaries property as mutable ref
      * @return animated boundaries
      */
-    public final ref Box2d animBounds()
+    final ref Box2d animBounds()
     {
         return _animBounds;
     }
@@ -1164,7 +1190,7 @@ class Node
      * Sets boundaries property and emits changed signal if changed
      * @param new boundaries
      */
-    public final void bounds(in Box2d newBounds)
+    final void bounds(in Box2d newBounds)
     {
         if (newBounds != _bounds)
         {
@@ -1178,18 +1204,161 @@ class Node
      * Gets boundaries property as const ref
      * @return boundaries
      */
-    public final ref const(Box2d) bounds() const
+    final ref const(Box2d) bounds() const
     {
         return _bounds;
+    }
+    /**
+     * Sets total boundaries property and emits changed signal if changed
+     * @param new boundaries
+     */
+    final void totalBounds(in Box2d newTotalBounds)
+    {
+        if (newTotalBounds != _totalBounds)
+        {
+            auto oldTotalBounds = _totalBounds;
+            _totalBounds = newTotalBounds;
+            emit(PropName.totalBounds, newTotalBounds, oldTotalBounds);
+        }
+    }
+
+    /**
+     * Gets total boundaries property as const ref
+     * @return boundaries
+     */
+    final ref const(Box2d) totalBounds() const
+    {
+        return _totalBounds;
     }
 
     /**
      * Gets boundaries property as mutable ref
      * @return boundaries
      */
-    public final ref Box2d bounds()
+    final ref Box2d bounds()
     {
         return _bounds;
+    }
+
+    /**
+     * Gets name property
+     */
+    final string name() const
+    {
+        return _name;
+    }
+
+    final void name(string newName)
+    {
+        if (newName != _name)
+        {
+            auto oldName = _name;
+            _name = newName;
+            emit(PropName.name, newName, oldName);
+        }
+    }
+
+
+    /**
+     * Sets minimum dimension property and emits minimum dimension changed signal
+     * @param new alignment
+     */
+    final void minDim(in Dim2d newMinDim)
+    {
+        if (newMinDim != _dim.min)
+        {
+            auto oldMinDim = _dim.min;
+            _dim.min = newMinDim;
+            emit(PropName.minDim, newMinDim, oldMinDim);
+        }
+    }
+
+    /**
+     * Gets minimum dimension property as const ref
+     * @return alignment
+     */
+    final ref const(Dim2d) minDim() const
+    {
+        return _dim.min;
+    }
+
+    /**
+     * Sets maximum dimension property and emits maximum dimension changed signal
+     * @param new alignment
+     */
+    final void maxDim(in Dim2d newMaxDim)
+    {
+        if (newMaxDim != _dim.max)
+        {
+            auto oldMaxDim = _dim.max;
+            _dim.max = newMaxDim;
+            emit(PropName.maxDim, newMaxDim, oldMaxDim);
+        }
+    }
+
+    /**
+     * Gets maximum dimension property as const ref
+     * @return alignment
+     */
+    final ref const(Dim2d) maxDim() const
+    {
+        return _dim.max;
+    }
+
+    /**
+     * Sets preferred dimension property and emits preferred dimension changed signal
+     * @param new alignment
+     */
+    final void prefDim(in Dim2d newPrefDim)
+    {
+        if (newPrefDim != _dim.pref)
+        {
+            auto oldPrefDim = _dim.pref;
+            _dim.pref = newPrefDim;
+            emit(PropName.prefDim, newPrefDim, oldPrefDim);
+        }
+    }
+
+    /**
+     * Gets preferred dimension property as const ref
+     * @return alignment
+     */
+    final ref const(Dim2d) prefDim() const
+    {
+        return _dim.pref;
+    }
+
+    /**
+     * Sets best fit dimension property and emits best fit dimension changed signal
+     * @param new alignment
+     */
+    final void fitDim(in Dim2d newFitDim)
+    {
+        if (newFitDim != _dim.fit)
+        {
+            auto oldFitDim = _dim.fit;
+            _dim.fit = newFitDim;
+            emit(PropName.fitDim, newFitDim, oldFitDim);
+        }
+    }
+
+    /**
+     * Gets best fit dimension property as const ref
+     * @return alignment
+     */
+    final ref const(Dim2d) fitDim() const
+    {
+        return _dim.fit;
+    }
+
+    final ref Node parent()
+    {
+        return _parent;
+    }
+
+    final ref Node[] children()
+    {
+        return _children;
     }
 }
 

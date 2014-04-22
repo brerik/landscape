@@ -20,12 +20,12 @@ import landscape.nodes.node;
 import gio.File;
 alias gio.File.File GioFile;
 
-
-public class FileNode : Node
+class FileNode : Node
 {
     private GioFile _file;
     private string _displayName;
-    public this(GioFile f)
+
+    this(GioFile f)
     {
         super();
         _file = f;
@@ -35,12 +35,12 @@ public class FileNode : Node
             _displayName = f.getPath();
     }
 
-    public final GioFile file()
+    final GioFile file()
     {
         return _file;
     }
 
-    public final string displayName()
+    final string displayName()
     {
         return _displayName;
     }

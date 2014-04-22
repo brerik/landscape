@@ -170,9 +170,16 @@ struct Insets(int D, T)
         }
     }
 
+    @property
     static pure Insets zero()
     {
         return fill(0);
+    }
+
+    @property
+    static pure Insets ones()
+    {
+        return fill(1);
     }
 
     static pure Insets fill(T a)

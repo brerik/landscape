@@ -48,38 +48,42 @@ import std.c.stdio;
 
 class DirGroup : FileNode
 {
-    static immutable IMPORT_ALL = -1;
-    static immutable BG_COLOR = Color4d(1,1,.8,1);
-    static immutable FG_COLOR = Color4d(0,0,0,1);
-    static immutable DIR_GROUP_OUTLINE_COLOR = Color4d(0.4, 0.4, 0.5);
-    static immutable BOUNDS = Box2d(0, 0,240, 24);
-
-    static immutable FG_OPEN_COLOR = Color4d(.25,.25,.25,1);
-    static immutable BG_OPEN_COLOR = Color4d(1,1,1,1);
-    static immutable SHOW_DOCS_SIGN = SignNode.SignType.DOWN;
-    static immutable HIDE_DOCS_SIGN = SignNode.SignType.UP;
-    static immutable SHOW_DIRS_SIGN = SignNode.SignType.RIGHT;
-    static immutable HIDE_DIRS_SIGN = SignNode.SignType.LEFT;
-    static immutable HIDE_SIGN = SignNode.SignType.NONE;
-    static immutable TAIL_COLOR = Color4d(0.2, 0.2, 0.3, 1.0);
-    static immutable TAIL_LINE_WIDTH = 1.0;
-    static immutable CHILD_DIR_SPACING = 8.0;
-    static immutable CHILD_DIR_SPACING_EXPANDED = 12.0;
-    static immutable GRID_SIZE_PREF = Dim2i(4,6);
-    ExpandSign dirExpand;
-    OpenSign dirOpen;
-    DirSymbol dirSymbol;
-    TextNode dirText;
-    Color4d tailColor;
-    double tailLineWidth;
-    int mNumDocs;
-    bool bShowExpand;
-    DirGroup dirs[];
-    DocNode docs[];
-    bool imported;
-    Dim2i _gridSizeMin;
-    Dim2i _gridSizePref;
-    Dim2i _gridSizeMax;
+    static
+    {
+        immutable IMPORT_ALL = -1;
+        immutable BG_COLOR = Color4d(1,1,.8,1);
+        immutable FG_COLOR = Color4d(0,0,0,1);
+        immutable DIR_GROUP_OUTLINE_COLOR = Color4d(0.4, 0.4, 0.5);
+        immutable BOUNDS = Box2d(0, 0,240, 24);
+        immutable FG_OPEN_COLOR = Color4d(.25,.25,.25,1);
+        immutable BG_OPEN_COLOR = Color4d(1,1,1,1);
+        immutable SHOW_DOCS_SIGN = SignNode.SignType.DOWN;
+        immutable HIDE_DOCS_SIGN = SignNode.SignType.UP;
+        immutable SHOW_DIRS_SIGN = SignNode.SignType.RIGHT;
+        immutable HIDE_DIRS_SIGN = SignNode.SignType.LEFT;
+        immutable HIDE_SIGN = SignNode.SignType.NONE;
+        immutable TAIL_COLOR = Color4d(0.2, 0.2, 0.3, 1.0);
+        immutable TAIL_LINE_WIDTH = 1.0;
+        immutable CHILD_DIR_SPACING = 8.0;
+        immutable CHILD_DIR_SPACING_EXPANDED = 12.0;
+        immutable GRID_SIZE_PREF = Dim2i(4,6);
+    }
+    private {
+        ExpandSign dirExpand;
+        OpenSign dirOpen;
+        DirSymbol dirSymbol;
+        TextNode dirText;
+        Color4d tailColor;
+        double tailLineWidth;
+        int mNumDocs;
+        bool bShowExpand;
+        DirGroup dirs[];
+        DocNode docs[];
+        bool imported;
+        Dim2i _gridSizeMin;
+        Dim2i _gridSizePref;
+        Dim2i _gridSizeMax;
+    }
 
     this(GioFile aFile)
     {
@@ -207,6 +211,10 @@ class DirGroup : FileNode
         {
             hideDocs();
             dirOpen.sign = SHOW_DOCS_SIGN;
+        }
+        if (!hasDirs && !hasDocs)
+        {
+            dirSymbol.nodeColor = DirSymbol.NODE_COLOR.WHITE;
         }
         foreach (DirGroup dir; visibleDirs)
             dir.importAllChildren(level-1);
@@ -575,34 +583,48 @@ class DirGroup : FileNode
 
     class DirSymbol : CutCornerRectNode
     {
-        static immutable BG_COLORS = [
-            Color4d(0.8, 0.8, 0.8, 1.0),// grey
-            Color4d(0.6, 0.7, 1.0, 1.0),// blue
-            Color4d(1.0, 0.6, 0.7, 1.0),// red
-            Color4d(0.6, 1.0, 0.7, 1.0),// green
-            Color4d(1.0, 1.0, 0.5, 1.0),// yellow
-            Color4d(0.7, 0.65, 1.0, 1.0),// violet
-        ];
+        enum NODE_COLOR : NodeColor
+        {
+            GREY = NodeColor(Color4d(0.2, 0.2, 0.2, 1.0), Color4d(0.8, 0.8, 0.8, 1.0)),
+            BLUE = NodeColor(Color4d(0.0, 0.1, 0.5, 1.0), Color4d(0.6, 0.7, 1.0, 1.0)),
+            RED = NodeColor(Color4d(0.5, 0.0, 0.1, 1.0), Color4d(1.0, 0.6, 0.7, 1.0)),
+            GREEN = NodeColor(Color4d(0.0, 0.5, 0.1, 1.0), Color4d(0.6, 1.0, 0.7, 1.0)),
+            YELLOW = NodeColor(Color4d(0.6, 0.5, 0.0, 1.0), Color4d(1.0, 1.0, 0.5, 1.0)),
+            VIOLET = NodeColor(Color4d(0.5, 0.2, 0.6, 1.0), Color4d(0.7, 0.65, 1.0, 1.0)),
+            WHITE = NodeColor(Color4d(0.5, 0.5, 0.5, 1.0), Color4d(1.0, 1.0, 1.0, 1.0)),
+            OCEAN = NodeColor(Color4d(0.0, 0.5, 0.5, 1.0), Color4d(0.3, 0.8, 0.8, 1.0)),
+        }
 
-        static immutable FG_COLORS = [
-            Color4d(0.2, 0.2, 0.2, 1.0),// grey
-            Color4d(0.0, 0.1, 0.5, 1.0),// blue
-            Color4d(0.5, 0.0, 0.1, 1.0),// red
-            Color4d(0.0, 0.5, 0.1, 1.0),// green
-            Color4d(0.6, 0.5, 0.0, 1.0),// yellow
-            Color4d(0.5, 0.2, 0.6, 1.0),// violet
-        ];
+        static {
+            immutable NODE_COLORS = [NODE_COLOR.GREY, NODE_COLOR.BLUE,
+                    NODE_COLOR.RED, NODE_COLOR.GREEN, NODE_COLOR.YELLOW,
+                    NODE_COLOR.VIOLET, NODE_COLOR.WHITE, NODE_COLOR.OCEAN];
 
-        static int nextColor = 0;
+            auto _nextColor = 0;
+        }
+
+
+        private enum INSETS : Insets2d
+        {
+            SELECTED = Insets2d.zero,
+            DEFAULT = Insets2d.ones,
+        }
+        private enum LINE_WIDTH : double
+        {
+            SELECTED = 2.0,
+            DEFAULT = 1.0,
+        }
+        private enum CUT : Vec2d
+        {
+            DEFAULT = Vec2d(4,4),
+        }
 
         this()
         {
             super();
             connect(&watchNamedBool);
             addOnMousePressedDlg(&onSelectedDlg);
-            bgColor = BG_COLORS[nextColor % BG_COLORS.length];
-            fgColor = FG_COLORS[nextColor % FG_COLORS.length];
-            nextColor++;
+            nodeColor = NODE_COLORS[_nextColor++ % NODE_COLORS.length];
             updateRect();
         }
 
@@ -630,14 +652,14 @@ class DirGroup : FileNode
 
         final void updateRect()
         {
-            cut = Vec2d(4,4);
-            lineWidth = selected ? 2 : 1;
-            insets = Insets2d.fill(selected ? 0 : 1);
+            cut = CUT.DEFAULT;
+            lineWidth = selected ? LINE_WIDTH.SELECTED : LINE_WIDTH.DEFAULT;
+            insets = selected ? INSETS.SELECTED : INSETS.DEFAULT;
         }
 
         Box2d tailBounds()
         {
-            return bounds - Insets2d.fill(1);
+            return bounds - INSETS.SELECTED;
         }
 
         override void doPaintNode(Context ct)
@@ -649,8 +671,8 @@ class DirGroup : FileNode
                 auto r = rectToPaint(lineWidth);
                 ct.setLineWidth(lineWidth);
                 ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
-                ct.moveTo(r.left + 4, r.top + TOP);
-                ct.lineTo(r.right - 4, r.top + TOP);
+                ct.moveTo(r.left + CUT.DEFAULT.x, r.top + TOP);
+                ct.lineTo(r.right - CUT.DEFAULT.x, r.top + TOP);
                 ct.stroke();
             }
         }

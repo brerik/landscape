@@ -46,7 +46,6 @@ class DocNode : FileNode
 {
     static immutable BOUNDS = Box2d(0,0,1.0,Mathd.invSqrt2)*110;
 
-
     CutCornerRectNode docLeaf;
     TextNode textLeaf;
 
@@ -123,12 +122,12 @@ class DocNode : FileNode
         return rl;
     }
 
-    void text(string t)
+    final void text(string t)
     {
         textLeaf.text = t;
     }
 
-    string text() const
+    final string text() const
     {
         return textLeaf.text;
     }
