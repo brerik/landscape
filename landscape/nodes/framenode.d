@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 module landscape.nodes.framenode;
+public import landscape.nodes.node;
 import std.string, std.stdio;
-import landscape.nodes.node;
 import brew.dim;
 import brew.box;
 import brew.vec;

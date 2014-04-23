@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 module landscape.nodes.signnode;
-import landscape.nodes.node;
+public import landscape.nodes.node;
 import brew.box, brew.dim, brew.vec, brew.color, brew.insets, brew.math;
 import cairo.Context;
 

@@ -17,7 +17,7 @@
  */
 module landscape.main;
 import landscape.nodes.node;
-import landscape.nodes.dir.dirgroup;
+import landscape.nodes.dir.dirnode;
 import landscape.map;
 import brew.gstr;
 import brew.math;

@@ -17,11 +17,11 @@
  */
 module landscape.nodes.node;
 import brew.math;
-import brew.box;
-import brew.dim;
-import brew.vec;
-import brew.insets;
-import brew.color;
+public import brew.box;
+public import brew.dim;
+public import brew.vec;
+public import brew.insets;
+public import brew.color;
 import brew.tween;
 import brew.fun;
 import brew.misc;

@@ -18,7 +18,7 @@
 module landscape.map;
 import landscape.nodes.node;
 import landscape.nodes.rootnode;
-import landscape.nodes.dir.dirgroup;
+import landscape.nodes.dir.dirnode;
 import landscape.nodes.framenode;
 import landscape.selection;
 import brew.insets;
@@ -151,9 +151,9 @@ class Map : DrawingArea
         surface = null;
     }
 
-    final DirGroup buildDir(GioFile f)
+    final DirNode buildDir(GioFile f)
     {
-        DirGroup n = new DirGroup(f);
+        DirNode n = new DirNode(f);
         n.importAllChildren(2);
         return n;
     }
