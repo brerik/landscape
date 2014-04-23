@@ -140,7 +140,7 @@ class Map : DrawingArea
         cr.translate(Mathd.floor(offset.x), Mathd.floor(offset.y));
         if (scale != 1.0)
             cr.scale(scale, scale);
-        root.doPaint(cr);
+        root.draw(cr);
         delete cr;
     }
 

@@ -45,10 +45,8 @@ static import std.uri;
 import glib.CharacterSet;
 import std.c.stdio;
 
-class DirNode : FileNode
-{
-    enum
-    {
+class DirNode : FileNode {
+    enum {
         IMPORT_ALL = -1,
         BG_COLOR = Color4d(1,1,.8,1),
         FG_COLOR = Color4d(0,0,0,1),
@@ -61,8 +59,7 @@ class DirNode : FileNode
         CHILD_DIR_SPACING_EXPANDED = 12.0,
         GRID_SIZE_PREF = Dim2i(4,6),
     }
-    private
-    {
+    private {
         ExpandSign dirExpand;
         OpenSign dirOpen;
         DirSymbol dirSymbol;
@@ -79,8 +76,7 @@ class DirNode : FileNode
         Dim2i _gridSizeMax;
     }
 
-    this(GioFile aFile)
-    {
+    this(GioFile aFile) {
         super(aFile);
         margin = Insets2d(5,5,5,5);
         bounds = Box2d(0,0,240,24);
@@ -101,8 +97,7 @@ class DirNode : FileNode
 
     }
 
-    private OpenSign createOpenLeaf()
-    {
+    private OpenSign createOpenLeaf() {
         OpenSign sl = new OpenSign();
         sl.name = "OpenSignNode";
         sl.bgColor = BG_OPEN_COLOR;
@@ -112,8 +107,7 @@ class DirNode : FileNode
         return sl;
     }
 
-    private ExpandSign createExpandLeaf()
-    {
+    private ExpandSign createExpandLeaf() {
         ExpandSign sl = new ExpandSign();
         sl.name = "ExpandSignNode";
         sl.sign = ExpandSign.HIDDEN;
@@ -123,16 +117,14 @@ class DirNode : FileNode
         return sl;
     }
 
-    private DirSymbol createDirSymbol()
-    {
+    private DirSymbol createDirSymbol() {
         DirSymbol rl = new DirSymbol();
         rl.name = "DirSymbol";
         rl.bounds = Box2d(0,0,240,24);
         return rl;
     }
 
-    private TextNode createDirText(string text)
-    {
+    private TextNode createDirText(string text) {
         TextNode rl = new TextNode();
         rl.name = "TextNode";
         rl.text = text;
@@ -147,8 +139,7 @@ class DirNode : FileNode
         return rl;
     }
 
-    final bool onExpandDlg(in Vec2d point, uint clickCount)
-    {
+    final bool onExpandDlg(in Vec2d point, uint clickCount) {
         if (dirExpand.sign == ExpandSign.OPEN)
             showDirsAndUpdate();
         else if (dirExpand.sign == ExpandSign.CLOSE)
@@ -158,8 +149,7 @@ class DirNode : FileNode
         return true;
     }
 
-    final void importAllChildren(int level)
-    {
+    final void importAllChildren(int level) {
         alias gio.FileInfo.FileInfo GioFileInfo;
         dirExpand.sign = ExpandSign.HIDDEN;
         dirOpen.sign = OpenSign.HIDDEN;
@@ -172,24 +162,18 @@ class DirNode : FileNode
             uint type = info.getAttributeUint32("standard::type");
             bool hidden = (0 != info.getAttributeBoolean("standard::is-hidden"));
             if (type == FileType.TYPE_DIRECTORY && !hidden)
-            {
                 dirInfos ~= info;
-            }
             else if (type == FileType.TYPE_REGULAR && !hidden)
-            {
                 docInfos ~= info;
-            }
             info = e.nextFile(null);
         }
-        foreach (GioFileInfo i; dirInfos)
-        {
+        foreach (GioFileInfo i; dirInfos) {
             auto f = e.getChild(i);
             auto child = new DirNode(f);
             addDir(child);
             dirExpand.sign = ExpandSign.CLOSE;
         }
-        foreach (GioFileInfo i; docInfos)
-        {
+        foreach (GioFileInfo i; docInfos) {
                 auto f = e.getChild(i);
                 auto child = new DocNode(f);
                 child.visible = true;
@@ -197,27 +181,23 @@ class DirNode : FileNode
                 dirOpen.sign = OpenSign.CLOSE;
         }
         e.close(null);
-        if ((dirs.length > 6 && isChildDir) || (dirs.length > 0 && level-1 == 0))
-        {
+        if ((dirs.length > 6 && isChildDir) || (dirs.length > 0 && level-1 == 0)) {
             hideDirs();
             dirExpand.sign = ExpandSign.OPEN;
         }
 
-        if (hasDocs)
-        {
+        if (hasDocs) {
             hideDocs();
             dirOpen.sign = OpenSign.OPEN;
         }
-        if (!hasDirs && !hasDocs)
-        {
+        if (!hasDirs && !hasDocs) {
             dirSymbol.nodeColor = DirSymbol.WHITE;
         }
         foreach (DirNode dir; visibleDirs)
             dir.importAllChildren(level-1);
         setLayoutDirty();
         cleanLayout();
-        if (totalBounds.height > 600 && dirExpand.sign == ExpandSign.CLOSE && isChildDir)
-        {
+        if (totalBounds.height > 600 && dirExpand.sign == ExpandSign.CLOSE && isChildDir) {
             hideDirs();
             dirExpand.sign = ExpandSign.OPEN;
             setLayoutDirty();
@@ -225,42 +205,35 @@ class DirNode : FileNode
         }
     }
 
-    public final void addDir(DirNode dirGroup)
-    {
+    public final void addDir(DirNode dirGroup) {
         addChild(dirGroup);
         dirs ~= dirGroup;
         updateLayout();
     }
 
-    public final void addDoc(DocNode doc)
-    {
+    public final void addDoc(DocNode doc) {
         addChild(doc);
         docs ~= doc;
     }
 
-    public final void setShowExpand(bool b)
-    {
+    public final void setShowExpand(bool b) {
         bShowExpand = b;
         updateBounds();
     }
 
-    public final bool isShowExpand()
-    {
+    public final bool isShowExpand() {
         return bShowExpand;
     }
 
-    final string numDocText() const
-    {
+    final string numDocText() const {
         return mNumDocs > 0 ? format("%d", mNumDocs) : "";
     }
 
-    public override Vec2d tailPoint(Vec2d alignment)
-    {
+    public override Vec2d tailPoint(Vec2d alignment) {
         return bounds.alignedPoint(alignment);
     }
 
-    final bool onOpenDocsDlg(in Vec2d point, uint clickCount)
-    {
+    final bool onOpenDocsDlg(in Vec2d point, uint clickCount) {
         if (dirOpen.sign == OpenSign.OPEN)
             showDocsAndUpdate();
         else if (dirOpen.sign == OpenSign.CLOSE)
@@ -270,8 +243,7 @@ class DirNode : FileNode
         return true;
     }
 
-    final void showDirsAndUpdate()
-    {
+    final void showDirsAndUpdate() {
         void handleImport() {
             if (!imported)
                 importAllChildren(1);
@@ -299,14 +271,12 @@ class DirNode : FileNode
         redraw();
     }
 
-    final void showDirs()
-    {
+    final void showDirs() {
         foreach (DirNode c; dirs)
             c.show();
     }
 
-    final void hideDirsAndUpdate()
-    {
+    final void hideDirsAndUpdate() {
         void handleHasDirs() {
             hideDirs();
             dirExpand.sign = ExpandSign.OPEN;
@@ -323,14 +293,12 @@ class DirNode : FileNode
         redraw();
     }
 
-    final void hideDirs()
-    {
+    final void hideDirs() {
         foreach (DirNode c; dirs)
             c.hide();
     }
 
-    final void showDocsAndUpdate()
-    {
+    final void showDocsAndUpdate() {
         void handleImport() {
             if (!imported)
                 importAllChildren(1);
@@ -357,8 +325,7 @@ class DirNode : FileNode
         redraw();
     }
 
-    final void showDocs()
-    {
+    final void showDocs() {
         foreach (Node d; docs)
             d.show();
     }
@@ -511,7 +478,7 @@ class DirNode : FileNode
         dirOpen.setBoundsDirty();
     }
 
-    override void doPaintNode(Context ct) {
+    override void drawNode(Context ct) {
         paintTails(ct);
     }
 

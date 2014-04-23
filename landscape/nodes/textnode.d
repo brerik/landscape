@@ -30,10 +30,9 @@ import pango.PgCairo;
 import pango.PgFontDescription;
 import gtkc.pangotypes;
 
-class TextNode : Node
+public class TextNode : Node
 {
-    enum PropName
-    {
+    public enum PropName : string {
         text = "text",
         fontSize = "fontSize",
     }
@@ -129,7 +128,7 @@ class TextNode : Node
      * Paints text
      * @param ct - Cairo Context
      */
-    public override void doPaintNode(Context ct)
+    public override void drawNode(Context ct)
     {
         ct.save();
         alias Math!double.ceil ceil;

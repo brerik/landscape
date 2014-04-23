@@ -30,12 +30,10 @@ import std.stdio;
 
 class IconNode : Node
 {
-    enum
-    {
+    enum {
         DEFAULT_ICON_SIZE = Dim2d(100,100),
     }
-    enum PropName
-    {
+    public enum PropName : string {
         iconSize = "iconSize",
     }
 
@@ -48,7 +46,7 @@ class IconNode : Node
         alignment = Vec2d.halves;
     }
 
-    override void doPaintNode(Context ct)
+    override void drawNode(Context ct)
     {
         auto r = insetBounds;
         ct.setSourceRgb(.5,1,.5);

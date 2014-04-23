@@ -51,8 +51,7 @@ class DocNode : FileNode
     CutFrameNode docLeaf;
     TextNode textLeaf;
 
-    this(GioFile aFile)
-    {
+    this(GioFile aFile) {
         super(aFile);
         name = aFile.getBasename();
         bounds = DOC_BOUNDS;
@@ -65,41 +64,31 @@ class DocNode : FileNode
         updateRect();
     }
 
-    final bool onPressedDlg(in Vec2d point, uint clickCount)
-    {
+    final bool onPressedDlg(in Vec2d point, uint clickCount) {
         selected = !selected;
         if (clickCount == 2)
-        {
             FileUtil.openFile(file);
-        }
         else if (clickCount == 1)
-        {
             writefln("Clicked %s\n", file.getPath());
-        }
-        return true;
-    }
-    final bool onReleaseDlg(in Vec2d point, uint clickCount)
-    {
         return true;
     }
 
-    final void watchBoolChanged(string name, bool newValue, bool oldValue)
-    {
-        if (name == "selected")
-        {
+    final bool onReleaseDlg(in Vec2d point, uint clickCount) {
+        return true;
+    }
+
+    final void watchBoolChanged(string propName, bool newValue, bool oldValue) {
+        if (propName == PropName.selected)
             updateRect();
-        }
     }
 
-    final void updateRect()
-    {
+    final void updateRect() {
         docLeaf.cut = Vec2d(4,4);
         docLeaf.lineWidth = selected ? 2 : 1;
         docLeaf.insets = Insets2d.fill(selected ? 0 : 1);
     }
 
-    final CutFrameNode createBoxNode()
-    {
+    final CutFrameNode createBoxNode() {
         CutFrameNode rl = new CutFrameNode();
         rl.name = "BoxNode";
         rl.bounds = insetBounds;
@@ -110,8 +99,7 @@ class DocNode : FileNode
         return rl;
     }
 
-    final TextNode createTextNode(string text)
-    {
+    final TextNode createTextNode(string text) {
         TextNode rl = new TextNode();
         rl.name = "TextNode";
         rl.bgColor.set(1,1, 1,1);
@@ -124,18 +112,15 @@ class DocNode : FileNode
         return rl;
     }
 
-    final void text(string t)
-    {
+    final void text(string t) {
         textLeaf.text = t;
     }
 
-    final string text() const
-    {
+    final string text() const {
         return textLeaf.text;
     }
 
-    override void updateLayout()
-    {
+    override void updateLayout() {
         docLeaf.bounds = insetBounds;
         textLeaf.bounds = insetBounds;
     }

@@ -30,11 +30,10 @@ import cairo.Context;
  */
 class FrameNode : Node
 {
-    enum PropName
-    {
+    public enum PropName : string {
         lineWidth = "lineWidth",
         outlined = "outlined",
-        filled = "filled"
+        filled = "filled",
     }
 
     double _lineWidth = 1.0;
@@ -66,7 +65,7 @@ class FrameNode : Node
         return _lineWidth;
     }
 
-    override void doPaintNode(Context ct)
+    override void drawNode(Context ct)
     {
         if (filled)
         {
@@ -116,14 +115,17 @@ class FrameNode : Node
  */
 class CutFrameNode : FrameNode
 {
-    static immutable DEFAULT_CUT = Vec2d(4,4);
-    enum PropName : string
-    {
+    public enum PropName : string {
         topLeftCut = "topLeftCut",
         topRightCut = "topRightCut",
         bottomLeftCut = "bottomLeftCut",
-        bottomRightCut = "bottomRightCut"
+        bottomRightCut = "bottomRightCut",
     }
+
+    enum {
+        DEFAULT_CUT = Vec2d(4,4),
+    }
+
 
     Vec2d _topLeftCut = DEFAULT_CUT;
     Vec2d _topRightCut = DEFAULT_CUT;
@@ -208,7 +210,7 @@ class CutFrameNode : FrameNode
         return r;
     }
 
-    override void doPaintNode(Context ct)
+    override void drawNode(Context ct)
     {
         void doOutline()
         {

@@ -20,10 +20,8 @@ public import landscape.nodes.node;
 import brew.box, brew.dim, brew.vec, brew.color, brew.insets, brew.math;
 import cairo.Context;
 
-class SignNode : Node
-{
-    enum SignType
-    {
+class SignNode : Node {
+    enum {
         NONE = 0,
         PLUS = 1,
         MINUS = 2,
@@ -33,8 +31,7 @@ class SignNode : Node
         UP = 6,
     }
 
-    enum PropName
-    {
+    public enum PropName : string {
         signColor = "signColor",
         sign = "sign",
         lineWidth = "lineWidth",
@@ -45,39 +42,34 @@ class SignNode : Node
     static immutable DIM = Dim2d(20, 20);
     static immutable INSETS = Insets2d(5, 5, 5, 5);
 
-    private SignType _sign = SignType.NONE;
+    private int _sign = NONE;
     private Color4d _signColor = Color4d.BLACK;
     private double _lineWidth = 1.0;
     private double _signLineWidth = 1.0;
     private bool _drawRing = true;
 
-    this()
-    {
+    this() {
         bounds.dim = DIM;
         insets = INSETS;
     }
 
-    final Color4d signColor() const
-    {
+    final Color4d signColor() const {
         return _signColor;
     }
 
-    final void signColor(in Color4d newColor)
-    {
-        if (newColor != _signColor)
-        {
+    final void signColor(in Color4d newColor) {
+        if (newColor != _signColor) {
             auto oldColor = _signColor;
             _signColor = newColor;
             emit(PropName.signColor, newColor, oldColor);
         }
     }
 
-    final SignType sign() const
-    {
+    final int sign() const {
         return _sign;
     }
 
-    final void sign(in SignType newSign)
+    final void sign(int newSign)
     {
         if (newSign != _sign)
         {
@@ -102,7 +94,7 @@ class SignNode : Node
         }
     }
 
-    override void doPaintNode(Context ct)
+    override void drawNode(Context ct)
     {
         Box2d signBounds = bounds - insets;
         if (_drawRing)
@@ -117,30 +109,30 @@ class SignNode : Node
         }
         switch (_sign)
         {
-            case SignType.PLUS:
+            case PLUS:
                 ct.moveTo(signBounds.centerX, signBounds.top);
                 ct.lineTo(signBounds.centerX, signBounds.bottom);
                 break;
-            case SignType.MINUS:
+            case MINUS:
                 ct.moveTo(signBounds.left, signBounds.centerY);
                 ct.lineTo(signBounds.right, signBounds.centerY);
                 break;
-            case SignType.LEFT:
+            case LEFT:
                 ct.moveTo(signBounds.right, signBounds.top);
                 ct.lineTo(signBounds.left, signBounds.centerY);
                 ct.lineTo(signBounds.right, signBounds.bottom);
                 break;
-            case SignType.RIGHT:
+            case RIGHT:
                 ct.moveTo(signBounds.left, signBounds.top);
                 ct.lineTo(signBounds.right, signBounds.centerY);
                 ct.lineTo(signBounds.left, signBounds.bottom);
                 break;
-            case SignType.UP:
+            case UP:
                 ct.moveTo(signBounds.left, signBounds.bottom);
                 ct.lineTo(signBounds.centerX, signBounds.top);
                 ct.lineTo(signBounds.right, signBounds.bottom);
                 break;
-            case SignType.DOWN:
+            case DOWN:
                 ct.moveTo(signBounds.left, signBounds.top);
                 ct.lineTo(signBounds.centerX, signBounds.bottom);
                 ct.lineTo(signBounds.right, signBounds.top);

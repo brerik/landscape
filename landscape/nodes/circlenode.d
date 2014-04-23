@@ -32,7 +32,7 @@ class CircleNode : Node
         super();
     }
 
-    override void doPaintNode(Context ct)
+    override void drawNode(Context ct)
     {
         if (isFill)
         {
