@@ -21,27 +21,22 @@ import landscape.nodes.node;
 import brew.dim, brew.box, brew.vec, brew.color, brew.math;
 import cairo.Context;
 
-class CircleNode : Node
-{
+class CircleNode : Node {
     double lineWidth = 2.0;
     bool isDraw = true;
     bool isFill = true;
 
-    this()
-    {
+    this() {
         super();
     }
 
-    override void drawNode(Context ct)
-    {
-        if (isFill)
-        {
+    override void drawNode(Context ct) {
+        if (isFill) {
             pathCircle(ct);
             ct.setSourceRgb(bgColor.red, bgColor.green, bgColor.blue);
             ct.fill();
         }
-        if (isDraw)
-        {
+        if (isDraw) {
             ct.setLineWidth(lineWidth);
             ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
             pathCircle(ct);
@@ -49,8 +44,7 @@ class CircleNode : Node
         }
     }
 
-    final void pathCircle(Context ct)
-    {
+    final void pathCircle(Context ct) {
         ct.moveTo(bounds.maxX, bounds.centerY);
         ct.arc(bounds.centerX, bounds.centerY, bounds.halfWidth, 0, 2 * Mathd.pi);
 //        const M_1_4 = 1.0 / 5.0;

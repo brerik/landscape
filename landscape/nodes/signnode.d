@@ -29,9 +29,12 @@ class SignNode : Node {
         RIGHT = 4,
         DOWN = 5,
         UP = 6,
+        DEFAULT_DIM = Dim2d(20, 20),
+        DEFAULT_INSETS = Insets2d(5, 5, 5, 5),
+        DEFAULT_COLOR = Color4d.BLACK,
     }
 
-    public enum PropName : string {
+    enum PropName {
         signColor = "signColor",
         sign = "sign",
         lineWidth = "lineWidth",
@@ -39,18 +42,17 @@ class SignNode : Node {
         drawRing ="drawRing"
     }
 
-    static immutable DIM = Dim2d(20, 20);
-    static immutable INSETS = Insets2d(5, 5, 5, 5);
-
-    private int _sign = NONE;
-    private Color4d _signColor = Color4d.BLACK;
-    private double _lineWidth = 1.0;
-    private double _signLineWidth = 1.0;
-    private bool _drawRing = true;
+    private {
+        Color4d _signColor = DEFAULT_COLOR;
+        double _lineWidth = 1.0;
+        double _signLineWidth = 1.0;
+        int _sign = NONE;
+        bool _drawRing = true;
+    }
 
     this() {
-        bounds.dim = DIM;
-        insets = INSETS;
+        bounds.dim = DEFAULT_DIM;
+        insets = DEFAULT_INSETS;
     }
 
     final Color4d signColor() const {
@@ -69,36 +71,29 @@ class SignNode : Node {
         return _sign;
     }
 
-    final void sign(int newSign)
-    {
-        if (newSign != _sign)
-        {
+    final void sign(int newSign) {
+        if (newSign != _sign) {
             auto oldSign = _sign;
             _sign = newSign;
             emit(PropName.sign, newSign, oldSign);
         }
     }
-    final double lineWidth() const
-    {
+
+    final double lineWidth() const {
         return _lineWidth;
     }
 
-    final void lineWidth(double newLineWidth)
-    {
+    final void lineWidth(double newLineWidth) {
         auto oldLineWidth = _lineWidth;
-        if (newLineWidth != oldLineWidth)
-        {
-
+        if (newLineWidth != oldLineWidth) {
             _lineWidth = newLineWidth;
             emit(PropName.lineWidth, newLineWidth, oldLineWidth);
         }
     }
 
-    override void drawNode(Context ct)
-    {
+    override void drawNode(Context ct) {
         Box2d signBounds = bounds - insets;
-        if (_drawRing)
-        {
+        if (_drawRing) {
             ct.setSourceRgb(bgColor.red,bgColor.green,bgColor.blue);
             ct.moveTo(bounds.right, bounds.centerY);
             ct.arc(bounds.centerX, bounds.centerY,bounds.halfWidth,0,Math!double.pi*2);
@@ -107,8 +102,7 @@ class SignNode : Node {
             ct.setSourceRgb(fgColor.red,fgColor.green,fgColor.blue);
             ct.stroke();
         }
-        switch (_sign)
-        {
+        switch (_sign) {
             case PLUS:
                 ct.moveTo(signBounds.centerX, signBounds.top);
                 ct.lineTo(signBounds.centerX, signBounds.bottom);
@@ -149,32 +143,26 @@ class SignNode : Node {
         return bounds.alignedPoint(alignment);
     }
 
-    final void drawRing(bool b)
-    {
-        if (b != _drawRing)
-        {
+    final void drawRing(bool b) {
+        if (b != _drawRing) {
             _drawRing = b;
             emit(PropName.drawRing, b, !b);
         }
     }
 
-    final bool drawRing() const
-    {
+    final bool drawRing() const {
         return _drawRing;
     }
 
-    final void signLineWidth(double v)
-    {
-        if (v != _signLineWidth)
-        {
+    final void signLineWidth(double v) {
+        if (v != _signLineWidth) {
             auto old = _signLineWidth;
             _signLineWidth = v;
             emit(PropName.signLineWidth, v, old);
         }
     }
 
-    final double signLineWidth() const
-    {
+    final double signLineWidth() const {
         return _signLineWidth;
     }
 }

@@ -205,23 +205,23 @@ class DirNode : FileNode {
         }
     }
 
-    public final void addDir(DirNode dirGroup) {
+    final void addDir(DirNode dirGroup) {
         addChild(dirGroup);
         dirs ~= dirGroup;
         updateLayout();
     }
 
-    public final void addDoc(DocNode doc) {
+    final void addDoc(DocNode doc) {
         addChild(doc);
         docs ~= doc;
     }
 
-    public final void setShowExpand(bool b) {
+    final void setShowExpand(bool b) {
         bShowExpand = b;
         updateBounds();
     }
 
-    public final bool isShowExpand() {
+    final bool isShowExpand() {
         return bShowExpand;
     }
 
@@ -229,7 +229,7 @@ class DirNode : FileNode {
         return mNumDocs > 0 ? format("%d", mNumDocs) : "";
     }
 
-    public override Vec2d tailPoint(Vec2d alignment) {
+    override Vec2d tailPoint(Vec2d alignment) {
         return bounds.alignedPoint(alignment);
     }
 
@@ -465,7 +465,7 @@ class DirNode : FileNode {
         bounds = box;
     }
 
-    private final void layoutSymbols() {
+    private void layoutSymbols() {
         dirSymbol.bounds.width = bounds.width;
         dirSymbol.bounds.height = bounds.height;
         dirSymbol.setBoundsDirty();

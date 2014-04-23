@@ -33,36 +33,32 @@ class IconNode : Node
     enum {
         DEFAULT_ICON_SIZE = Dim2d(100,100),
     }
-    public enum PropName : string {
+    enum PropName {
         iconSize = "iconSize",
     }
+    private {
+        Dim2d _iconSize;
+    }
 
-    Dim2d _iconSize;
-
-    this()
-    {
+    this() {
         super();
         _iconSize = DEFAULT_ICON_SIZE;
         alignment = Vec2d.halves;
     }
 
-    override void drawNode(Context ct)
-    {
+    override void drawNode(Context ct) {
         auto r = insetBounds;
         ct.setSourceRgb(.5,1,.5);
         ct.rectangle(r.x + (r.width - iconSize.width) * alignment.x, r.y + (r.height - iconSize.height) * alignment.y, iconSize.width, iconSize.height);
         ct.fill();
     }
 
-    ref const(Dim2d) iconSize() const
-    {
+    ref const(Dim2d) iconSize() const {
         return _iconSize;
     }
 
-    void iconSize(in Dim2d newSize)
-    {
-        if (newSize != _iconSize)
-        {
+    void iconSize(in Dim2d newSize) {
+        if (newSize != _iconSize) {
             auto oldSize = _iconSize;
             _iconSize = newSize;
             emit(PropName.iconSize, newSize, oldSize);

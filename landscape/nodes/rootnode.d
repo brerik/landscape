@@ -22,8 +22,7 @@ import brew.vec;
 import brew.color;
 import brew.insets;
 
-class RootNode : CutFrameNode
-{
+class RootNode : CutFrameNode {
     enum  {
         ROOT_COLOR = NodeColor(Color4d(0.1, 0.1, 0.1, 1.0), Color4d(0.9, 0.9, 0.9, 1.0)),
         ROOT_PADDING = Insets2d(160,160,100,100),
@@ -32,19 +31,16 @@ class RootNode : CutFrameNode
         NODE_SPACING = 50,
     }
 
-    this()
-    {
+    this() {
         cut = ROOT_CUT;
         nodeColor = ROOT_COLOR;
         lineWidth = ROOT_LINE_WIDTH;
     }
 
-    override void updateLayout()
-    {
+    override void updateLayout() {
         double next = 0;
         double m = 0;
-        foreach(Node c; visibleChildren)
-        {
+        foreach (Node c; visibleChildren) {
             c.updateTotalBounds();
             c.offset.y = next - c.totalBounds.top + m;
             m = NODE_SPACING;
@@ -54,8 +50,7 @@ class RootNode : CutFrameNode
         updateTotalBounds();
     }
 
-    override void updateBounds()
-    {
+    override void updateBounds() {
         bounds = computeTotalBounds() + ROOT_PADDING;
     }
 }

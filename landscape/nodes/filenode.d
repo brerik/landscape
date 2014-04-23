@@ -20,13 +20,13 @@ public import landscape.nodes.node;
 import gio.File;
 alias gio.File.File GioFile;
 
-class FileNode : Node
-{
-    private GioFile _file;
-    private string _displayName;
+class FileNode : Node {
+    private {
+        GioFile _file;
+        string _displayName;
+    }
 
-    this(GioFile f)
-    {
+    this(GioFile f) {
         super();
         _file = f;
         auto fi = f.queryInfo("standard::display-name", FileQueryInfoFlags.NONE, null);
@@ -35,13 +35,11 @@ class FileNode : Node
             _displayName = f.getPath();
     }
 
-    final GioFile file()
-    {
+    final GioFile file() {
         return _file;
     }
 
-    final string displayName()
-    {
+    final string displayName() {
         return _displayName;
     }
 }

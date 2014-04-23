@@ -146,8 +146,7 @@ class OpenSign : SignNode {
     }
 }
 
-class ExpandSign : SignNode
-{
+class ExpandSign : SignNode {
     enum {
         OPEN = RIGHT,
         CLOSE = LEFT,

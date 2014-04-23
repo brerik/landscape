@@ -19,8 +19,7 @@
 module landscape.selection;
 import std.signals;
 
-class Selection
-{
+class Selection {
     enum Event {
         Selected,
         Deselected,
@@ -29,18 +28,14 @@ class Selection
     Object[] _selection;
     mixin Signal!(Object, Event);
 
-    final void select(Object o)
-    {
+    final void select(Object o) {
         _selection ~= o;
         emit(o, Event.Selected);
     }
 
-    final void deselect(Object o)
-    {
-        for (size_t i = 0; i < _selection.length; i++)
-        {
-            if (_selection[i] == o)
-            {
+    final void deselect(Object o) {
+        for (size_t i = 0; i < _selection.length; i++) {
+            if (_selection[i] == o) {
                 _selection[i] = _selection[$-1];
                 _selection.length--;
                 emit(o, Event.Deselected);
@@ -49,8 +44,7 @@ class Selection
         }
     }
 
-    final void deselectAll()
-    {
+    final void deselectAll() {
         for (size_t i = _selection.length-1; i < _selection.length; i--)
             emit(_selection[i], Event.Deselected);
         _selection.length = 0;

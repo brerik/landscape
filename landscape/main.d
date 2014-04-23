@@ -80,17 +80,14 @@ gtkd
 /**
  *
  */
-class MyWindow : MainWindow
-{
-    enum
-    {
+class MyWindow : MainWindow {
+    enum {
         APP_NAME = "Landscape Filesystem Browser",
     }
 
     Label StatusLbl;
 
-    this()
-    {
+    this() {
         super(APP_NAME);
         setDefaultSize(800, 600);
         Map layout = new Map();
@@ -99,34 +96,28 @@ class MyWindow : MainWindow
     }
 }
 
-version(Windows)
-{
+version(Windows) {
     import core.sys.windows.windows;
     extern (Windows)
-    int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-                LPSTR lpCmdLine, int nCmdShow)
-    {
-        int result;
+    immutable RESULT_FAILED = 0;
 
-        try
-        {
+    int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                LPSTR lpCmdLine, int nCmdShow) {
+        int result;
+        try {
             Runtime.initialize();
             result = myWinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
             Runtime.terminate();
-        }
-        catch (Throwable e) // catch any uncaught exceptions
-        {
+        } catch (Throwable e) {
             MessageBoxA(null, e.toString().toStringz(), "Error",
                         MB_OK | MB_ICONEXCLAMATION);
-            result = 0;     // failed
+            result = RESULT_FAILED;
         }
-
-      return result;
+        return result;
     }
 
     int myWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-                  LPSTR lpCmdLine, int nCmdShow)
-    {
+                  LPSTR lpCmdLine, int nCmdShow) {
         auto args = getCommandLineArgs(lpCmdLine);
         Main.init(args);
         new MyWindow();
@@ -134,8 +125,7 @@ version(Windows)
         return 0;
     }
 
-    string[] getCommandLineArgs(LPSTR lpCmdLine)
-    {
+    string[] getCommandLineArgs(LPSTR lpCmdLine) {
         int numArgs;
         wstring cmd = GStr.toWString(Str.toString(lpCmdLine));
         LPWSTR* lines = CommandLineToArgvW(cmd.toUTF16z, &numArgs);
@@ -151,8 +141,7 @@ version(Windows)
 }
 
 version(linux)
-void main(string[] args)
-{
+void main(string[] args) {
     Main.init(args);
     new MyWindow();
     Main.run();

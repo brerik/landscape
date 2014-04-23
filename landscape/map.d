@@ -57,36 +57,32 @@ import pango.PgContext;
 import std.stdio;
 import core.memory;
 
-/**
- * Map component
- *
- */
-class Map : DrawingArea
-{
+class Map : DrawingArea {
     alias gio.File.File GioFile;
-    enum
-    {
+    enum {
         SCALE_INTERVAL = Intervald(0.2, 2.0),
         SCALE_GRANULARITY = 0.1,
         MAP_INSETS = Insets2d(400,400,400,400),
         BG_COLOR = Color4d(0.25, 0.25, 0.25, 1.0),
     }
 
-    Adjustment hAdj, vAdj;
-    private Vec2d oldMouseCoords = Vec2d.zero;
-    double _scale = 1.0;
-    bool pressed;
-    Box2d bounds;
-    Root root;
-    bool layoutDirty;
-    bool boundsDirty;
-    Color4d bgColor;
-    Vec2d offset = Vec2d.zero;
-    Surface surface;
-    Selection _selection;
+    private {
+        Adjustment hAdj;
+        Adjustment vAdj;
+        Vec2d oldMouseCoords = Vec2d.zero;
+        double _scale = 1.0;
+        bool pressed;
+        Box2d bounds;
+        Root root;
+        bool layoutDirty;
+        bool boundsDirty;
+        Color4d bgColor;
+        Vec2d offset = Vec2d.zero;
+        Surface surface;
+        Selection _selection;
+    }
 
-    this()
-    {
+    this() {
         super();
         bounds = Box2d.zero;
         bgColor = BG_COLOR;
@@ -103,8 +99,7 @@ class Map : DrawingArea
         cleanUp();
     }
 
-    final void clearSurface()
-    {
+    final void clearSurface() {
         assert (surface);
         Context cr = Context.create(surface);
         setSourceRgba(cr, bgColor);
@@ -112,18 +107,15 @@ class Map : DrawingArea
         delete cr;
     }
 
-    final bool onConfigureEventCb(Event ev, Widget wt)
-    {
-      if (surface)
-        surface.destroy();
-
-      surface = new Surface(getWindow(), CairoContent.COLOR, getAllocatedWidth(), getAllocatedHeight());
-      clearSurface();
-      return true;
+    final bool onConfigureEventCb(Event ev, Widget wt) {
+        if (surface)
+            surface.destroy();
+        surface = new Surface(getWindow(), CairoContent.COLOR, getAllocatedWidth(), getAllocatedHeight());
+        clearSurface();
+        return true;
     }
 
-    final bool onDrawCb(Context cr, Widget wt)
-    {
+    final bool onDrawCb(Context cr, Widget wt) {
         drawMap();
         cr.setSourceSurface(surface, 0, 0);
         cr.paint();
@@ -131,8 +123,7 @@ class Map : DrawingArea
         return false;
     }
 
-    final void drawMap()
-    {
+    final void drawMap() {
         cleanUp();
         Context cr = Context.create(surface);
         setSourceRgba(cr, bgColor);
@@ -144,22 +135,19 @@ class Map : DrawingArea
         delete cr;
     }
 
-    final void onDestroyCb(Widget wt)
-    {
+    final void onDestroyCb(Widget wt) {
         if (surface)
             surface.destroy();
         surface = null;
     }
 
-    final DirNode buildDir(GioFile f)
-    {
+    final DirNode buildDir(GioFile f) {
         DirNode n = new DirNode(f);
         n.importAllChildren(2);
         return n;
     }
 
-    final bool onMouseButtonPress(Event ev, Widget wt)
-    {
+    final bool onMouseButtonPress(Event ev, Widget wt) {
         oldMouseCoords = getRootCoords(ev);
         pressed = true;
         uint clickCount;
@@ -170,35 +158,26 @@ class Map : DrawingArea
         return true;
     }
 
-    final bool onMouseButtonRelease(Event ev, Widget wt)
-    {
+    final bool onMouseButtonRelease(Event ev, Widget wt) {
         pressed = false;
         Vec2d coords = getCoords(ev);
         uint clickCount = getClickCount(ev);
-        if (coords != Vec2d.nan)
-        {
-            if (!root.dispatchMouseButtonReleased((coords-offset)/scale, clickCount))
-                handleMouseButtonReleased(coords, clickCount);
-        }
+        if (coords != Vec2d.nan && !root.dispatchMouseButtonReleased((coords-offset)/scale, clickCount))
+            handleMouseButtonReleased(coords, clickCount);
         return true;
     }
 
-    final void handleMouseButtonReleased(Vec2d coords, uint clickCount)
-    {
+    final void handleMouseButtonReleased(Vec2d coords, uint clickCount) {
         _selection.deselectAll();
     }
 
-    final bool onMouseMotion(Event ev, Widget wt)
-    {
+    final bool onMouseMotion(Event ev, Widget wt) {
         Vec2d newMouseCoords = getRootCoords(ev);
-        if (pressed && newMouseCoords != Vec2d.nan)
-        {
+        if (pressed && newMouseCoords != Vec2d.nan) {
             offset += newMouseCoords - oldMouseCoords;
             oldMouseCoords = newMouseCoords;
             queueDraw();
-        }
-        else
-        {
+        } else {
             Vec2d coords = getCoords(ev);
             if (coords != Vec2d.nan)
                 root.dispatchMouseMotion((coords-offset)/scale);
@@ -206,15 +185,12 @@ class Map : DrawingArea
         return true;
     }
 
-    final bool onMouseScroll(Event ev, Widget w)
-    {
+    final bool onMouseScroll(Event ev, Widget w) {
         ModifierType mod;
         int res = ev.getState(mod);
-        if (res && mod & ModifierType.CONTROL_MASK)
-        {
+        if (res && mod & ModifierType.CONTROL_MASK) {
             Vec2d d = getScrollDeltas(ev);
-            if (d != Vec2d.nan)
-            {
+            if (d != Vec2d.nan) {
                 scale = scale * (1 + (0.1 * d.y));
                 queueDraw();
                 return true;
@@ -223,83 +199,68 @@ class Map : DrawingArea
         return false;
     }
 
-    final double scale() const
-    {
+    final double scale() const {
         return _scale;
     }
 
-    final void scale(double aScale)
-    {
+    final void scale(double aScale) {
         double newScale = clampRoundScale(aScale);
-        if (newScale != _scale)
-        {
+        if (newScale != _scale) {
             double oldScale = _scale;
             _scale = newScale;
-            scaleChanged(oldScale, newScale);
+            scaleChanged(newScale, oldScale);
         }
     }
 
-    final double clampRoundScale(double aScale)
-    {
+    final double clampRoundScale(double aScale) {
         return clampScale(roundScale(aScale));
     }
 
-    final double clampScale(double aScale)
-    {
+    final double clampScale(double aScale) {
         return SCALE_INTERVAL.clamp(aScale);
     }
 
-    final double roundScale(double aScale)
-    {
+    final double roundScale(double aScale) {
         return Mathd.round(aScale, SCALE_GRANULARITY);
     }
 
-    final void scaleChanged(double oldScale, double newScale)
-    {
+    final void scaleChanged(double newScale, double oldScale) {
         setDirty();
     }
 
-    final void addRoot(Node node)
-    {
+    final void addRoot(Node node) {
         root.addChild(node);
     }
 
-    final void cleanUp()
-    {
-        if (isDirty)
-        {
+    final void cleanUp() {
+        if (isDirty) {
             root.cleanUp();
             updateBounds();
             layoutDirty = layoutDirty = false;
         }
     }
 
-    final void updateBounds()
-    {
+    final void updateBounds() {
         Box2d ttb = root.totalBounds * scale + MAP_INSETS;
         root.offset = -ttb.pos;
         root.updateTotalBounds();
         bounds = root.transformedTotalBounds / scale + MAP_INSETS;
     }
 
-    final void setLayoutDirty()
-    {
+    final void setLayoutDirty() {
         layoutDirty = true;
         queueDraw();
     }
 
-    final void setBoundsDirty()
-    {
+    final void setBoundsDirty() {
         boundsDirty = true;
     }
 
-    final void setDirty()
-    {
+    final void setDirty() {
         layoutDirty = boundsDirty = true;
     }
 
-    final bool isDirty()
-    {
+    final bool isDirty() {
         return layoutDirty || boundsDirty || root.isDirty;
     }
 
@@ -309,10 +270,8 @@ class Map : DrawingArea
 //        Box2d tot = root.transformedTotalBounds / scale + MAP_INSETS;
 //    }
 
-    class Root : RootNode
-    {
-        override void redraw()
-        {
+    class Root : RootNode {
+        override void redraw() {
             queueDraw();
         }
     }

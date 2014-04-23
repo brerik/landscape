@@ -28,8 +28,7 @@ import cairo.Context;
 /**
  * Node with rectangular frame
  */
-class PortNode : Node
-{
+class PortNode : Node {
 
 }
 

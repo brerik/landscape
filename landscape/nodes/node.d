@@ -589,21 +589,33 @@ public class Node {
     }
 
     final void drawBounds(Context ct) {
-        ct.rectangle(bounds.x+.5, bounds.y+.5, bounds.width, bounds.height);
+        double x = bounds.x + .5;
+        double y = bounds.y + .5;
+        double w = bounds.width;
+        double h = bounds.height;
+        ct.rectangle(x, y, w, h);
         ct.setLineWidth(2.0);
         ct.setSourceRgb(1,0,0);
         ct.stroke();
     }
 
     final void drawTotalBounds(Context ct) {
-        ct.rectangle(totalBounds.x+.5, totalBounds.y+.5, totalBounds.width, totalBounds.height);
+        double x = totalBounds.x + .5;
+        double y = totalBounds.y + .5;
+        double w = totalBounds.width;
+        double h = totalBounds.height;
+        ct.rectangle(x, y, w, h);
         ct.setLineWidth(2.0);
         ct.setSourceRgb(0,1,0);
         ct.stroke();
     }
 
     final void drawFitBounds(Context ct) {
-        ct.rectangle(bounds.x+.5, bounds.y+.5, fitDim.width, fitDim.height);
+        double x = bounds.x + .5;
+        double y = bounds.y + .5;
+        double w = fitDim.width;
+        double h = fitDim.height;
+        ct.rectangle(x, y, w, h);
         ct.setLineWidth(1.0);
         ct.setSourceRgb(1,0,1);
         ct.stroke();
