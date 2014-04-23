@@ -22,6 +22,7 @@ public import brew.dim;
 public import brew.vec;
 public import brew.insets;
 public import brew.color;
+import brew.cairo;
 import brew.tween;
 import brew.fun;
 import brew.misc;
@@ -589,35 +590,23 @@ public class Node {
     }
 
     final void drawBounds(Context ct) {
-        double x = bounds.x + .5;
-        double y = bounds.y + .5;
-        double w = bounds.width;
-        double h = bounds.height;
-        ct.rectangle(x, y, w, h);
+        rectangleInside(ct, bounds);
         ct.setLineWidth(2.0);
-        ct.setSourceRgb(1,0,0);
+        setSourceRgb(ct, Color3d.RED);
         ct.stroke();
     }
 
     final void drawTotalBounds(Context ct) {
-        double x = totalBounds.x + .5;
-        double y = totalBounds.y + .5;
-        double w = totalBounds.width;
-        double h = totalBounds.height;
-        ct.rectangle(x, y, w, h);
+        rectangleInside(ct, totalBounds);
         ct.setLineWidth(2.0);
-        ct.setSourceRgb(0,1,0);
+        setSourceRgb(ct, Color3d.GREEN);
         ct.stroke();
     }
 
     final void drawFitBounds(Context ct) {
-        double x = bounds.x + .5;
-        double y = bounds.y + .5;
-        double w = fitDim.width;
-        double h = fitDim.height;
-        ct.rectangle(x, y, w, h);
+        rectangleInside(ct, bounds.withDim(fitDim));
         ct.setLineWidth(1.0);
-        ct.setSourceRgb(1,0,1);
+        setSourceRgb(ct, Color3d.MAGENTA);
         ct.stroke();
     }
 
