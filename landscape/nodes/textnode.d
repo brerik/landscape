@@ -41,18 +41,30 @@ public class TextNode : Node
     PgFontDescription _fontDesc;
     PgLayout _textLayout;
 
-    this()
-    {
-        _text = "";
+    this() {
+        this("");
     }
 
-    this(string aText)
-    {
+    this(string aText) {
         _text = aText;
+        connect(&watchBox);
     }
 
     ~this()
     {
+    }
+
+    final void watchBox(string propName, Box2d newBox, Box2d oldBox) {
+        if (propName == Node.PropName.bounds)
+            updateTextWidth();
+    }
+
+    final void updateTextWidth() {
+        if (_textLayout !is null) {
+            _textLayout.setWidth(cast(int)((bounds.width-insets.width)*PANGO_SCALE));
+            updateFitDim();
+        }
+        redraw();
     }
 
     /**
@@ -131,7 +143,6 @@ public class TextNode : Node
     public override void drawNode(Context ct)
     {
         ct.save();
-        alias Math!double.ceil ceil;
         // update text
 
         if (_textLayout is null)
@@ -143,18 +154,9 @@ public class TextNode : Node
             _textLayout.setText(text);
         }
 
-        // update fit dim
+        updateFitDim();
         Dim2i size;
         _textLayout.getPixelSize(size.width, size.height);
-        Dim2d newDim;
-        newDim.width = ceil(size.width + insets.width);
-        newDim.height = ceil(size.height + insets.height);
-        if (newDim != fitDim)
-        {
-            fitDim = newDim;
-            setLayoutDirty();
-        }
-
         // paint text
         ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
         double tx = bounds.x + insets.left + (bounds.width - insets.width - size.width) * alignment.x;
@@ -162,6 +164,19 @@ public class TextNode : Node
         ct.translate(tx, ty);
         PgCairo.showLayout(ct, _textLayout);
         ct.restore();
+    }
+
+    final void updateFitDim() {
+        Dim2i size;
+        _textLayout.getPixelSize(size.width, size.height);
+        Dim2d newDim;
+        newDim.width = Mathd.ceil(size.width + insets.width);
+        newDim.height = Mathd.ceil(size.height + insets.height);
+        if (newDim != fitDim)
+        {
+            fitDim = newDim;
+            setLayoutDirty();
+        }
     }
 }
 

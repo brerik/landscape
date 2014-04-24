@@ -129,7 +129,7 @@ class DirNode : FileNode {
         rl.name = "TextNode";
         rl.text = text;
         rl.fontSize = 10.0;
-        rl.insets.set(10,10,5,4);
+        rl.insets.set(20,20,5,4);
         rl.bgColor.set(1,1,1,1);
         rl.fgColor.set(0,0,0);
         rl.text = text;
@@ -437,8 +437,11 @@ class DirNode : FileNode {
 
     final void layoutDocs() {
         auto box = Box3d(0,0,240,24);
+        box.height = Mathd.max(box.height, dirText.fitDim.height);
         DocNode visDocs[] = visibleDocs;
         if (visDocs.length > 0) {
+            dirSymbol.dividerVisible = true;
+            dirSymbol.dividerPosition = box.height - 2;
             immutable INSETS = Insets2d.fill(4);
             immutable CELL_SIZE = DocNode.DOC_BOUNDS.dim;
             immutable SPACE = Vec2d(4,4);
@@ -460,6 +463,8 @@ class DirNode : FileNode {
             auto newWidth = Mathd.max(box.width, INSETS.width + (CELL_SIZE.width + SPACE.x) * length - SPACE.x);
             auto newHeight = box.height + INSETS.height + (CELL_SIZE.height + SPACE.y) * row - SPACE.y;
             box = Box2d(box.x, box.y, newWidth, newHeight);
+        } else {
+            dirSymbol.dividerVisible = false;
         }
         setBoundsDirty();
         bounds = box;
@@ -469,7 +474,7 @@ class DirNode : FileNode {
         dirSymbol.bounds.width = bounds.width;
         dirSymbol.bounds.height = bounds.height;
         dirSymbol.setBoundsDirty();
-        dirText.bounds.width = dirSymbol.bounds.width;
+        dirText.bounds = dirText.bounds.withWidth(dirSymbol.bounds.width);
         dirExpand.offset.x = dirSymbol.bounds.right - 22;
         dirExpand.offset.y = dirSymbol.bounds.top + 2;
         dirExpand.setBoundsDirty();

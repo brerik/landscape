@@ -40,7 +40,7 @@ public class DirSymbol : CutFrameNode {
         SELECTED_LINE_WIDTH = 2.0,
         DEFAULT_LINE_WIDTH = 1.0,
         DEFAULT_CUT = Vec2d(4,4),
-        BAR_HEIGHT = 21,
+        DIVIDER_POSITION = 21,
     }
 
     static {
@@ -50,6 +50,9 @@ public class DirSymbol : CutFrameNode {
             return COLORS[next++ % COLORS.length];
         }
     }
+
+    bool dividerVisible;
+    double dividerPosition = DIVIDER_POSITION;
 
     this() {
         super();
@@ -75,18 +78,15 @@ public class DirSymbol : CutFrameNode {
 
     override void drawNode(Context ct) {
         void drawDividerIfVisible() {
-            bool isDividerVisible() {
-                return bounds.height > DEFAULT_BOUNDS.height;
-            }
             void drawDivider() {
                 auto r = rectToPaint(lineWidth);
                 ct.setLineWidth(lineWidth);
                 ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
-                ct.moveTo(r.left + DEFAULT_CUT.x, r.top + BAR_HEIGHT);
-                ct.lineTo(r.right - DEFAULT_CUT.x, r.top + BAR_HEIGHT);
+                ct.moveTo(r.left + DEFAULT_CUT.x, r.top + dividerPosition);
+                ct.lineTo(r.right - DEFAULT_CUT.x, r.top + dividerPosition);
                 ct.stroke();
             }
-            if (isDividerVisible())
+            if (dividerVisible)
                 drawDivider();
         }
         super.drawNode(ct);

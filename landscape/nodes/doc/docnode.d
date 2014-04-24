@@ -45,7 +45,7 @@ alias gio.File.File GioFile;
 class DocNode : FileNode
 {
     enum {
-        DOC_BOUNDS = Box2d(0,0,1.0,Mathd.invSqrt2)*110,
+        DOC_BOUNDS = Box2d(0,0,110,110),
     }
 
     CutFrameNode docLeaf;
