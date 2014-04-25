@@ -17,8 +17,10 @@
  */
 module landscape.nodes.filenode;
 public import landscape.nodes.node;
+import landscape.selection;
 import gio.File;
 alias gio.File.File GioFile;
+import std.stdio;
 
 class FileNode : Node {
     private {
@@ -26,13 +28,15 @@ class FileNode : Node {
         string _displayName;
     }
 
-    this(GioFile f) {
+    this(GioFile aFile, Selection aSelection) {
         super();
-        _file = f;
-        auto fi = f.queryInfo("standard::display-name", FileQueryInfoFlags.NONE, null);
-        _displayName = fi !is null ? fi.getDisplayName() : f.getBasename();
+        objectSignal.connect(&objectWatcher);
+        _file = aFile;
+        auto fi = aFile.queryInfo("standard::display-name", FileQueryInfoFlags.NONE, null);
+        _displayName = fi !is null ? fi.getDisplayName() : aFile.getBasename();
         if (_displayName == "\\")
-            _displayName = f.getPath();
+            _displayName = aFile.getPath();
+        selection = aSelection;
     }
 
     final GioFile file() {
@@ -41,6 +45,23 @@ class FileNode : Node {
 
     final string displayName() {
         return _displayName;
+    }
+
+    final void objectWatcher(string propName, Object newObject, Object oldObject) {
+        if (propName == Node.PropName.selection) {
+            Selection newSelection = cast(Selection)newObject;
+            Selection oldSelection = cast(Selection)oldObject;
+            if (oldSelection !is null)
+                oldSelection.disconnect(&selectionWatcher);
+            if (newSelection !is null)
+                newSelection.connect(&selectionWatcher);
+        }
+    }
+
+    final void selectionWatcher(Object o, bool s) {
+        if (file == o) {
+            selected = s;
+        }
     }
 }
 

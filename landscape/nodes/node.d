@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 module landscape.nodes.node;
+import landscape.selection;
 import brew.math;
 public import brew.box;
 public import brew.dim;
@@ -66,6 +67,7 @@ public class Node {
         maxDim = "maxDim",
         prefDim = "prefDim",
         fitDim = "fitDim",
+        selection = "selection",
     }
 
     enum {
@@ -102,6 +104,7 @@ public class Node {
         Vec2d _offset = Vec2d.zero;
         Vec2d _animOffset = Vec2d.zero;
         Vec2d _alignment = Vec2d.zero;
+        Selection _selection;
     }
 
     bool delegate(in Vec2d, uint clickCount) onMousePressedDlgs[];
@@ -119,6 +122,7 @@ public class Node {
     mixin Signal!(string, Box2d, Box2d) changedBox2dSignal;
     mixin Signal!(string, Dim2d, Dim2d) changedDim2dSignal;
     mixin Signal!(MouseEvent) mouseEventSignal;
+    mixin Signal!(string, Object, Object) objectSignal;
 
     final {
         void connect(changedBoolSignal.slot_t s) {
@@ -938,6 +942,18 @@ public class Node {
 
     final ref Node[] children() {
         return _children;
+    }
+
+    final void selection(Selection newSelection) {
+        if (newSelection !is _selection) {
+            Selection oldSelection = _selection;
+            _selection = newSelection;
+            objectSignal.emit(PropName.selection, newSelection, oldSelection);
+        }
+    }
+
+    final Selection selection() {
+        return _selection;
     }
 }
 

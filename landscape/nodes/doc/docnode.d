@@ -17,6 +17,7 @@
  */
 module landscape.nodes.doc.docnode;
 import landscape.nodes.node;
+import landscape.selection;
 import landscape.nodes.textnode;
 import landscape.nodes.framenode;
 import landscape.nodes.circlenode;
@@ -51,8 +52,8 @@ class DocNode : FileNode
     CutFrameNode docLeaf;
     TextNode textLeaf;
 
-    this(GioFile aFile) {
-        super(aFile);
+    this(GioFile aFile, Selection aSelection) {
+        super(aFile, aSelection);
         name = aFile.getBasename();
         bounds = DOC_BOUNDS;
         insets.setAll(0);

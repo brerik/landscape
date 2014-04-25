@@ -18,6 +18,7 @@
 module landscape.nodes.dir.dirnode;
 public import landscape.nodes.filenode;
 import landscape.map;
+import landscape.selection;
 import landscape.nodes.framenode;
 import landscape.nodes.textnode;
 import landscape.nodes.dir.dirsign;
@@ -76,8 +77,8 @@ class DirNode : FileNode {
         Dim2i _gridSizeMax;
     }
 
-    this(GioFile aFile) {
-        super(aFile);
+    this(GioFile aFile, Selection aSelection) {
+        super(aFile, aSelection);
         margin = Insets2d(5,5,5,5);
         bounds = Box2d(0,0,240,24);
         minDim = Dim2d(240,24);
@@ -93,9 +94,10 @@ class DirNode : FileNode {
         _gridSizeMin = Dim2i(2,-1);
         _gridSizeMax = Dim2i(4,-1);
         dirSymbol.addOnMousePressedDlg(&onSelectedDlg);
+        dirSymbol.addOnMouseReleasedDlg(&onReleasedDlg);
         connect(&watchBool);
-
     }
+
 
     private OpenSign createOpenLeaf() {
         OpenSign sl = new OpenSign();
@@ -129,13 +131,13 @@ class DirNode : FileNode {
         rl.name = "TextNode";
         rl.text = text;
         rl.fontSize = 10.0;
-        rl.insets.set(20,20,5,4);
+        rl.insets.set(20,20,4,3);
         rl.bgColor.set(1,1,1,1);
         rl.fgColor.set(0,0,0);
         rl.text = text;
         rl.bounds = Box2d(0,0,240,24);
         rl.minDim = Dim2d(24,24);
-        rl.alignment = Vec2d(.5,.5);
+        rl.alignment = Vec2d(.5,0);
         return rl;
     }
 
@@ -169,13 +171,13 @@ class DirNode : FileNode {
         }
         foreach (GioFileInfo i; dirInfos) {
             auto f = e.getChild(i);
-            auto child = new DirNode(f);
+            auto child = new DirNode(f,selection);
             addDir(child);
             dirExpand.sign = ExpandSign.CLOSE;
         }
         foreach (GioFileInfo i; docInfos) {
                 auto f = e.getChild(i);
-                auto child = new DocNode(f);
+                auto child = new DocNode(f,selection);
                 child.visible = true;
                 addDoc(child);
                 dirOpen.sign = OpenSign.CLOSE;
@@ -545,7 +547,14 @@ class DirNode : FileNode {
     }
 
     final bool onSelectedDlg(in Vec2d point, uint clickCount) {
-        selected = !selected;
+        if (selection !is null) {
+            if (!selected) {
+                selection.clear();
+                selection.add(file);
+            } else {
+                selection.clear();
+            }
+        }
         if (clickCount == 2)
             FileUtil.openFile(file);
         else if (clickCount == 1)
@@ -553,9 +562,14 @@ class DirNode : FileNode {
         return true;
     }
 
+    final bool onReleasedDlg(in Vec2d point, uint clickCount) {
+        return true;
+    }
+
     final void watchBool(string propName, bool newValue, bool oldValue) {
-        if (propName == PropName.selected)
+        if (propName == PropName.selected) {
             dirSymbol.selected = newValue;
+        }
     }
 }
 

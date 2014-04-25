@@ -95,7 +95,8 @@ class Map : DrawingArea {
         addOnConfigure(&onConfigureEventCb);
         addOnDestroy(&onDestroyCb);
         root = new Root();
-        addRoot(buildDir(GioFile.parseName("~")));
+        auto file = GioFile.parseName("~");
+        addRoot(buildDir(file, _selection));
         cleanUp();
     }
 
@@ -141,8 +142,8 @@ class Map : DrawingArea {
         surface = null;
     }
 
-    final DirNode buildDir(GioFile f) {
-        DirNode n = new DirNode(f);
+    final DirNode buildDir(GioFile f, Selection s) {
+        DirNode n = new DirNode(f, s);
         n.importAllChildren(2);
         return n;
     }
@@ -168,7 +169,7 @@ class Map : DrawingArea {
     }
 
     final void handleMouseButtonReleased(Vec2d coords, uint clickCount) {
-        _selection.deselectAll();
+        _selection.clear();
     }
 
     final bool onMouseMotion(Event ev, Widget wt) {
