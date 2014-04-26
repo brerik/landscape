@@ -58,7 +58,10 @@ class DirNode : FileNode {
         TAIL_LINE_WIDTH = 1.0,
         CHILD_DIR_SPACING = 8.0,
         CHILD_DIR_SPACING_EXPANDED = 12.0,
-        GRID_SIZE_PREF = Dim2i(4,6),
+        GRID_SIZE_RATIO = Dim2i(1,1),
+        GRID_SIZE_MIN = Dim2i(2,2),
+        GRID_SIZE_PREF = Dim2i(5,5),
+        GRID_SIZE_MAX = Dim2i(10,-1),
     }
     private {
         ExpandSign dirExpand;
@@ -72,9 +75,10 @@ class DirNode : FileNode {
         DirNode dirs[];
         DocNode docs[];
         bool imported;
-        Dim2i _gridSizeMin;
-        Dim2i _gridSizePref;
-        Dim2i _gridSizeMax;
+        Dim2i _gridSizeRatio = GRID_SIZE_RATIO;
+        Dim2i _gridSizeMin = GRID_SIZE_MIN;
+        Dim2i _gridSizePref = GRID_SIZE_PREF;
+        Dim2i _gridSizeMax = GRID_SIZE_MAX;
     }
 
     this(GioFile aFile, Selection aSelection) {
@@ -90,9 +94,6 @@ class DirNode : FileNode {
         addChild(dirText = createDirText(displayName));
         dirExpand.addOnMousePressedDlg(&onExpandDlg);
         dirOpen.addOnMousePressedDlg(&onOpenDocsDlg);
-        _gridSizePref = GRID_SIZE_PREF;
-        _gridSizeMin = Dim2i(2,-1);
-        _gridSizeMax = Dim2i(4,-1);
         dirSymbol.addOnMousePressedDlg(&onSelectedDlg);
         dirSymbol.addOnMouseReleasedDlg(&onReleasedDlg);
         connect(&watchBool);
@@ -447,7 +448,8 @@ class DirNode : FileNode {
             immutable INSETS = Insets2d.fill(4);
             immutable CELL_SIZE = DocNode.DOC_BOUNDS.dim;
             immutable SPACE = Vec2d(4,4);
-            int length = Mathi.clamp(cast(int)visDocs.length, _gridSizeMin.width, _gridSizeMax.width);
+//            int length = Mathi.clamp(cast(int)Mathd.ceil(Mathd.sqrt(visDocs.length)), _gridSizeMin.width, _gridSizeMax.width);
+            int length = cast(int)computeNumColumns(visDocs.length, Mathd.invSqrt2);
             int col = 0;
             int row = 0;
             foreach (Node d; visDocs) {
@@ -470,6 +472,20 @@ class DirNode : FileNode {
         }
         setBoundsDirty();
         bounds = box;
+    }
+
+    double computeNumColumns(double numCells, double targetRatio) {
+        if (numCells < _gridSizeMin.width)
+            return _gridSizeMin.width;
+        double numColumns = _gridSizeMin.width;
+        double numRows = Mathd.ceil(numCells / numColumns);
+        double ratio = numColumns / numRows;
+        while (ratio < targetRatio && numColumns < _gridSizeMax.width) {
+            numColumns += 1.0;
+            numRows = Mathd.ceil(numCells / numColumns);
+            ratio = numColumns / numRows;
+        }
+        return numColumns;
     }
 
     private void layoutSymbols() {
