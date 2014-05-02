@@ -30,6 +30,13 @@ class RootNode : CutFrameNode {
         ROOT_LINE_WIDTH = 2.0,
         NODE_SPACING = 50,
     }
+    enum PropName {
+        worldBounds = "worldBounds",
+    }
+
+    private {
+        Box2d _worldBounds = Box2d(0,0,800,600);
+    }
 
     this() {
         cut = ROOT_CUT;
@@ -53,4 +60,17 @@ class RootNode : CutFrameNode {
     override void updateBounds() {
         bounds = computeTotalBounds() + ROOT_PADDING;
     }
+
+    final void worldBounds(in Box2d newWorldBounds) {
+        if (newWorldBounds != _worldBounds) {
+            auto oldWorldBounds = _worldBounds;
+            _worldBounds = newWorldBounds;
+            emit(PropName.worldBounds, newWorldBounds, oldWorldBounds);
+        }
+    }
+
+    final ref const(Box2d) worldBounds() const {
+        return _worldBounds;
+    }
 }
+
