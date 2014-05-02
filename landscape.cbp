@@ -30,9 +30,13 @@
 				</Compiler>
 			</Target>
 		</Build>
+		<Compiler>
+			<Add option="-I/usr/include/dmd/gtkd2" />
+		</Compiler>
 		<Linker>
-			<Add option="landscape.def" />
-			<Add library="gtkd" />
+			<Add option="-L/usr/lib/x86_64-linux-gnu -L/usr/lib/i386-linux-gnu" />
+			<Add library="gtkd2" />
+			<Add library="dl" />
 		</Linker>
 		<Unit filename="brew/box.d" />
 		<Unit filename="brew/cairo.d" />
@@ -63,13 +67,15 @@
 		<Unit filename="landscape/main.d" />
 		<Unit filename="landscape/map.d" />
 		<Unit filename="landscape/nodes/circlenode.d" />
-		<Unit filename="landscape/nodes/dirgroup.d" />
-		<Unit filename="landscape/nodes/dirnode.d" />
-		<Unit filename="landscape/nodes/docnode.d" />
+		<Unit filename="landscape/nodes/dir/dirnode.d" />
+		<Unit filename="landscape/nodes/dir/dirsign.d" />
+		<Unit filename="landscape/nodes/doc/docnode.d" />
 		<Unit filename="landscape/nodes/filenode.d" />
+		<Unit filename="landscape/nodes/framenode.d" />
 		<Unit filename="landscape/nodes/iconnode.d" />
 		<Unit filename="landscape/nodes/node.d" />
-		<Unit filename="landscape/nodes/rectnode.d" />
+		<Unit filename="landscape/nodes/portnode.d" />
+		<Unit filename="landscape/nodes/rootnode.d" />
 		<Unit filename="landscape/nodes/signnode.d" />
 		<Unit filename="landscape/nodes/textnode.d" />
 		<Unit filename="landscape/selection.d" />
