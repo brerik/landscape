@@ -8,8 +8,7 @@ struct Pair(T)
     T first;
     T second;
 
-    static Pair opCall(T first, T second)
-    {
+    static Pair opCall(T first, T second) {
         Pair p = {first, second};
         return p;
     }

@@ -15,34 +15,14 @@ struct Polar(T)
      * @param angle in radians
      * @param radius
      */
-    static pure Polar opCall(T angle, T radius)
-    {
+    static pure Polar opCall(T angle, T radius) {
         Polar p = {angle, radius};
         return p;
     }
 
-    Vec2T vec() const
-    {
-        return Vec2T(x,y);
-    }
-
-    T x() const
-    {
-        return cos(angle) * radius;
-    }
-
-    T y() const
-    {
-        return sin(angle) * radius;
-    }
-
-    T degrees() const
-    {
-        return toDegrees(angle);
-    }
-
-    T radians() const
-    {
-        return angle;
-    }
+    Vec2T vec() const                                       { return Vec2T(x,y); }
+    T x() const                                             { return cos(angle) * radius; }
+    T y() const                                             { return sin(angle) * radius; }
+    T degrees() const                                       { return toDegrees(angle); }
+    T radians() const                                       { return angle; }
 }

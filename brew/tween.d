@@ -3,18 +3,15 @@
  */
 module brew.tween;
 
-struct Tween(T)
-{
+struct Tween(T) {
     static assert (__traits(isFloating, T));
     alias T function(T,T,T,T) tweener4;
 
-    struct Linear
-    {
+    struct Linear {
         /**
          * f(t) = t
          */
-        static T easeLinear(T a, T b, T c, T d)
-        {
+        static T easeLinear(T a, T b, T c, T d) {
             immutable t = a / d;
             return b + c * t;
         }
@@ -22,10 +19,7 @@ struct Tween(T)
         /**
          * f(t) = 0
          */
-        static T easeNone(T a, T b, T c, T d)
-        {
-            return b;
-        }
+        static T easeNone(T a, T b, T c, T d) { return b; }
     }
 
     struct Sine
@@ -49,19 +43,15 @@ struct Tween(T)
 
     struct Quad
     {
-        static pure T easeIn(T a, T b, T c, T d)
-        {
+        static pure T easeIn(T a, T b, T c, T d) {
             immutable t = a / d;
             return b + c * t * t;
         }
-
-        static pure T easeOut(T a, T b, T c, T d)
-        {
+        static pure T easeOut(T a, T b, T c, T d) {
             immutable t = a / d;
             return b + c * t * t;
         }
-        static T easeInOut(T a, T b, T c, T d)
-        {
+        static T easeInOut(T a, T b, T c, T d) {
             return b + (a * c) / d;
         }
     }

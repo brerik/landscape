@@ -7,118 +7,53 @@ private import brew.vec;
 private import std.string;
 private import std.stdio;
 
-mixin template TDim1(T)
-{
-    T width;
-
-    pure T halfWidth() const
-    {
-        return Math!T.half(width);
-    }
-    T floorWidth() const
-    {
-        return Math!T.floor(width);
-    }
-    T roundWidth() const
-    {
-        return Math!T.round(width);
-    }
-    T ceilWidth() const
-    {
-        return Math!T.ceil(width);
-    }
-}
-mixin template TDim2(T)
-{
-    T height;
-
-    pure T halfHeight() const
-    {
-        return Math!T.half(height);
-    }
-    T floorHeight() const
-    {
-        return Math!T.floor(height);
-    }
-    T roundHeight() const
-    {
-        return Math!T.round(height);
-    }
-    T ceilHeight() const
-    {
-        return Math!T.ceil(height);
-    }
-}
-mixin template TDim3(T)
-{
-    T depth;
-
-    pure T halfDepth() const
-    {
-        return Math!T.half(depth);
-    }
-    T floorDepth() const
-    {
-        return Math!T.floor(depth);
-    }
-    T roundDepth() const
-    {
-        return Math!T.round(depth);
-    }
-    T ceilDepth() const
-    {
-        return Math!T.ceil(depth);
-    }
-}
-mixin template TDim4(T)
-{
-    T weight;
-
-    pure T halfWeight() const
-    {
-        return Math!T.half(weight);
-    }
-    T floorWeight() const
-    {
-        return Math!T.floor(weight);
-    }
-    T roundWeight() const
-    {
-        return Math!T.round(weight);
-    }
-    T ceilWeight() const
-    {
-        return Math!T.ceil(weight);
-    }
-}
-
-struct Dim(int D, T)
-{
+struct Dim(int D, T) {
     alias Math!T MathT;
     static assert (D>=1);
     static assert (D<=4);
-
-    static if (D>=1) mixin TDim1!T;
-    static if (D>=2) mixin TDim2!T;
-    static if (D>=3) mixin TDim3!T;
-    static if (D>=4) mixin TDim4!T;
-
-    string toString() const
-    {
-        return format("Dim%d%s[%s]", D, T.mangleof, paramString);
+    static if (D>=1) {
+        /* Dimension 1 */
+        T width;
+        pure T halfWidth() const                            { return Math!T.half(width); }
+        T floorWidth() const                                { return Math!T.floor(width); }
+        T roundWidth() const                                { return Math!T.round(width); }
+        T ceilWidth() const                                 { return Math!T.ceil(width); }
+    }
+    static if (D>=2) {
+        /* Dimension 2 */
+        T height;
+        pure T halfHeight() const                           { return Math!T.half(height); }
+        T floorHeight() const                               { return Math!T.floor(height); }
+        T roundHeight() const                               { return Math!T.round(height); }
+        T ceilHeight() const                                { return Math!T.ceil(height); }
+    }
+    static if (D>=3) {
+        /* Dimension 3 */
+        T depth;
+        pure T halfDepth() const                            { return Math!T.half(depth); }
+        T floorDepth() const                                { return Math!T.floor(depth); }
+        T roundDepth() const                                { return Math!T.round(depth); }
+        T ceilDepth() const                                 { return Math!T.ceil(depth); }
+    }
+    static if (D>=4) {
+        /* Dimension 4 */
+        T weight;
+        pure T halfWeight() const                           { return Math!T.half(weight); }
+        T floorWeight() const                               { return Math!T.floor(weight); }
+        T roundWeight() const                               { return Math!T.round(weight); }
+        T ceilWeight() const                                { return Math!T.ceil(weight); }
     }
 
-    string paramString() const
-    {
-        static if (__traits(isFloating, T))
-        {
+    string toString() const { return format("Dim%d%s[%s]", D, T.mangleof, paramString); }
+
+    string paramString() const {
+        static if (__traits(isFloating, T)) {
             static if (D==1) return format("width=%f", width);
             static if (D==2) return format("width=%f, height=%f", width, height);
             static if (D==3) return format("width=%f, height=%f, depth=%f", width, height, depth);
             static if (D==4) return format("width=%f, height=%f, depth=%f, weight=%f", width, height, depth, weight);
         }
-        static if (__traits(isIntegral, T))
-        {
+        static if (__traits(isIntegral, T)) {
             static if (D==1) return format("width=%d", width);
             static if (D==2) return format("width=%d, height=%d", width, height);
             static if (D==3) return format("width=%d, height=%d, depth=%d", width, height, depth);
@@ -126,99 +61,62 @@ struct Dim(int D, T)
         }
     }
 
-    pure static Dim!(1,T) opCall(T width)
-    {
-        Dim!(1,T) d = {width};
-        return d;
-    }
-    pure static Dim!(2,T) opCall(T width, T height)
-    {
-        Dim!(2,T) d = {width, height};
-        return d;
-    }
-    pure static Dim!(3,T) opCall(T width, T height, T depth)
-    {
-        Dim!(3,T) d = {width, height, depth};
-        return d;
-    }
-    pure static Dim!(4,T) opCall(T width, T height, T depth, T weight)
-    {
-        Dim!(4,T) d = {width, height, depth, weight};
-        return d;
-    }
+    pure static Dim!(1,T) opCall(T width)                               { Dim!(1,T) d = {width}; return d; }
+    pure static Dim!(2,T) opCall(T width, T height)                     { Dim!(2,T) d = {width, height}; return d; }
+    pure static Dim!(3,T) opCall(T width, T height, T depth)            { Dim!(3,T) d = {width, height, depth}; return d; }
+    pure static Dim!(4,T) opCall(T width, T height, T depth, T weight)  { Dim!(4,T) d = {width, height, depth, weight}; return d; }
 
-    pure static Dim fill(T a)
-    {
+    pure static Dim fill(T a) {
         static if (D==1) return Dim(a);
         static if (D==2) return Dim(a,a);
         static if (D==3) return Dim(a,a,a);
         static if (D==4) return Dim(a,a,a,a);
     }
 
-    @property
-    pure static Dim zero()
-    {
-        return fill(0);
-    }
+    @property pure static Dim zero()                        { return fill(0); }
+    @property pure static Dim ones()                        { return fill(1); }
 
     @property
-    pure static Dim ones()
-    {
-        return fill(1);
-    }
-
-    @property
-    pure static Dim nan()
-    {
+    pure static Dim nan() {
         static if (__traits(hasMember, T, "nan")) T NAN = T.nan;
         static if (!__traits(hasMember, T, "nan")) T NAN = 0;
         return fill(NAN);
     }
 
-    Dim halfDim() const
-    {
+    Dim halfDim() const {
         static if (D==1) return Dim(halfWidth);
         static if (D==2) return Dim(halfWidth, halfHeight);
         static if (D==3) return Dim(halfWidth, halfHeight, halfDepth);
         static if (D==4) return Dim(halfWidth, halfHeight, halfDepth, halfWeight);
     }
 
-    Vec!(D,T) centerPos() const
-    {
+    Vec!(D,T) centerPos() const {
         static if (D==1) return Vec!(D,T)(halfWidth);
         static if (D==2) return Vec!(D,T)(halfWidth, halfHeight);
         static if (D==3) return Vec!(D,T)(halfWidth, halfHeight, halfDepth);
         static if (D==4) return Vec!(D,T)(halfWidth, halfHeight, halfDepth, halfWeight);
     }
 
-    static if (D==1)
-    {
-        void set(T width)
-        {
+    static if (D==1) {
+        void set(T width) {
             this.width = width;
         }
     }
-    static if (D==2)
-    {
-        void set(T width, T height)
-        {
+    static if (D==2) {
+        void set(T width, T height) {
             this.width = width;
             this.height = height;
         }
     }
-    static if (D==3)
-    {
-        void set(T width, T height, T depth)
-        {
+    static if (D==3) {
+        void set(T width, T height, T depth) {
             this.width = width;
             this.height = height;
             this.depth = depth;
         }
     }
-    static if (D==4)
-    {
-        void set(T width, T height, T depth, T weight)
-        {
+    static if (D==4) {
+        void set(T width, T height, T depth, T weight) {
             this.width = width;
             this.height = height;
             this.depth = depth;
@@ -226,8 +124,7 @@ struct Dim(int D, T)
         }
     }
 
-    Dim clampNan(in Dim minDim, in Dim maxDim) const
-    {
+    Dim clampNan(in Dim minDim, in Dim maxDim) const {
         alias Math!T.clampNan clampNan;
         Dim res = this;
         static if (D>=1) res.width = clampNan(res.width, minDim.width, maxDim.width);
@@ -237,8 +134,7 @@ struct Dim(int D, T)
         return res;
     }
 
-    Dim clampAccept(in Dim minDim, in Dim maxDim, bool function(T) accept) const
-    {
+    Dim clampAccept(in Dim minDim, in Dim maxDim, bool function(T) accept) const {
         alias Math!T.clampAccept clampAccept;
         Dim res = this;
         static if (D>=1) res.width = clampAccept(res.width, minDim.width, maxDim.width, accept);
@@ -248,8 +144,7 @@ struct Dim(int D, T)
         return res;
     }
 
-    static pure Dim max(in Dim d1, in Dim d2)
-    {
+    static pure Dim max(in Dim d1, in Dim d2) {
         alias Math!T.max max;
         Dim res;
         static if (D>=1) res.width = max(d1.width, d2.width);
@@ -259,8 +154,7 @@ struct Dim(int D, T)
         return res;
     }
 
-    static pure Dim min(in Dim d1, in Dim d2)
-    {
+    static pure Dim min(in Dim d1, in Dim d2) {
         alias Math!T.min min;
         Dim res;
         static if (D>=1) res.width = min(d1.width, d2.width);
@@ -270,8 +164,7 @@ struct Dim(int D, T)
         return res;
     }
 
-    pure Dim opAdd(in Dim d) const
-    {
+    pure Dim opAdd(in Dim d) const {
         Dim res;
         static if (D>=1) res.width = width + d.width;
         static if (D>=2) res.height = height + d.height;

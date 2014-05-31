@@ -31,8 +31,8 @@ struct NodeDim {
     Dim2d fit = Dim2d.zero;
 }
 
-public class Node {
-    public enum PropName : string {
+class Node {
+    enum PropName : string {
         selected = "selected",
         pressed = "pressed",
         visible = "visible",
@@ -98,109 +98,57 @@ public class Node {
     bool delegate(in Vec2d) onMouseMotionDlgs[];
 
     // property name, new value, old value
-    mixin Signal!(string, bool, bool) changedBoolSignal;
-    mixin Signal!(string, double, double) changedDoubleSignal;
-    mixin Signal!(string, string, string) changedStringSignal;
-    mixin Signal!(string, int, int) changedIntSignal;
-    mixin Signal!(string, Color4d, Color4d) changedColor4dSignal;
-    mixin Signal!(string, Insets2d, Insets2d) changedInsets2dSignal;
-    mixin Signal!(string, Vec2d, Vec2d) changedVector2dSignal;
-    mixin Signal!(string, Box2d, Box2d) changedBox2dSignal;
-    mixin Signal!(string, Dim2d, Dim2d) changedDim2dSignal;
-    mixin Signal!(MouseEvent) mouseEventSignal;
-    mixin Signal!(string, Object, Object) objectSignal;
+    mixin Signal!(string, bool, bool)           changedBoolSignal;
+    mixin Signal!(string, double, double)       changedDoubleSignal;
+    mixin Signal!(string, string, string)       changedStringSignal;
+    mixin Signal!(string, int, int)             changedIntSignal;
+    mixin Signal!(string, Color4d, Color4d)     changedColor4dSignal;
+    mixin Signal!(string, Insets2d, Insets2d)   changedInsets2dSignal;
+    mixin Signal!(string, Vec2d, Vec2d)         changedVector2dSignal;
+    mixin Signal!(string, Box2d, Box2d)         changedBox2dSignal;
+    mixin Signal!(string, Dim2d, Dim2d)         changedDim2dSignal;
+    mixin Signal!(MouseEvent)                   mouseEventSignal;
+    mixin Signal!(string, Object, Object)       objectSignal;
 
     final {
-        void connect(changedBoolSignal.slot_t s) {
-            changedBoolSignal.connect(s);
-        }
-        void disconnect(changedBoolSignal.slot_t s) {
-            changedBoolSignal.disconnect(s);
-        }
-        void emit(string propName, bool newValue, bool oldValue) {
-            changedBoolSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedDoubleSignal.slot_t s) {
-            changedDoubleSignal.connect(s);
-        }
-        void disconnect(changedDoubleSignal.slot_t s) {
-            changedDoubleSignal.disconnect(s);
-        }
-        void emit(string propName, double newValue, double oldValue) {
-            changedDoubleSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedStringSignal.slot_t s) {
-            changedStringSignal.connect(s);
-        }
-        void disconnect(changedStringSignal.slot_t s) {
-            changedStringSignal.disconnect(s);
-        }
-        void emit(string propName, string newValue, string oldValue) {
-            changedStringSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedIntSignal.slot_t s) {
-            changedIntSignal.connect(s);
-        }
-        void disconnect(changedIntSignal.slot_t s) {
-            changedIntSignal.disconnect(s);
-        }
-        void emit(string propName, int newValue, int oldValue) {
-            changedIntSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedColor4dSignal.slot_t s) {
-            changedColor4dSignal.connect(s);
-        }
-        void disconnect(changedColor4dSignal.slot_t s) {
-            changedColor4dSignal.disconnect(s);
-        }
-        void emit(string propName, in Color4d newValue, in Color4d oldValue) {
-            changedColor4dSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedInsets2dSignal.slot_t s) {
-            changedInsets2dSignal.connect(s);
-        }
-        void disconnect(changedInsets2dSignal.slot_t s) {
-            changedInsets2dSignal.disconnect(s);
-        }
-        void emit(string propName, in Insets2d newValue, in Insets2d oldValue) {
-            changedInsets2dSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedVector2dSignal.slot_t s) {
-            changedVector2dSignal.connect(s);
-        }
-        void disconnect(changedVector2dSignal.slot_t s) {
-            changedVector2dSignal.disconnect(s);
-        }
-        void emit(string propName, in Vec2d newValue, in Vec2d oldValue) {
-            changedVector2dSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedBox2dSignal.slot_t s) {
-            changedBox2dSignal.connect(s);
-        }
-        void disconnect(changedBox2dSignal.slot_t s) {
-            changedBox2dSignal.disconnect(s);
-        }
-        void emit(string propName, in Box2d newValue, in Box2d oldValue) {
-            changedBox2dSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(changedDim2dSignal.slot_t s) {
-            changedDim2dSignal.connect(s);
-        }
-        void disconnect(changedDim2dSignal.slot_t s) {
-            changedDim2dSignal.disconnect(s);
-        }
-        void emit(string propName, in Dim2d newValue, in Dim2d oldValue) {
-            changedDim2dSignal.emit(propName, newValue, oldValue);
-        }
-        void connect(mouseEventSignal.slot_t s) {
-            mouseEventSignal.connect(s);
-        }
-        void disconnect(mouseEventSignal.slot_t s) {
-            mouseEventSignal.disconnect(s);
-        }
-        void emit(MouseEvent s) {
-            mouseEventSignal.emit(s);
-        }
+        /***************************
+         * @param s: Signal Slot   *
+         * @param p: Property Name *
+         * @param n: New Value     *
+         * @param o: Old Value     */
+        void connect(changedBoolSignal.slot_t s)            { changedBoolSignal.connect(s); }
+        void disconnect(changedBoolSignal.slot_t s)         { changedBoolSignal.disconnect(s); }
+        void emit(string p, bool n, bool o)                 { changedBoolSignal.emit(p, n, o); }
+        void connect(changedDoubleSignal.slot_t s)          { changedDoubleSignal.connect(s); }
+        void disconnect(changedDoubleSignal.slot_t s)       { changedDoubleSignal.disconnect(s); }
+        void emit(string p, double n, double o)             { changedDoubleSignal.emit(p, n, o); }
+        void connect(changedStringSignal.slot_t s)          { changedStringSignal.connect(s); }
+        void disconnect(changedStringSignal.slot_t s)       { changedStringSignal.disconnect(s); }
+        void emit(string p, string n, string o)             { changedStringSignal.emit(p, n, o); }
+        void connect(changedIntSignal.slot_t s)             { changedIntSignal.connect(s); }
+        void disconnect(changedIntSignal.slot_t s)          { changedIntSignal.disconnect(s); }
+        void emit(string p, int n, int o)                   { changedIntSignal.emit(p, n, o); }
+        void connect(changedColor4dSignal.slot_t s)         { changedColor4dSignal.connect(s); }
+        void disconnect(changedColor4dSignal.slot_t s)      { changedColor4dSignal.disconnect(s); }
+        void emit(string p, in Color4d n, in Color4d o)     { changedColor4dSignal.emit(p, n, o); }
+        void connect(changedInsets2dSignal.slot_t s)        { changedInsets2dSignal.connect(s); }
+        void disconnect(changedInsets2dSignal.slot_t s)     { changedInsets2dSignal.disconnect(s); }
+        void emit(string p, in Insets2d n, in Insets2d o)   { changedInsets2dSignal.emit(p, n, o); }
+        void connect(changedVector2dSignal.slot_t s)        { changedVector2dSignal.connect(s); }
+        void disconnect(changedVector2dSignal.slot_t s)     { changedVector2dSignal.disconnect(s); }
+        void emit(string p, in Vec2d n, in Vec2d o)         { changedVector2dSignal.emit(p, n, o); }
+        void connect(changedBox2dSignal.slot_t s)           { changedBox2dSignal.connect(s); }
+        void disconnect(changedBox2dSignal.slot_t s)        { changedBox2dSignal.disconnect(s); }
+        void emit(string p, in Box2d n, in Box2d o)         { changedBox2dSignal.emit(p, n, o); }
+        void connect(changedDim2dSignal.slot_t s)           { changedDim2dSignal.connect(s); }
+        void disconnect(changedDim2dSignal.slot_t s)        { changedDim2dSignal.disconnect(s); }
+        void emit(string p, in Dim2d n, in Dim2d o)         { changedDim2dSignal.emit(p, n, o); }
+        void connect(objectSignal.slot_t s)                 { objectSignal.connect(s); }
+        void disconnect(objectSignal.slot_t s)              { objectSignal.disconnect(s); }
+        void emit(string p, Object n, Object o)             { objectSignal.emit(p, n, o); }
+        void connect(mouseEventSignal.slot_t s)             { mouseEventSignal.connect(s); }
+        void disconnect(mouseEventSignal.slot_t s)          { mouseEventSignal.disconnect(s); }
+        void emit(MouseEvent s)                             { mouseEventSignal.emit(s); }
     }
 
     this() {

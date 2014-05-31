@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="landscape" />
+		<Option platforms="Windows;" />
+		<Option pch_mode="2" />
+		<Option compiler="dmd" />
+		<Build>
+			<Target title="Debug">
+				<Option platforms="Windows;" />
+				<Option output="bin/Debug/Landscape" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="dmd" />
+				<Compiler>
+					<Add option="-w" />
+					<Add option="-unittest" />
+					<Add option="-g" />
+					<Add option="-debug" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option platforms="Windows;" />
+				<Option output="bin/Release/Landscape" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="dmd" />
+				<Compiler>
+					<Add option="-O" />
+					<Add option="-w" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Linker>
+			<Add option="forest.def" />
+			<Add library="gtkd" />
+		</Linker>
+		<Unit filename="brew/box.d" />
+		<Unit filename="brew/cairo.d" />
+		<Unit filename="brew/color.d" />
+		<Unit filename="brew/dim.d" />
+		<Unit filename="brew/fun.d" />
+		<Unit filename="brew/gdk.d" />
+		<Unit filename="brew/gio.d" />
+		<Unit filename="brew/gstr.d" />
+		<Unit filename="brew/insets.d" />
+		<Unit filename="brew/loc.d" />
+		<Unit filename="brew/mat.d" />
+		<Unit filename="brew/math.d" />
+		<Unit filename="brew/misc.d" />
+		<Unit filename="brew/pair.d" />
+		<Unit filename="brew/polar.d" />
+		<Unit filename="brew/tween.d" />
+		<Unit filename="brew/vec.d" />
+		<Unit filename="forest.def" />
+		<Unit filename="forest/event.d" />
+		<Unit filename="forest/events/boolevent.d" />
+		<Unit filename="forest/events/event.d" />
+		<Unit filename="forest/events/eventhandler.d" />
+		<Unit filename="forest/events/mouseevent.d" />
+		<Unit filename="forest/events/renderevent.d" />
+		<Unit filename="forest/events/updateevent.d" />
+		<Unit filename="forest/fileutil.d" />
+		<Unit filename="forest/main.d" />
+		<Unit filename="forest/map.d" />
+		<Unit filename="forest/nodes/circlenode.d" />
+		<Unit filename="forest/nodes/dir/dirnode.d" />
+		<Unit filename="forest/nodes/dir/dirsign.d" />
+		<Unit filename="forest/nodes/doc/docnode.d" />
+		<Unit filename="forest/nodes/filenode.d" />
+		<Unit filename="forest/nodes/framenode.d" />
+		<Unit filename="forest/nodes/iconnode.d" />
+		<Unit filename="forest/nodes/node.d" />
+		<Unit filename="forest/nodes/portnode.d" />
+		<Unit filename="forest/nodes/rootnode.d" />
+		<Unit filename="forest/nodes/signnode.d" />
+		<Unit filename="forest/nodes/textnode.d" />
+		<Unit filename="forest/selection.d" />
+		<Unit filename="forest/sprites/dirsprite.d" />
+		<Unit filename="forest/sprites/sprite.d" />
+		<Unit filename="resources.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

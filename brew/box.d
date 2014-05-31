@@ -9,108 +9,6 @@ private import brew.insets;
 private import std.string;
 private import std.stdio;
 
-mixin template TBox1(T) {
-    mixin TVec1!T;
-    mixin TDim1!T;
-
-    pure T centerX() const {
-        return x + halfWidth;
-    }
-    pure T left() const {
-        return x;
-    }
-    pure T right() const {
-        return x + width;
-    }
-    pure T alignedX(T alignX) const {
-        return x + width * alignX;
-    }
-    pure bool pointInX(T px) const {
-        return px >= x && px < x + width;
-    }
-    pure T minX() const {
-        return left;
-    }
-    pure T maxX() const {
-        return right;
-    }
-}
-
-mixin template TBox2(T) {
-    mixin TVec2!T;
-    mixin TDim2!T;
-
-    pure T centerY() const {
-        return y + halfHeight;
-    }
-    pure T top() const {
-        return y;
-    }
-    pure T bottom() const {
-        return y + height;
-    }
-    pure T alignedY(T alignY) const {
-        return y + height * alignY;
-    }
-    pure bool pointInY(T py) const {
-        return py >= y && py < y + height;
-    }
-    pure T minY() const {
-        return top;
-    }
-    pure T maxY() const {
-        return bottom;
-    }
-}
-
-mixin template TBox3(T) {
-    mixin TVec3!T;
-    mixin TDim3!T;
-
-    pure T centerZ() const {
-        return z + halfDepth;
-    }
-    pure T near() const {
-        return z;
-    }
-    pure T far() const {
-        return z + depth;
-    }
-    pure T alignedZ(T alignZ) const {
-        return z + depth * alignZ;
-    }
-    pure bool pointInZ(T pz) const {
-        return pz >= z && pz < z + depth;
-    }
-    pure T minZ() const {
-        return near;
-    }
-    pure T maxZ() const {
-        return far;
-    }
-}
-
-mixin template TBox4(T) {
-    mixin TVec4!T;
-    mixin TDim4!T;
-
-    pure T centerW() const {
-        return w + halfWeight;
-    }
-    pure T alignedW(T alignW) const {
-        return w + weight * alignW;
-    }
-    pure bool pointInW(T pw) const {
-        return pw >= w && pw < w + weight;
-    }
-    pure T minW() const {
-        return w;
-    }
-    pure T maxW() const {
-        return w + weight;
-    }
-}
-
 struct Box(int D, T) {
     static assert (D >= 1);
     static assert (D <= 4);
@@ -120,10 +18,96 @@ struct Box(int D, T) {
     alias Dim!(D,T) DimDT;
     alias Box!(D,T) BoxDT;
 
-    static if (D>=1) mixin TBox1!T;
-    static if (D>=2) mixin TBox2!T;
-    static if (D>=3) mixin TBox3!T;
-    static if (D>=4) mixin TBox4!T;
+    static if (D>=1) {
+        /* Dimension 1 */
+        T x;
+        T width;
+        pure T negX() const                                 { return Math!T.neg(x); }
+        pure T invX() const                                 { return Math!T.inv(x); }
+        pure T sqrX() const                                 { return Math!T.sqr(x); }
+        pure T absX() const                                 { return Math!T.abs(x); }
+        T floorX() const                                    { return Math!T.floor(x); }
+        T roundX() const                                    { return Math!T.round(x); }
+        T ceilX() const                                     { return Math!T.ceil(x); }
+        pure T halfWidth() const                            { return Math!T.half(width); }
+        T floorWidth() const                                { return Math!T.floor(width); }
+        T roundWidth() const                                { return Math!T.round(width); }
+        T ceilWidth() const                                 { return Math!T.ceil(width); }
+        pure T centerX() const                              { return x + halfWidth; }
+        pure T left() const                                 { return x; }
+        pure T right() const                                { return x + width; }
+        pure T alignedX(T alignX) const                     { return x + width * alignX; }
+        pure bool pointInX(T px) const                      { return px >= x && px < x + width; }
+        pure T minX() const                                 { return left; }
+        pure T maxX() const                                 { return right; }
+    }
+    static if (D>=2) {
+        /* Dimension 2 */
+        T y;
+        T height;
+        pure T negY() const                                 { return Math!T.neg(y); }
+        pure T invY() const                                 { return Math!T.inv(y); }
+        pure T sqrY() const                                 { return Math!T.sqr(y); }
+        pure T absY() const                                 { return Math!T.abs(y); }
+        T floorY() const                                    { return Math!T.floor(y); }
+        T roundY() const                                    { return Math!T.round(y); }
+        T ceilY() const                                     { return Math!T.ceil(y); }
+        pure T halfHeight() const                           { return Math!T.half(height); }
+        T floorHeight() const                               { return Math!T.floor(height); }
+        T roundHeight() const                               { return Math!T.round(height); }
+        T ceilHeight() const                                { return Math!T.ceil(height); }
+        pure T centerY() const                              { return y + halfHeight; }
+        pure T top() const                                  { return y; }
+        pure T bottom() const                               { return y + height; }
+        pure T alignedY(T alignY) const                     { return y + height * alignY; }
+        pure bool pointInY(T py) const                      { return py >= y && py < y + height; }
+        pure T minY() const                                 { return top; }
+        pure T maxY() const                                 { return bottom; }
+    }
+    static if (D>=3) {
+        /* Dimension 3 */
+        T z;
+        T depth;
+        pure T negZ() const                                 { return Math!T.neg(z); }
+        pure T invZ() const                                 { return Math!T.inv(z); }
+        pure T sqrZ() const                                 { return Math!T.sqr(z); }
+        pure T absZ() const                                 { return Math!T.abs(z); }
+        T floorZ() const                                    { return Math!T.floor(z); }
+        T roundZ() const                                    { return Math!T.round(z); }
+        T ceilZ() const                                     { return Math!T.ceil(z); }
+        pure T halfDepth() const                            { return Math!T.half(depth); }
+        T floorDepth() const                                { return Math!T.floor(depth); }
+        T roundDepth() const                                { return Math!T.round(depth); }
+        T ceilDepth() const                                 { return Math!T.ceil(depth); }
+        pure T centerZ() const                              { return z + halfDepth; }
+        pure T near() const                                 { return z; }
+        pure T far() const                                  { return z + depth; }
+        pure T alignedZ(T alignZ) const                     { return z + depth * alignZ; }
+        pure bool pointInZ(T pz) const                      { return pz >= z && pz < z + depth; }
+        pure T minZ() const                                 { return near; }
+        pure T maxZ() const                                 { return far; }
+    }
+    static if (D>=4) {
+        /* Dimension 4 */
+        T w;
+        T weight;
+        pure T negW() const                                 { return Math!T.neg(w); }
+        pure T invW() const                                 { return Math!T.inv(w); }
+        pure T sqrW() const                                 { return Math!T.sqr(w); }
+        pure T absW() const                                 { return Math!T.abs(w); }
+        T floorW() const                                    { return Math!T.floor(w); }
+        T roundW() const                                    { return Math!T.round(w); }
+        T ceilW() const                                     { return Math!T.ceil(w); }
+        pure T halfWeight() const                           { return Math!T.half(weight); }
+        T floorWeight() const                               { return Math!T.floor(weight); }
+        T roundWeight() const                               { return Math!T.round(weight); }
+        T ceilWeight() const                                { return Math!T.ceil(weight); }
+        pure T centerW() const                              { return w + halfWeight; }
+        pure T alignedW(T alignW) const                     { return w + weight * alignW; }
+        pure bool pointInW(T pw) const                      { return pw >= w && pw < w + weight; }
+        pure T minW() const                                 { return w; }
+        pure T maxW() const                                 { return w + weight; }
+    }
 
     string toString() {
         return format("Box%d%s[%s]", D, T.mangleof, paramString);
@@ -184,19 +168,9 @@ struct Box(int D, T) {
         return b;
     }
 
-    @property
-    pure static Box zero() {
-        return Box(VecDT.zero, DimDT.zero);
-    }
-    @property
-    pure static Box ones() {
-        return Box(VecDT.ones, DimDT.ones);
-    }
-
-    @property
-    pure static Box nan() {
-        return Box(VecDT.nan, DimDT.nan);
-    }
+    @property pure static Box zero()                        { return Box(VecDT.zero, DimDT.zero); }
+    @property pure static Box ones()                        { return Box(VecDT.ones, DimDT.ones); }
+    @property pure static Box nan()                         { return Box(VecDT.nan, DimDT.nan); }
 
     VecDT centerPos() const {
         static if (D==1) return VecDT(centerX);
@@ -261,21 +235,10 @@ struct Box(int D, T) {
         }
     }
 
-    pure bool isNotZero() const {
-        return this != zero;
-    }
-
-    pure bool isZero() const {
-        return this == zero;
-    }
-
-    pure bool isNan() const {
-        return this == nan;
-    }
-
-    pure bool isNotNan() const {
-        return this != nan;
-    }
+    pure bool isNotZero() const                             { return this != zero; }
+    pure bool isZero() const                                { return this == zero; }
+    pure bool isNan() const                                 { return this == nan; }
+    pure bool isNotNan() const                              { return this != nan; }
 
     void opAddAssign(in VecDT v) {
         static if (D>=1) x += v.x;
@@ -403,9 +366,7 @@ struct Box(int D, T) {
         return b;
     }
 
-    Box opAdd(in Insets!(D,T) insets) const {
-        return addInsets(insets);
-    }
+    Box opAdd(in Insets!(D,T) insets) const                 { return addInsets(insets); }
 
     Box addInsets(in Insets!(D,T) insets) const {
         Box b = this;
@@ -428,13 +389,8 @@ struct Box(int D, T) {
         return b;
     }
 
-    Box withDim(DimDT d) const {
-        return Box(pos, d);
-    }
-
-    Box withPos(VecDT p) const {
-        return Box(p, dim);
-    }
+    Box withDim(DimDT d) const                              { return Box(pos, d); }
+    Box withPos(VecDT p) const                              { return Box(p, dim); }
 
     static if (D>=1) {
         Box withX(T x) const {
