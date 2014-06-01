@@ -889,6 +889,14 @@ class Node {
     final Selection selection() {
         return _selection;
     }
+
+    final const(Selection) selection() const {
+        return _selection;
+    }
+
+    final bool hasSelection() const {
+        return _selection !is null;
+    }
 }
 
 

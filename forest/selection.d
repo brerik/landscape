@@ -3,10 +3,15 @@
  */
 module forest.selection;
 import std.signals;
+import std.algorithm;
 
 class Selection {
     enum {
         NONE = size_t.max
+    }
+    enum Mode {
+        MULTI,
+        SINGLE
     }
 
     private {
@@ -16,19 +21,26 @@ class Selection {
     mixin Signal!(Object, bool);
 
     final void add(Object o) {
-        _objects ~= o;
-        emit(o, true);
+        if (!contains(o)) {
+            _objects ~= o;
+            emit(o, true);
+        }
     }
 
     final void remove(Object o) {
-        for (size_t i = 0; i < _objects.length; i++) {
-            if (_objects[i] == o) {
-                _objects[i] = _objects[$-1];
-                _objects.length--;
-                emit(o, false);
-                return;
-            }
+        size_t i = indexOf(o);
+        if (i != NONE) {
+            _objects[i] = _objects[$-1];
+            _objects.length--;
+            emit(o, false);
         }
+    }
+
+    final void set(Object obj, bool s) {
+        if (s)
+            add(obj);
+        else
+            remove(obj);
     }
 
     final void clear() {

@@ -29,6 +29,10 @@ class FileNode : Node {
         return _file;
     }
 
+    final const(GioFile) file() const {
+        return _file;
+    }
+
     final string displayName() {
         return _displayName;
     }
@@ -45,9 +49,28 @@ class FileNode : Node {
     }
 
     final void selectionWatcher(Object o, bool s) {
-        if (file == o) {
+        if (file == o)
             selected = s;
+    }
+
+    final void selectFile(Selection.Mode m) {
+        selected = true;
+        if (hasSelection) {
+            if (m == Selection.Mode.SINGLE)
+                selection.clear();
+            selection.add(file);
         }
     }
+
+    final void unselectFile(Selection.Mode m) {
+        selected = false;
+        if (hasSelection) {
+            if (m == Selection.Mode.SINGLE)
+                selection.clear();
+            else
+                selection.remove(file);
+        }
+    }
+
 }
 

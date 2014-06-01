@@ -549,18 +549,15 @@ class DirNode : FileNode {
     }
 
     final bool onSelectedDlg(in Vec2d point, uint clickCount) {
-        if (selection !is null) {
-            if (!selected) {
-                selection.clear();
-                selection.add(file);
-            } else {
-                selection.clear();
-            }
-        }
-        if (clickCount == 2)
+        if (clickCount == 2) {
+            selectFile(Selection.Mode.SINGLE);
             FileUtil.openFile(file);
-        else if (clickCount == 1)
-            writefln("Clicked %s"w, file.getPath);
+        } else if (clickCount == 1) {
+            if (selected)
+                unselectFile(Selection.Mode.SINGLE);
+            else
+                selectFile(Selection.Mode.SINGLE);
+        }
         return true;
     }
 
@@ -568,9 +565,9 @@ class DirNode : FileNode {
         return true;
     }
 
-    final void watchBool(string propName, bool newValue, bool oldValue) {
-        if (propName == PropName.selected)
-            dirSymbol.selected = newValue;
+    final void watchBool(string p, bool n, bool o) {
+        if (p == PropName.selected)
+            dirSymbol.selected = n;
     }
 }
 

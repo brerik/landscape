@@ -52,11 +52,15 @@ class DocNode : FileNode
     }
 
     final bool onPressedDlg(in Vec2d point, uint clickCount) {
-        selected = !selected;
-        if (clickCount == 2)
+        if (clickCount == 2) {
+            selectFile(Selection.Mode.SINGLE);
             FileUtil.openFile(file);
-        else if (clickCount == 1)
-            writefln("Clicked %s\n", file.getPath());
+        } else if (clickCount == 1) {
+            if (selected)
+                unselectFile(Selection.Mode.SINGLE);
+            else
+                selectFile(Selection.Mode.SINGLE);
+        }
         return true;
     }
 
