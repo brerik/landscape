@@ -57,8 +57,7 @@ enum CardinalDirection
     EAST_SOUTH_EAST
 }
 
-enum Direction
-{
+enum Direction {
     LEFT,
     UP,
     RIGHT,

@@ -144,7 +144,7 @@ public class TextNode : Node
         Dim2i size;
         _textLayout.getPixelSize(size.width, size.height);
         // paint text
-        ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
+        ct.setSourceRgba(fgColor.tupleof);
         double tx = bounds.x + insets.left + (bounds.width - insets.width - size.width) * alignment.x;
         double ty = bounds.y + insets.top + (bounds.height - insets.height - size.height) * alignment.y;
         ct.translate(tx, ty);

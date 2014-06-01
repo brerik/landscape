@@ -10,7 +10,7 @@ struct Loc2
 
     this(int row, int col)
     {
-        this.row    = row;
+        this.row = row;
         this.col = col;
     }
 

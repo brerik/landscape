@@ -67,7 +67,7 @@ public class DirSymbol : CutFrameNode {
             void drawDivider() {
                 auto r = rectToPaint(lineWidth);
                 ct.setLineWidth(lineWidth);
-                ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
+                ct.setSourceRgba(fgColor.tupleof);
                 ct.moveTo(r.left + DEFAULT_CUT.x, r.top + dividerPosition);
                 ct.lineTo(r.right - DEFAULT_CUT.x, r.top + dividerPosition);
                 ct.stroke();

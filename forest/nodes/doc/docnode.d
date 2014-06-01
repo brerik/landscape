@@ -81,16 +81,16 @@ class DocNode : FileNode
         rl.bounds = insetBounds;
         rl.insets.setAll(0);
         rl.cut = Vec2d(4,4);
-        rl.bgColor.set(1,1,1,1);
-        rl.fgColor.set(.25, .25, .5,1);
+        rl.bgColor = Color4d.WHITE;
+        rl.fgColor = Color4d(.25, .25, .5,1);
         return rl;
     }
 
     final TextNode createTextNode(string text) {
         TextNode rl = new TextNode();
         rl.name = "TextNode";
-        rl.bgColor.set(1,1, 1,1);
-        rl.fgColor.set(0,0,0);
+        rl.bgColor = Color4d.WHITE;
+        rl.fgColor = Color4d.BLACK;
         rl.text = text;
         rl.fontSize = 9.0;
         rl.alignment = Vec2d(.5,.5);

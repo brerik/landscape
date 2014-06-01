@@ -80,12 +80,12 @@ class SignNode : Node {
     override void drawNode(Context ct) {
         Box2d signBounds = bounds - insets;
         if (_drawRing) {
-            ct.setSourceRgb(bgColor.red,bgColor.green,bgColor.blue);
+            ct.setSourceRgba(bgColor.tupleof);
             ct.moveTo(bounds.right, bounds.centerY);
             ct.arc(bounds.centerX, bounds.centerY,bounds.halfWidth,0,Math!double.pi*2);
             ct.fillPreserve();
             ct.setLineWidth(_lineWidth);
-            ct.setSourceRgb(fgColor.red,fgColor.green,fgColor.blue);
+            ct.setSourceRgba(fgColor.tupleof);
             ct.stroke();
         }
         switch (_sign) {
@@ -120,8 +120,8 @@ class SignNode : Node {
             default:
                 break;
         }
-        ct.setLineWidth(_signLineWidth);
-        ct.setSourceRgb(_signColor.red,_signColor.green,_signColor.blue);
+        ct.setLineWidth(signLineWidth);
+        ct.setSourceRgba(signColor.tupleof);
         ct.stroke();
     }
 

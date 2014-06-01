@@ -497,11 +497,11 @@ class DirNode : FileNode {
             DirNode d = dirs[i];
             if (d.visible) {
                 Vec2d tailStop = (d.tailBounds+d.offset).alignedPoint(Vec2d(0,.5)).floorVec + Vec2d.halves;
-                ct.moveTo(tailStart.x,tailStart.y);
+                ct.moveTo(tailStart.tupleof);
                 immutable mx = Mathd.mean(tailStart.x, tailStop.x);
                 ct.curveTo(mx, tailStart.y, mx, tailStop.y, tailStop.x,tailStop.y);
                 ct.setLineWidth(tailLineWidth);
-                ct.setSourceRgb(tailColor.red,tailColor.green,tailColor.blue);
+                ct.setSourceRgba(tailColor.tupleof);
                 ct.stroke();
             }
         }
@@ -569,9 +569,8 @@ class DirNode : FileNode {
     }
 
     final void watchBool(string propName, bool newValue, bool oldValue) {
-        if (propName == PropName.selected) {
+        if (propName == PropName.selected)
             dirSymbol.selected = newValue;
-        }
     }
 }
 

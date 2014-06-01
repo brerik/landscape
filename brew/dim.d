@@ -7,7 +7,7 @@ private import brew.vec;
 private import std.string;
 private import std.stdio;
 
-mixin template TDim1(T)
+mixin template TDimWidth(T)
 {
     T width;
 
@@ -28,7 +28,7 @@ mixin template TDim1(T)
         return Math!T.ceil(width);
     }
 }
-mixin template TDim2(T)
+mixin template TDimHeight(T)
 {
     T height;
 
@@ -49,7 +49,7 @@ mixin template TDim2(T)
         return Math!T.ceil(height);
     }
 }
-mixin template TDim3(T)
+mixin template TDimDepth(T)
 {
     T depth;
 
@@ -70,7 +70,7 @@ mixin template TDim3(T)
         return Math!T.ceil(depth);
     }
 }
-mixin template TDim4(T)
+mixin template TDimWeight(T)
 {
     T weight;
 
@@ -98,10 +98,10 @@ struct Dim(int D, T)
     static assert (D>=1);
     static assert (D<=4);
 
-    static if (D>=1) mixin TDim1!T;
-    static if (D>=2) mixin TDim2!T;
-    static if (D>=3) mixin TDim3!T;
-    static if (D>=4) mixin TDim4!T;
+    static if (D>=1) mixin TDimWidth!T;
+    static if (D>=2) mixin TDimHeight!T;
+    static if (D>=3) mixin TDimDepth!T;
+    static if (D>=4) mixin TDimWeight!T;
 
     string toString() const
     {

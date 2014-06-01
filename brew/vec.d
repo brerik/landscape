@@ -6,7 +6,7 @@ private import brew.math;
 private import std.string;
 private import std.stdio;
 
-mixin template TVec1(T)
+mixin template TVecX(T)
 {
     alias Math!T MathT;
     T x;
@@ -39,7 +39,7 @@ mixin template TVec1(T)
         return MathT.ceil(x);
     }
 }
-mixin template TVec2(T)
+mixin template TVecY(T)
 {
     alias Math!T MathT;
     T y;
@@ -72,7 +72,7 @@ mixin template TVec2(T)
         return MathT.ceil(y);
     }
 }
-mixin template TVec3(T)
+mixin template TVecZ(T)
 {
     alias Math!T MathT;
     T z;
@@ -105,7 +105,7 @@ mixin template TVec3(T)
         return MathT.ceil(z);
     }
 }
-mixin template TVec4(T)
+mixin template TVecW(T)
 {
     alias Math!T MathT;
     T w;
@@ -138,7 +138,8 @@ mixin template TVec4(T)
         return MathT.ceil(w);
     }
 }
-struct Vec(int D, T)
+
+struct Vec(uint D, T)
 {
     static assert (D>=1);
     static assert (D<=4);
@@ -148,10 +149,10 @@ struct Vec(int D, T)
     alias Vec!(3,T) Vec3;
     alias Vec!(4,T) Vec4;
 
-    static if (D>=1) mixin TVec1!T;
-    static if (D>=2) mixin TVec2!T;
-    static if (D>=3) mixin TVec3!T;
-    static if (D>=4) mixin TVec4!T;
+    static if (D>=1) mixin TVecX!T;
+    static if (D>=2) mixin TVecY!T;
+    static if (D>=3) mixin TVecZ!T;
+    static if (D>=4) mixin TVecW!T;
 
     pure static Vec1 opCall(T x)
     {

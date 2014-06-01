@@ -47,14 +47,14 @@ class FrameNode : Node
 
     override void drawNode(Context ct) {
         if (filled) {
-            ct.rectangle(bounds.x+insets.left, bounds.y+insets.top, bounds.width-insets.width, bounds.height-insets.height);
-            ct.setSourceRgb(bgColor.red, bgColor.green, bgColor.blue);
+            ct.rectangle((bounds-insets).tupleof);
+            ct.setSourceRgba(bgColor.tupleof);
             ct.fill();
         }
         if (outlined && lineWidth > 0) {
             ct.setLineWidth(lineWidth);
-            ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
-            ct.rectangle(bounds.x+insets.left, bounds.y+insets.top, bounds.width-insets.width, bounds.height-insets.height);
+            ct.setSourceRgba(fgColor.tupleof);
+            ct.rectangle((bounds-insets).tupleof);
             ct.stroke();
         }
     }
@@ -185,12 +185,12 @@ class CutFrameNode : FrameNode
         }
         if (filled) {
             doOutline();
-            ct.setSourceRgb(bgColor.red, bgColor.green, bgColor.blue);
+            ct.setSourceRgba(bgColor.tupleof);
             ct.fill();
         }
         if (outlined && lineWidth > 0) {
             ct.setLineWidth(lineWidth);
-            ct.setSourceRgb(fgColor.red, fgColor.green, fgColor.blue);
+            ct.setSourceRgba(fgColor.tupleof);
             doOutline();
             ct.stroke();
         }

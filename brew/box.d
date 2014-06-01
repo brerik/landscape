@@ -10,9 +10,6 @@ private import std.string;
 private import std.stdio;
 
 mixin template TBox1(T) {
-    mixin TVec1!T;
-    mixin TDim1!T;
-
     pure T centerX() const {
         return x + halfWidth;
     }
@@ -37,9 +34,6 @@ mixin template TBox1(T) {
 }
 
 mixin template TBox2(T) {
-    mixin TVec2!T;
-    mixin TDim2!T;
-
     pure T centerY() const {
         return y + halfHeight;
     }
@@ -64,9 +58,6 @@ mixin template TBox2(T) {
 }
 
 mixin template TBox3(T) {
-    mixin TVec3!T;
-    mixin TDim3!T;
-
     pure T centerZ() const {
         return z + halfDepth;
     }
@@ -91,9 +82,6 @@ mixin template TBox3(T) {
 }
 
 mixin template TBox4(T) {
-    mixin TVec4!T;
-    mixin TDim4!T;
-
     pure T centerW() const {
         return w + halfWeight;
     }
@@ -119,7 +107,14 @@ struct Box(int D, T) {
     alias Vec!(D,T) VecDT;
     alias Dim!(D,T) DimDT;
     alias Box!(D,T) BoxDT;
-
+    static if (D>=1) mixin TVecX!T;
+    static if (D>=2) mixin TVecY!T;
+    static if (D>=3) mixin TVecZ!T;
+    static if (D>=4) mixin TVecW!T;
+    static if (D>=1) mixin TDimWidth!T;
+    static if (D>=2) mixin TDimHeight!T;
+    static if (D>=3) mixin TDimDepth!T;
+    static if (D>=4) mixin TDimWeight!T;
     static if (D>=1) mixin TBox1!T;
     static if (D>=2) mixin TBox2!T;
     static if (D>=3) mixin TBox3!T;
@@ -139,26 +134,22 @@ struct Box(int D, T) {
     }
 
     static pure Box!(2,T) opCall(T x, T y, T width, T height) {
-        Box!(2,T) b = {x, width, y, height};
+        Box!(2,T) b = {x, y, width, height};
         return b;
     }
 
     static pure Box!(3,T) opCall(T x, T y, T z, T width, T height, T depth) {
-        Box!(3,T) b = {x, width, y, height, z, depth};
+        Box!(3,T) b = {x, y, z, width, height, depth};
         return b;
     }
 
     static pure Box!(4,T) opCall(T x, T y, T z, T w, T width, T height, T depth, T weight) {
-        Box!(4,T) b = {x, width, y, height, z, depth, w, weight};
+        Box!(4,T) b = {x, y, z, w, width, height, depth, weight};
         return b;
     }
 
     static pure BoxDT opCall(VecDT p, DimDT d) {
-        static if (D==1) BoxDT b = {p.x, d.width};
-        static if (D==2) BoxDT b = {p.x, d.width, p.y, d.height};
-        static if (D==3) BoxDT b = {p.x, d.width, p.y, d.height, p.z, d.depth};
-        static if (D==4) BoxDT b = {p.x, d.width, p.y, d.height, p.z, d.depth, p.w, d.weight};
-        return b;
+        return BoxDT(p.tupleof, d.tupleof);
     }
 
     static pure BoxDT opCall(in VecDT p1, in VecDT p2) {
