@@ -1,7 +1,6 @@
 module forest.parts.part;
 
 
-class Part [
+class Part {
     int id;
-
-]
+}

@@ -9,21 +9,16 @@ private import brew.insets;
 private import std.string;
 private import std.stdio;
 
-
-
 struct Box(int D, T) {
     static assert (D >= 1);
     static assert (D <= 4);
-
     alias Math!T MathT;
     alias Vec!(D,T) VecDT;
     alias Dim!(D,T) DimDT;
     alias Box!(D,T) BoxDT;
 
     static if (D>=1) {
-        /* Dimension 1 */
         T x;
-        T width;
         pure T negX() const                                 { return Math!T.neg(x); }
         pure T invX() const                                 { return Math!T.inv(x); }
         pure T sqrX() const                                 { return Math!T.sqr(x); }
@@ -31,6 +26,39 @@ struct Box(int D, T) {
         T floorX() const                                    { return Math!T.floor(x); }
         T roundX() const                                    { return Math!T.round(x); }
         T ceilX() const                                     { return Math!T.ceil(x); }
+    }
+    static if (D>=2) {
+        T y;
+        pure T negY() const                                 { return Math!T.neg(y); }
+        pure T invY() const                                 { return Math!T.inv(y); }
+        pure T sqrY() const                                 { return Math!T.sqr(y); }
+        pure T absY() const                                 { return Math!T.abs(y); }
+        T floorY() const                                    { return Math!T.floor(y); }
+        T roundY() const                                    { return Math!T.round(y); }
+        T ceilY() const                                     { return Math!T.ceil(y); }
+    }
+    static if (D>=3) {
+        T z;
+        pure T negZ() const                                 { return Math!T.neg(z); }
+        pure T invZ() const                                 { return Math!T.inv(z); }
+        pure T sqrZ() const                                 { return Math!T.sqr(z); }
+        pure T absZ() const                                 { return Math!T.abs(z); }
+        T floorZ() const                                    { return Math!T.floor(z); }
+        T roundZ() const                                    { return Math!T.round(z); }
+        T ceilZ() const                                     { return Math!T.ceil(z); }
+    }
+    static if (D>=4) {
+        T w;
+        pure T negW() const                                 { return Math!T.neg(w); }
+        pure T invW() const                                 { return Math!T.inv(w); }
+        pure T sqrW() const                                 { return Math!T.sqr(w); }
+        pure T absW() const                                 { return Math!T.abs(w); }
+        T floorW() const                                    { return Math!T.floor(w); }
+        T roundW() const                                    { return Math!T.round(w); }
+        T ceilW() const                                     { return Math!T.ceil(w); }
+    }
+    static if (D>=1) {
+        T width;
         pure T halfWidth() const                            { return Math!T.half(width); }
         T floorWidth() const                                { return Math!T.floor(width); }
         T roundWidth() const                                { return Math!T.round(width); }
@@ -44,16 +72,7 @@ struct Box(int D, T) {
         pure T maxX() const                                 { return right; }
     }
     static if (D>=2) {
-        /* Dimension 2 */
-        T y;
         T height;
-        pure T negY() const                                 { return Math!T.neg(y); }
-        pure T invY() const                                 { return Math!T.inv(y); }
-        pure T sqrY() const                                 { return Math!T.sqr(y); }
-        pure T absY() const                                 { return Math!T.abs(y); }
-        T floorY() const                                    { return Math!T.floor(y); }
-        T roundY() const                                    { return Math!T.round(y); }
-        T ceilY() const                                     { return Math!T.ceil(y); }
         pure T halfHeight() const                           { return Math!T.half(height); }
         T floorHeight() const                               { return Math!T.floor(height); }
         T roundHeight() const                               { return Math!T.round(height); }
@@ -67,16 +86,7 @@ struct Box(int D, T) {
         pure T maxY() const                                 { return bottom; }
     }
     static if (D>=3) {
-        /* Dimension 3 */
-        T z;
         T depth;
-        pure T negZ() const                                 { return Math!T.neg(z); }
-        pure T invZ() const                                 { return Math!T.inv(z); }
-        pure T sqrZ() const                                 { return Math!T.sqr(z); }
-        pure T absZ() const                                 { return Math!T.abs(z); }
-        T floorZ() const                                    { return Math!T.floor(z); }
-        T roundZ() const                                    { return Math!T.round(z); }
-        T ceilZ() const                                     { return Math!T.ceil(z); }
         pure T halfDepth() const                            { return Math!T.half(depth); }
         T floorDepth() const                                { return Math!T.floor(depth); }
         T roundDepth() const                                { return Math!T.round(depth); }
@@ -90,16 +100,7 @@ struct Box(int D, T) {
         pure T maxZ() const                                 { return far; }
     }
     static if (D>=4) {
-        /* Dimension 4 */
-        T w;
         T weight;
-        pure T negW() const                                 { return Math!T.neg(w); }
-        pure T invW() const                                 { return Math!T.inv(w); }
-        pure T sqrW() const                                 { return Math!T.sqr(w); }
-        pure T absW() const                                 { return Math!T.abs(w); }
-        T floorW() const                                    { return Math!T.floor(w); }
-        T roundW() const                                    { return Math!T.round(w); }
-        T ceilW() const                                     { return Math!T.ceil(w); }
         pure T halfWeight() const                           { return Math!T.half(weight); }
         T floorWeight() const                               { return Math!T.floor(weight); }
         T roundWeight() const                               { return Math!T.round(weight); }
@@ -339,9 +340,7 @@ struct Box(int D, T) {
         return v;
     }
 
-    Box opSub(in Insets!(D,T) insets) const {
-        return subInsets(insets);
-    }
+    Box opSub(in Insets!(D,T) insets) const                 { return subInsets(insets); }
 
     BoxDT subInsets(in Insets!(D,T) insets) const {
         BoxDT b = this;

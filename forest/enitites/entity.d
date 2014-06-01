@@ -6,7 +6,7 @@ class Entity {
     uint parentId;
     uint childIds[];
     uint layer;
-    uint partIds[]
+    uint partIds[];
     Vec2f pos;
     Box2f box;
     Color4f fg;
