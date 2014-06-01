@@ -21,20 +21,12 @@ alias gio.File.File GioFile;
  * This call does no blocking I/O.
  * Returns: string containing the GFile's base name, or NULL if given GFile is invalid. The returned string should be freed with g_free() when no longer needed.
  */
-wstring getBasenameW(GioFile f)
-{
-    // char * g_file_get_basename (GFile *file);
-    return GStr.toWString(g_file_get_basename(f.getFileStruct));
-}
+wstring getBasenameW(GioFile f)                             { return GStr.toWString(g_file_get_basename(f.getFileStruct)); }
 
 /**
  * Gets the local pathname for GFile, if one exists.
  * This call does no blocking I/O.
  * Returns: string containing the GFile's path, or NULL if no such path exists. The returned string should be freed with g_free() when no longer needed.
  */
-wstring getPathW(GioFile f)
-{
-    // char * g_file_get_path (GFile *file);
-    return GStr.toWString(g_file_get_path(f.getFileStruct));
-}
+wstring getPathW(GioFile f)                                 { return GStr.toWString(g_file_get_path(f.getFileStruct)); }
 

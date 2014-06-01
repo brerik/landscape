@@ -7,21 +7,10 @@ import brew.vec;
 import gdk.RGBA;
 import gdk.Event;
 
-RGBA toRGBA(in Color4d c) {
-    return new RGBA(c.tupleof);
-}
-
-RGBA toRGBA(in Color3d c) {
-    return new RGBA(c.tupleof, 1);
-}
-
-RGBA toRGBA(in Color4f c) {
-    return new RGBA(c.tupleof);
-}
-
-RGBA toRGBA(in Color3f c) {
-    return new RGBA(c.tupleof, 1);
-}
+RGBA toRGBA(in Color4d c)                                   { return new RGBA(c.tupleof); }
+RGBA toRGBA(in Color3d c)                                   { return new RGBA(c.tupleof, 1.0); }
+RGBA toRGBA(in Color4f c)                                   { return new RGBA(c.tupleof); }
+RGBA toRGBA(in Color3f c)                                   { return new RGBA(c.tupleof, 1.0); }
 
 /**
  * Gets scroll deltas or Vec2d.nan if fail

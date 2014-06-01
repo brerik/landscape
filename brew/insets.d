@@ -2,117 +2,66 @@
  * Brew Library by erik wikforss
  */
 module brew.insets;
-private import std.string;
-
-mixin template TInsets1(T)
-{
-    T left;
-    T right;
-
-    T width() const
-    {
-        return left + right;
-    }
-    void swapLeftRight()
-    {
-        T t = left;
-        left = right;
-        right = t;
-    }
-}
-
-mixin template TInsets2(T)
-{
-    T top;
-    T bottom;
-
-    T height() const
-    {
-        return top + bottom;
-    }
-
-    void swapTopBottom()
-    {
-        T t = top;
-        top = bottom;
-        bottom = t;
-    }
-}
-
-mixin template TInsets3(T)
-{
-    T front;
-    T back;
-
-    T depth() const
-    {
-        return front + back;
-    }
-
-    void swapFrontBack()
-    {
-        T t = front;
-        front = back;
-        back = t;
-    }
-}
-mixin template TInsets4(T)
-{
-    T light;
-    T heavy;
-
-    T weight() const
-    {
-        return light + heavy;
-    }
-
-    void swapLightHeavy()
-    {
-        T t = light;
-        light = heavy;
-        heavy = t;
-    }
-}
+import std.string;
+import brew.math;
 
 struct Insets(int D, T)
 {
     static assert (D>=1 && D<=4);
 
-    static if (D>=1) mixin TInsets1!T;
-    static if (D>=2) mixin TInsets2!T;
-    static if (D>=3) mixin TInsets3!T;
-    static if (D>=4) mixin TInsets4!T;
+    static if (D>=1) {
+        T left;
+        T right;
+
+        T width() const { return left + right; }
+        void swapLeftRight() { Math!T.swap(left, right); }
+    }
+    static if (D>=2) {
+        T top;
+        T bottom;
+
+        T height() const { return top + bottom; }
+        void swapTopBottom() { Math!T.swap(top, bottom); }
+    }
+    static if (D>=3) {
+        T front;
+        T back;
+
+        T depth() const { return front + back; }
+        void swapFrontBack() { Math!T.swap(front, back); }
+    }
+    static if (D>=4) {
+        T light;
+        T heavy;
+
+        T weight() const { return light + heavy; }
+        void swapLightHeavy() { Math!T.swap(light, heavy); }
+    }
 
     enum {
         ONES = fill(1),
         ZERO = fill(0),
     }
 
-    static if (D==1)
-    {
-        static pure Insets!(1,T) opCall(T left, T right)
-        {
+    static if (D==1) {
+        static pure Insets!(1,T) opCall(T left, T right) {
             Insets!(1,T) i = {left, right};
             return i;
         }
 
-        void set(T left, T right)
-        {
+        void set(T left, T right) {
             this.left = left;
             this.right = right;
         }
     }
 
-    static if (D==2)
-    {
-        static pure Insets!(2,T) opCall(T left, T right, T top, T bottom)
-        {
+    static if (D==2) {
+        static pure Insets!(2,T) opCall(T left, T right, T top, T bottom) {
             Insets!(2,T) i = {left, right, top, bottom};
             return i;
         }
 
-        void set(T left, T right, T top, T bottom)
-        {
+        void set(T left, T right, T top, T bottom) {
             this.left = left;
             this.right = right;
             this.top = top;
@@ -120,16 +69,13 @@ struct Insets(int D, T)
         }
     }
 
-    static if (D==3)
-    {
-        static pure Insets!(3,T) opCall(T left, T right, T top, T bottom, T front, T back)
-        {
+    static if (D==3) {
+        static pure Insets!(3,T) opCall(T left, T right, T top, T bottom, T front, T back) {
             Insets!(3,T) i = {left, right, top, bottom, front, back};
             return i;
         }
 
-        void set(T left, T right, T top, T bottom, T front, T back)
-        {
+        void set(T left, T right, T top, T bottom, T front, T back) {
             this.left = left;
             this.right = right;
             this.top = top;
@@ -139,16 +85,13 @@ struct Insets(int D, T)
         }
     }
 
-    static if (D==4)
-    {
-        static pure Insets!(4,T) opCall(T left, T right, T top, T bottom, T front, T back, T light, T heavy)
-        {
+    static if (D==4) {
+        static pure Insets!(4,T) opCall(T left, T right, T top, T bottom, T front, T back, T light, T heavy) {
             Insets!(4,T) i = {left, right, top, bottom, front, back, light, heavy};
             return i;
         }
 
-        void set(T left, T right, T top, T bottom, T front, T back, T light, T heavy)
-        {
+        void set(T left, T right, T top, T bottom, T front, T back, T light, T heavy) {
             this.left = left;
             this.right = right;
             this.top = top;
@@ -160,33 +103,19 @@ struct Insets(int D, T)
         }
     }
 
-    @property
-    static pure Insets zero()
-    {
-        return fill(0);
-    }
+    @property static pure Insets zero()                     { return fill(0); }
+    @property static pure Insets ones()                     { return fill(1); }
 
-    @property
-    static pure Insets ones()
-    {
-        return fill(1);
-    }
-
-    static pure Insets fill(T a)
-    {
+    static pure Insets fill(T a) {
         static if (D==1) return Insets!(1,T)(a,a);
         static if (D==2) return Insets!(2,T)(a,a,a,a);
         static if (D==3) return Insets!(3,T)(a,a,a,a,a,a);
         static if (D==4) return Insets!(4,T)(a,a,a,a,a,a,a,a);
     }
 
-    void setAll(T a)
-    {
-        this = Insets.fill(a);
-    }
+    void setAll(T a) { this = Insets.fill(a); }
 
-    string toString() const
-    {
+    string toString() const {
         return format("Insets%d%s[%s]", D, T.mangleof, paramString);
     }
 
@@ -208,16 +137,14 @@ struct Insets(int D, T)
         }
     }
 
-    void swapSides()
-    {
+    void swapSides() {
         static if (D>=1) swapLeftRight();
         static if (D>=2) swapTopBottom();
         static if (D>=3) swapFrontBack();
         static if (D>=4) swapLightHeavy();
     }
 
-    Insets swappedSides()
-    {
+    Insets swappedSides() {
         Insets i = this;
         i.swapSides();
         return i;

@@ -85,8 +85,6 @@ class MyWindow : MainWindow {
 version(Windows) {
     import core.sys.windows.windows;
     extern (Windows)
-    immutable RESULT_FAILED = 0;
-
     int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 LPSTR lpCmdLine, int nCmdShow) {
         int result;
@@ -97,7 +95,7 @@ version(Windows) {
         } catch (Throwable e) {
             MessageBoxA(null, e.toString().toStringz(), "Error",
                         MB_OK | MB_ICONEXCLAMATION);
-            result = RESULT_FAILED;
+            result = 0;// Failed
         }
         return result;
     }
