@@ -19,6 +19,7 @@ import pango.PgContext;
 import cairo.Context;
 import std.signals;
 import forest.events.mouseevent;
+import gtkc.gdktypes;
 
 struct NodeColor {
     Color4d fgColor = Color4d.BLACK;
@@ -93,9 +94,9 @@ class Node {
         Selection _selection;
     }
 
-    bool delegate(in Vec2d, uint clickCount) onMousePressedDlgs[];
-    bool delegate(in Vec2d, uint clickCount) onMouseReleasedDlgs[];
-    bool delegate(in Vec2d) onMouseMotionDlgs[];
+    bool delegate(in Vec2d, in GdkEventButton) onMousePressedDlgs[];
+    bool delegate(in Vec2d, in GdkEventButton) onMouseReleasedDlgs[];
+    bool delegate(in Vec2d, in GdkEventMotion) onMouseMotionDlgs[];
 
     // property name, new value, old value
     mixin Signal!(string, bool, bool)           changedBoolSignal;
@@ -184,15 +185,15 @@ class Node {
         }
     }
 
-    final void addOnMouseMotionDlg(bool delegate(in Vec2d) dlg) {
+    final void addOnMouseMotionDlg(bool delegate(in Vec2d, in GdkEventMotion) dlg) {
         onMouseMotionDlgs ~= dlg;
     }
 
-    final void addOnMousePressedDlg(bool delegate(in Vec2d, uint clickCount) dlg) {
+    final void addOnMousePressedDlg(bool delegate(in Vec2d, in GdkEventButton) dlg) {
         onMousePressedDlgs ~= dlg;
     }
 
-    final void addOnMouseReleasedDlg(bool delegate(in Vec2d, uint clickCount) dlg) {
+    final void addOnMouseReleasedDlg(bool delegate(in Vec2d, in GdkEventButton) dlg) {
         onMouseReleasedDlgs ~= dlg;
     }
 
@@ -451,56 +452,56 @@ class Node {
         return a;
     }
 
-    final bool dispatchMouseButtonPressed(in Vec2d point0, uint clickCount) {
+    final bool dispatchMouseButtonPressed(in Vec2d point0, in GdkEventButton e) {
         auto point = (point0 - offset);
         if (totalBounds.pointIn(point))
             for(size_t i = _children.length-1; i < children.length; i--)
-                if (_children[i].visible && _children[i].dispatchMouseButtonPressed(point, clickCount))
+                if (_children[i].visible && _children[i].dispatchMouseButtonPressed(point, e))
                     return true;
-        if (bounds.pointIn(point) && notifyMouseButtonPressed(point, clickCount))
+        if (bounds.pointIn(point) && notifyMouseButtonPressed(point, e))
             return true;
         return false;
     }
 
-    final bool notifyMouseButtonPressed(in Vec2d point, uint clickCount) {
+    final bool notifyMouseButtonPressed(in Vec2d point, in GdkEventButton e) {
         for (size_t i = 0; i < onMousePressedDlgs.length; i++)
-            if (onMousePressedDlgs[i](point, clickCount))
+            if (onMousePressedDlgs[i](point, e))
                 return true;
         return false;
     }
 
-    final bool dispatchMouseButtonReleased(in Vec2d point0, uint clickCount) {
+    final bool dispatchMouseButtonReleased(in Vec2d point0, in GdkEventButton e) {
         auto point = (point0 - offset);
         if (totalBounds.pointIn(point))
             for(size_t i = _children.length-1; i < children.length; i--)
-                if (_children[i].visible && _children[i].dispatchMouseButtonReleased(point, clickCount))
+                if (_children[i].visible && _children[i].dispatchMouseButtonReleased(point, e))
                     return true;
-        if (bounds.pointIn(point) && notifyMouseButtonReleased(point, clickCount))
+        if (bounds.pointIn(point) && notifyMouseButtonReleased(point, e))
             return true;
         return false;
     }
 
-    final bool notifyMouseButtonReleased(in Vec2d point, uint clickCount) {
+    final bool notifyMouseButtonReleased(in Vec2d point, in GdkEventButton e) {
         for (size_t i = 0; i < onMouseReleasedDlgs.length; i++)
-            if (onMouseReleasedDlgs[i](point, clickCount))
+            if (onMouseReleasedDlgs[i](point, e))
                 return true;
         return false;
     }
 
-    final bool dispatchMouseMotion(in Vec2d point0) {
+    final bool dispatchMouseMotion(in Vec2d point0, in GdkEventMotion e) {
         auto point = (point0 - offset);
         if (totalBounds.pointIn(point))
             for(size_t i = _children.length-1; i < children.length; i--)
-                if (_children[i].visible && _children[i].dispatchMouseMotion(point))
+                if (_children[i].visible && _children[i].dispatchMouseMotion(point, e))
                     return true;
-        if (bounds.pointIn(point) && notifyMouseMotion(point))
+        if (bounds.pointIn(point) && notifyMouseMotion(point, e))
             return true;
         return false;
     }
 
-    final bool notifyMouseMotion(in Vec2d point) {
+    final bool notifyMouseMotion(in Vec2d point, in GdkEventMotion e) {
         for (size_t i = 0; i < onMouseMotionDlgs.length; i++)
-            if (onMouseMotionDlgs[i](point))
+            if (onMouseMotionDlgs[i](point, e))
                 return true;
         return false;
     }

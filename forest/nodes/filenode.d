@@ -2,7 +2,8 @@
  * Forest File Finder by erik wikforss
  */
 module forest.nodes.filenode;
-public import forest.nodes.node;
+import forest.nodes.node;
+import forest.fileutil;
 import forest.selection;
 import gio.File;
 alias gio.File.File GioFile;
@@ -22,6 +23,7 @@ class FileNode : Node {
         _displayName = fi !is null ? fi.getDisplayName() : aFile.getBasename();
         if (_displayName == "\\")
             _displayName = aFile.getPath();
+
         selection = aSelection;
     }
 
@@ -49,28 +51,54 @@ class FileNode : Node {
     }
 
     final void selectionWatcher(Object o, bool s) {
-        if (file == o)
+        if (file == o) {
+            writefln("selected file: %s", file.getPath());
             selected = s;
+        }
     }
 
-    final void selectFile(Selection.Mode m) {
+    final void selectFile(bool multiSelect) {
+        if (multiSelect)
+            multiSelectFile();
+        else
+            selectFile();
+    }
+
+    final void selectFile() {
         selected = true;
         if (hasSelection) {
-            if (m == Selection.Mode.SINGLE)
-                selection.clear();
+            selection.clear();
             selection.add(file);
         }
     }
 
-    final void unselectFile(Selection.Mode m) {
-        selected = false;
-        if (hasSelection) {
-            if (m == Selection.Mode.SINGLE)
-                selection.clear();
-            else
-                selection.remove(file);
-        }
+    final void multiSelectFile() {
+        selected = true;
+        if (hasSelection)
+            selection.add(file);
     }
 
+    final void unselectFile(bool multiSelect) {
+        if (multiSelect)
+            multiUnselectFile();
+        else
+            unselectFile();
+    }
+
+    final void unselectFile() {
+        selected = false;
+        if (hasSelection)
+            selection.clear();
+    }
+
+    final void multiUnselectFile() {
+        selected = false;
+        if (hasSelection)
+            selection.remove(file);
+    }
+
+    final void openFile() {
+        FileUtil.openFile(file);
+    }
 }
 

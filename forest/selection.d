@@ -3,20 +3,11 @@
  */
 module forest.selection;
 import std.signals;
-import std.algorithm;
 
 class Selection {
-    enum {
-        NONE = size_t.max
-    }
-    enum Mode {
-        MULTI,
-        SINGLE
-    }
+    enum NONE = size_t.max;
 
-    private {
-        Object[] _objects;
-    }
+    private Object[] _objects;
 
     mixin Signal!(Object, bool);
 
@@ -28,7 +19,7 @@ class Selection {
     }
 
     final void remove(Object o) {
-        size_t i = indexOf(o);
+        size_t i = indexof(o);
         if (i != NONE) {
             _objects[i] = _objects[$-1];
             _objects.length--;
@@ -50,13 +41,13 @@ class Selection {
     }
 
     final bool contains(Object o) {
-        return indexOf(o) >= 0;
+        return indexof(o) != NONE;
     }
 
     /**
      * returns index or NONE if not found
      */
-    final size_t indexOf(Object o) {
+    final size_t indexof(Object o) {
         for (size_t i = 0; i < _objects.length; i++)
             if (o is _objects[i])
                 return i;
@@ -64,8 +55,16 @@ class Selection {
     }
 
     final Object get(size_t i) {
-        return (i < _objects.length)
+        return (i < count)
             ? _objects[i]
             : null;
+    }
+
+    final bool empty() const {
+        return count == 0;
+    }
+
+    final size_t count() const {
+        return _objects.length;
     }
 }

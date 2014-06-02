@@ -81,36 +81,33 @@ class Map : DrawingArea {
         addOnConfigure(&onConfigureEventCb);
         addOnDestroy(&onDestroyCb);
         root = new Root();
-        void tryAddDirectory(string p) {
+        void tryAddDirectory(string p, Selection sel) {
             try {
-                addDirectory(p);
+                addDirectory(p, sel);
             } catch (Throwable e) {
                 writefln(e.toString);
             }
         }
-        tryAddDirectory("~");
-        tryAddDirectory("dkfnfkj");
-        tryAddDirectory("/media/erik/761a34b8-3278-45be-aeac-95eeefd205ff/home");
-
+        tryAddDirectory("~", _selection);
         cleanUp();
     }
 
-    final void addDirectory(string dirPath)
+    final void addDirectory(string dirPath, Selection sel)
     in {
         assert (dirPath !is null);
     } body {
         auto file = GioFile.parseName(dirPath);
         if (file !is null)
-            addDirectory(file);
+            addDirectory(file, sel);
         else
             throw new Exception("parsed filename result was null");
     }
 
-    final void addDirectory(GioFile file)
+    final void addDirectory(GioFile file, Selection sel)
     in {
         assert (file !is null);
     } body {
-        addRoot(buildDir(file, _selection));
+        addRoot(buildDir(file, sel));
     }
 
     final void clearSurface() {
@@ -164,24 +161,20 @@ class Map : DrawingArea {
     final bool onMouseButtonPress(Event ev, Widget wt) {
         oldMouseCoords = getRootCoords(ev);
         pressed = true;
-        uint clickCount;
-        Vec2d coords;
-        ev.getCoords(coords.x, coords.y);
-        ev.getClickCount(clickCount);
-        root.dispatchMouseButtonPressed((coords-offset)/scale, clickCount);
+        Vec2d coords = getCoords(ev);
+        root.dispatchMouseButtonPressed((coords-offset)/scale, *(ev.button()));
         return true;
     }
 
     final bool onMouseButtonRelease(Event ev, Widget wt) {
         pressed = false;
         Vec2d coords = getCoords(ev);
-        uint clickCount = getClickCount(ev);
-        if (coords != Vec2d.nan && !root.dispatchMouseButtonReleased((coords-offset)/scale, clickCount))
-            handleMouseButtonReleased(coords, clickCount);
+        if (coords != Vec2d.nan && !root.dispatchMouseButtonReleased((coords-offset)/scale, *(ev.button())))
+            handleMouseButtonReleased(coords, *ev.button);
         return true;
     }
 
-    final void handleMouseButtonReleased(Vec2d coords, uint clickCount) {
+    final void handleMouseButtonReleased(Vec2d coords, in GdkEventButton e) {
         _selection.clear();
     }
 
@@ -194,7 +187,7 @@ class Map : DrawingArea {
         } else {
             Vec2d coords = getCoords(ev);
             if (coords != Vec2d.nan)
-                root.dispatchMouseMotion((coords-offset)/scale);
+                root.dispatchMouseMotion((coords-offset)/scale, *(ev.motion()));
         }
         return true;
     }

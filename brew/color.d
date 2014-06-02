@@ -45,32 +45,18 @@ struct Color(int D, T) {
         int alphai() const                                  { return 255; }
     }
 
-    static if (D==3) {
-        /**
-         * Creates a RGB color
-         * @param red component
-         * @param green component
-         * @param blue component
-         * @param alpha ignored
-         */
-        pure static Color!(3,T)opCall(T red, T green, T blue, T alpha = 1) {
-            Color!(3,T) p = {red, green, blue};
-            return p;
-        }
-    }
 
-    static if (D==4) {
-        /**
-         * Creates a RGBA color
-         * @param red component
-         * @param green component
-         * @param blue component
-         * @param alpha component
-         */
-        pure static Color!(4,T)opCall(T red, T green, T blue, T alpha = 1) {
-            Color!(4,T) p = {red, green, blue, alpha};
-            return p;
-        }
+    /**
+     * Creates a Color
+     * @param red component
+     * @param green component
+     * @param blue component
+     * @param alpha component, ignored if D <= 3
+     */
+    pure static Color opCall(T red, T green, T blue, T alpha = 1) {
+        static if (D == 3) Color p = {red, green, blue};
+        static if (D == 4) Color p = {red, green, blue, alpha};
+        return p;
     }
 
     enum {

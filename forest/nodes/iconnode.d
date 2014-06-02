@@ -19,12 +19,12 @@ class IconNode : Node
     enum {
         DEFAULT_ICON_SIZE = Dim2d(100,100),
     }
+
     enum PropName {
-        iconSize = "iconSize",
+        iconSize = "iconSize"
     }
-    private {
-        Dim2d _iconSize;
-    }
+
+    private Dim2d _iconSize;
 
     this() {
         super();

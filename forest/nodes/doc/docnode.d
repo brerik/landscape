@@ -20,12 +20,12 @@ import gio.FileIcon;
 import cairo.Context;
 import std.stdio;
 import std.string;
-import forest.fileutil;
 
 
-private import gtkc.gio;
-private import gtkc.glib;
-private import core.stdc.stdio;
+import gtkc.gio;
+import gtkc.glib;
+import core.stdc.stdio;
+import gtkc.gdktypes;
 
 alias gio.File.File GioFile;
 
@@ -51,20 +51,21 @@ class DocNode : FileNode
         updateRect();
     }
 
-    final bool onPressedDlg(in Vec2d point, uint clickCount) {
-        if (clickCount == 2) {
-            selectFile(Selection.Mode.SINGLE);
-            FileUtil.openFile(file);
-        } else if (clickCount == 1) {
+    final bool onPressedDlg(in Vec2d point, in GdkEventButton e) {
+        bool multiSelect = (e.state & ModifierType.CONTROL_MASK) != 0;
+        if (e.type == EventType.DOUBLE_BUTTON_PRESS) {
+            selectFile(multiSelect);
+            openFile();
+        } else if (e.type == EventType.BUTTON_PRESS) {
             if (selected)
-                unselectFile(Selection.Mode.SINGLE);
+                unselectFile(multiSelect);
             else
-                selectFile(Selection.Mode.SINGLE);
+                selectFile(multiSelect);
         }
         return true;
     }
 
-    final bool onReleaseDlg(in Vec2d point, uint clickCount) {
+    final bool onReleaseDlg(in Vec2d point, in GdkEventButton e) {
         return true;
     }
 

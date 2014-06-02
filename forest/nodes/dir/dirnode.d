@@ -2,7 +2,7 @@
  * Forest File Finder by erik wikforss
  */
 module forest.nodes.dir.dirnode;
-public import forest.nodes.filenode;
+import forest.nodes.filenode;
 import forest.map;
 import forest.selection;
 import forest.nodes.framenode;
@@ -26,7 +26,7 @@ import core.stdc.stdlib;
 import cairo.Context;
 import gio.File;
 import gtkc.pangotypes;
-import forest.fileutil;
+import gtkc.gdktypes;
 import std.utf;
 static import std.uri;
 import glib.CharacterSet;
@@ -128,14 +128,17 @@ class DirNode : FileNode {
         return rl;
     }
 
-    final bool onExpandDlg(in Vec2d point, uint clickCount) {
-        if (dirExpand.sign == ExpandSign.OPEN)
-            showDirsAndUpdate();
-        else if (dirExpand.sign == ExpandSign.CLOSE)
-            hideDirsAndUpdate();
-        else
-            return false;
-        return true;
+    final bool onExpandDlg(in Vec2d point, in GdkEventButton e) {
+        if (e.type == EventType.BUTTON_PRESS) {
+            if (dirExpand.sign == ExpandSign.OPEN)
+                showDirsAndUpdate();
+            else if (dirExpand.sign == ExpandSign.CLOSE)
+                hideDirsAndUpdate();
+            else
+                return false;
+            return true;
+        }
+        return false;
     }
 
     final void importAllChildren(int level) {
@@ -222,14 +225,17 @@ class DirNode : FileNode {
         return bounds.alignedPoint(alignment);
     }
 
-    final bool onOpenDocsDlg(in Vec2d point, uint clickCount) {
-        if (dirOpen.sign == OpenSign.OPEN)
-            showDocsAndUpdate();
-        else if (dirOpen.sign == OpenSign.CLOSE)
-            hideDocsAndUpdate();
-        else
-            return false;
-        return true;
+    final bool onOpenDocsDlg(in Vec2d point, in GdkEventButton e) {
+        if (e.type == EventType.BUTTON_PRESS) {
+            if (dirOpen.sign == OpenSign.OPEN)
+                showDocsAndUpdate();
+            else if (dirOpen.sign == OpenSign.CLOSE)
+                hideDocsAndUpdate();
+            else
+                return false;
+            return true;
+        }
+        return false;
     }
 
     final void showDirsAndUpdate() {
@@ -548,20 +554,21 @@ class DirNode : FileNode {
         return is(parent == DirNode);
     }
 
-    final bool onSelectedDlg(in Vec2d point, uint clickCount) {
-        if (clickCount == 2) {
-            selectFile(Selection.Mode.SINGLE);
-            FileUtil.openFile(file);
-        } else if (clickCount == 1) {
+    final bool onSelectedDlg(in Vec2d point, in GdkEventButton e) {
+        bool multiSelect = (e.state & ModifierType.CONTROL_MASK) != 0;
+        if (e.type == EventType.DOUBLE_BUTTON_PRESS) {
+            selectFile(multiSelect);
+            openFile();
+        } else if (e.type == EventType.BUTTON_PRESS) {
             if (selected)
-                unselectFile(Selection.Mode.SINGLE);
+                unselectFile(multiSelect);
             else
-                selectFile(Selection.Mode.SINGLE);
+                selectFile(multiSelect);
         }
         return true;
     }
 
-    final bool onReleasedDlg(in Vec2d point, uint clickCount) {
+    final bool onReleasedDlg(in Vec2d point, in GdkEventButton e) {
         return true;
     }
 
